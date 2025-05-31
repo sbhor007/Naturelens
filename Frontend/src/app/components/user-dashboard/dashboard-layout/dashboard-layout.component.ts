@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 
+
 @Component({
   selector: 'app-dashboard-layout',
   imports: [RouterModule, CommonModule, RouterLink],
@@ -49,10 +50,19 @@ export class DashboardLayoutComponent {
     }
   ];
 
+  isMobile = false;
+
   constructor(
     private sanitizer: DomSanitizer, 
     public router: Router // Make router public so template can access it
   ) {}
+
+  ngOnInit() {
+    this.isMobile = window.innerWidth < 768;
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth < 768;
+    });
+  }
 
   getSafeHtml(html: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(html);
@@ -60,6 +70,8 @@ export class DashboardLayoutComponent {
 
   navigateTo(path: string): void {
     if (path && path !== '#') {
+      console.log(path);
+      
       this.router.navigate([path]);
     }
   }

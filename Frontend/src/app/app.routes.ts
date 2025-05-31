@@ -6,9 +6,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { ExploreComponent } from './components/explore/explore.component';
 import { DashboardLayoutComponent } from './components/user-dashboard/dashboard-layout/dashboard-layout.component';
 import { ProfileComponent } from './components/user-dashboard/profile/profile.component';
-import path from 'path';
 import { CreatePostComponent } from './components/user-dashboard/create-post/create-post.component';
-
+import { NotFoundComponent } from './components/not-found/not-found.component'; // Add a 404 component
 
 export const routes: Routes = [
   {
@@ -30,45 +29,44 @@ export const routes: Routes = [
       },
       {
         path: 'register',
-        component: RegisterComponent
+        component: RegisterComponent,
       },
       {
         path: 'explore',
-        component: ExploreComponent
-      }
+        component: ExploreComponent,
+      },
     ],
   },
+ 
   {
     path: 'user',
     component: DashboardLayoutComponent,
     children: [
       {
         path: '',
-        redirectTo: 'explore',
-        pathMatch: 'full'
+        redirectTo: 'profile', 
+        pathMatch: 'full',
       },
       {
         path: 'profile',
-        component: ProfileComponent
+        component: ProfileComponent,
       },
       {
-        path: 'explore',
-        component: ExploreComponent
+        path: 'explore', 
+        component: ExploreComponent,
       },
       {
         path: 'create-post',
-        component: CreatePostComponent
+        component: CreatePostComponent,
       },
-      // Add search route if you have a search component
       {
         path: 'search',
-        component: ExploreComponent // or create a SearchComponent
-      }
-    ]
+        component: CreatePostComponent,
+      },
+    ],
   },
-  // Add wildcard route for 404 handling
   {
     path: '**',
-    redirectTo: 'home'
-  }
+    component: NotFoundComponent, 
+  },
 ];

@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./Backend
+    container_name: naturelens-backend
+    volumes:
+      - ./Backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./Backend/.env
+    depends_on:
+      - mysql
+
+  frontend:
+    build:
+      context: ./Frontend
+    container_name: naturelens-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+  mysql:
+    image: mysql:8.0
+    container_name: naturelens-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: naturelens_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

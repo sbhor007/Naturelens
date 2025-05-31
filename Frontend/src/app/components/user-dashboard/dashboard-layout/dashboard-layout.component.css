@@ -1,0 +1,55 @@
+* Desktop Navigation Styles */
+.active-nav-item {
+  @apply bg-gradient-to-br from-blue-50 to-purple-50;
+}
+
+.active-nav-item .active-indicator {
+  @apply opacity-100;
+}
+
+.active-nav-item div[innerHTML] {
+  @apply text-blue-600;
+}
+
+/* Mobile Navigation Styles */
+.active-mobile-nav {
+  @apply bg-gradient-to-br from-blue-50 to-purple-50;
+}
+
+.active-mobile-nav div[innerHTML] {
+  @apply text-blue-600 scale-110;
+}
+
+.active-mobile-nav span {
+  @apply text-blue-600 font-semibold;
+}
+
+.active-mobile-nav .active-mobile-indicator {
+  @apply opacity-100;
+}
+
+/* Smooth transitions for all interactive elements */
+.nav-item:hover {
+  @apply shadow-md;
+}
+
+.mobile-nav-item:active {
+  @apply scale-95;
+}
+
+/* Custom scrollbar for content areas */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
