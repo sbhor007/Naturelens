@@ -1,0 +1,131 @@
+<div
+  class="bg-gradient-to-br  text-black min-h-[90vh] flex items-center justify-center overflow-hidden"
+>
+  <!-- Form Container -->
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
+    <div class="rounded-lg p-8 w-full max-w-md bg-gray-100/20 text-black shadow-lg backdrop-blur-lg backdrop-saturate-150 border border-white/30"
+      style="backdrop-filter: blur(16px) saturate(150%); -webkit-backdrop-filter: blur(16px) saturate(150%);">
+      <!-- Heading -->
+      <h1 class="text-2xl font-bold text-center mb-2 ">
+          Sign in to your account
+        </h1>
+        <p class="text-gray-400 text-center mb-6">
+            Login to your account for a faster checkout.
+        </p>
+        <span class="md:mx-64 mb-2 block"></span>
+
+      <!-- Social Login Buttons -->
+      <div class="md:flex gap-2 mb-3 ">
+        <button
+          class="w-full py-2 mb-3.5 rounded-md flex items-center justify-center space-x-2 hover:bg-gray-100 shadow-lg cursor-pointer"
+        >
+          <svg
+            class="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.855 1.845 1.215 1.08 1.815 2.805 1.305 3.495.99.105-.78.405-1.305.735-1.605-2.58-.285-5.295-1.29-5.295-5.745 0-1.275.465-2.31 1.215-3.135-.12-.285-.525-1.485.12-3.075 0 0 .975-.315 3.195 1.185.93-.255 1.92-.39 2.91-.39.99 0 1.98.135 2.91.39 2.22-1.5 3.195-1.185 3.195-1.185.645 1.59.24 2.79.12 3.075.75.825 1.215 1.86 1.215 3.135 0 4.47-2.715 5.46-5.31 5.745.405.345.795 1.035.795 2.085 0 1.5-.015 2.715-.015 3.09 0 .315.225.69.825.57C20.565 21.795 24 17.31 24 12 24 5.37 18.63 0 12 0z"
+              fill="black"
+            />
+          </svg>
+          <span class="">Sign in with Google</span>
+        </button>
+        <button
+          class="w-full py-2 rounded-md mb-3.5 flex items-center justify-center space-x-2 hover:bg-gray-100 shadow-lg cursor-pointer"
+        >
+          <svg
+            class="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.855 1.845 1.215 1.08 1.815 2.805 1.305 3.495.99.105-.78.405-1.305.735-1.605-2.58-.285-5.295-1.29-5.295-5.745 0-1.275.465-2.31 1.215-3.135-.12-.285-.525-1.485.12-3.075 0 0 .975-.315 3.195 1.185.93-.255 1.92-.39 2.91-.39.99 0 1.98.135 2.91.39 2.22-1.5 3.195-1.185 3.195-1.185.645 1.59.24 2.79.12 3.075.75.825 1.215 1.86 1.215 3.135 0 4.47-2.715 5.46-5.31 5.745.405.345.795 1.035.795 2.085 0 1.5-.015 2.715-.015 3.09 0 .315.225.69.825.57C20.565 21.795 24 17.31 24 12 24 5.37 18.63 0 12 0z"
+              fill="black"
+            />
+          </svg>
+          <span>Sign in with GitHub</span>
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="relative my-4">
+        <hr class="border-gray-600  mt-10" />
+        <span
+          class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50 px-2 text-gray-400 text-sm text-center"
+          >Or, sign in with your email</span
+        >
+      </div>
+
+      <!-- Form Inputs -->
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm mb-1">Your Email</label>
+          <input
+            type="email"
+            placeholder="Enter your Email"
+            formControlName="email"
+            class="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+          />
+        <div
+          *ngIf="
+            loginForm.get('email')?.invalid &&
+            loginForm.get('email')?.touched
+          "
+          class="text-red-700"
+        >
+          Invalid email address.
+        </div>
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Your Password</label>
+          <input
+            type="password"
+            placeholder="Enter your Password"
+            formControlName="password"
+            class="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+          />
+          <div
+          *ngIf="
+            loginForm.get('password')?.invalid &&
+            loginForm.get('password')?.touched
+          "
+          class="text-red-700"
+        >
+          Please Enter A Password.
+        </div>
+        </div>
+      </div>
+
+      <!-- Checkbox and Forgot Password -->
+      <div class="flex items-center justify-between my-4">
+        <div class="flex items-center">
+          <input type="checkbox" class="mr-2" />
+          <label class="text-sm text-gray-400">Keep me signed in</label>
+        </div>
+        <a href="#" class="text-sm text-blue-400 hover:underline"
+          >Forgot Password?</a
+        >
+      </div>
+
+      <!-- Sign In Button -->
+      <button
+        class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 cursor-pointer"
+      >
+        Sign In
+      </button>
+
+      <!-- Sign Up Link -->
+      <p class="text-center text-sm text-gray-400 mt-4">
+        Don't have an account?
+        <span
+          routerLink="/register"
+          class="text-blue-400 hover:underline cursor-pointer"
+          >Sign up</span
+        >
+      </p>
+    </div>
+  </form>
+</div>

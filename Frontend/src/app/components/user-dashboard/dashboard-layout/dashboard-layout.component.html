@@ -1,0 +1,74 @@
+<div class="hidden md:flex text-black">
+  <!-- Sidebar -->
+  <div class="fixed bg-gray-50 px-4 py-6 h-screen w-[5vw] z-50 shadow-md">
+    <nav class="space-y-2">
+      <div class="text-black flex flex-col items-center gap-10 px-3 cursor-pointer rounded-lg transition-colors duration-200 italic group transition-all">
+        
+        <!-- Logo -->
+        <div class="flex items-center flex-shrink-0 space-x-4 md:space-x-6">
+          <div class="flex items-center space-x-2">
+            <div class="w-6 h-6 bg-blue-600 rounded-md"></div>
+          </div>
+        </div>
+
+        <!-- Navigation Items -->
+        <div 
+          *ngFor="let item of icons" 
+          class="hover:scale-110 p-2 cursor-pointer transition-transform duration-200"
+          [class.text-blue-600]="router.url === item.route"
+          (click)="navigateTo(item.route)"
+        >
+          <div [innerHTML]="getSafeHtml(item.icon)"></div>
+        </div>
+
+      </div>
+    </nav>
+  </div>
+
+  <!-- Main Content Area (including search bar) -->
+  <div class="ml-[6vw] w-[94vw]">
+    <!-- Search Bar --> 
+    <div
+      class="sticky top-0 z-50 h-[10vh] flex items-center px-4 bg-white backdrop-blur-xl"
+    >
+      <input
+        type="search"
+        placeholder="Search..."
+        class="w-full p-2 border-2 rounded focus:outline-none focus:border-blue-500 "
+      />
+      <div class="mx-3 bg-gray-400 py-2 px-4 rounded-[50%] cursor-pointer">P</div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="p-2">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile View -->
+<div class="md:hidden">
+  <div class="w-full h-fit ">
+    <router-outlet></router-outlet>
+  </div>
+  <div class="h-[8vh] w-full block fixed bottom-0 left-0 z-50 flex items-center justify-center bg-gray-50 shadow-lg">
+    <div class="flex items-center justify-center h-full w-full">
+      <nav class="space-y-2">
+        <div class="text-black flex justify-center items-center gap-12 cursor-pointer rounded-lg transition-colors duration-200 group">
+          
+          <!-- Navigation Items Loop -->
+          <a 
+            *ngFor="let item of icons" 
+            class="flex flex-col items-center"
+            [routerLink]="item.route"
+            routerLinkActive="text-blue-600"
+          >
+            <div [innerHTML]="getSafeHtml(item.icon)"></div>
+            <span class="text-xs">{{ item.name }}</span>
+          </a>
+
+        </div>
+      </nav>
+    </div>
+  </div>
+</div>

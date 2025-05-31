@@ -1,0 +1,127 @@
+<div id="input-data" class="w-full md:h-fit md:flex text-black px-2 pb-11 md:p-0">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="w-full md:h-fit md:flex">
+    <!-- Upload Area -->
+    <div  id="upload-photo" class="w-full md:pt-0 px-2 md:px-0 h-[50vh] md:w-[30vw] mt-10">
+      <div
+      
+        class="border-2 border-dashed rounded-2xl md:p-8 text-center cursor-pointer transition-all duration-300 h-[50vh] flex items-center justify-center flex-col gap-4 md:h-[80vh]"
+        [class.border-blue-500]="isDragOver()"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+        (click)="fileInput.click()"
+        role="button"
+        aria-label="Upload file"
+      >
+        <input
+          #fileInput
+          type="file"
+          class="hidden"
+          (change)="onFileSelect($event)"
+          accept="image/*,video/mp4"
+          aria-hidden="true"
+        />
+
+        <ng-container *ngIf="imagePreview; else placeholder">
+          <img *ngIf="isImage" [src]="imagePreview" class="md:max-h-[80vh] max-h-[50vh] rounded shadow" alt="Preview of uploaded image" />
+          <video *ngIf="!isImage" [src]="imagePreview" class="max-h-48 rounded shadow" controls></video>
+        </ng-container>
+
+        <ng-template #placeholder>
+          <span class="text-gray-600">Choose a file or drag and drop it here</span>
+          <p class="text-xs text-gray-500">
+            We recommend using high-quality .jpg files < 20MB or .mp4 files < 200MB.
+          </p>
+        </ng-template>
+
+        <div *ngIf="form.get('file')?.invalid && form.get('file')?.touched" class="text-red-500 text-sm">
+          Please upload a valid image or video file.
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Fields -->
+    <div class="w-full md:w-[70vw] h-fit  p-4 flex flex-col gap-4 justify-center  my-10 md:mt-32 md:mr-20 md:pl-10">
+      <!-- Title -->
+      <div>
+        <input
+          type="text"
+          formControlName="title"
+          placeholder="Add a title"
+          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
+          aria-label="Post title"
+        />
+        <div *ngIf="form.get('title')?.invalid && form.get('title')?.touched" class="text-red-500 text-sm">
+          Title is required.
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div>
+        <textarea
+          formControlName="description"
+          placeholder="Add a detailed description"
+          rows="4"
+          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
+          aria-label="Post description"
+        ></textarea>
+        <div *ngIf="form.get('description')?.invalid && form.get('description')?.touched" class="text-red-500 text-sm">
+          Description is required.
+        </div>
+      </div>
+
+      <!-- Link -->
+      <div>
+        <input
+          type="url"
+          formControlName="link"
+          placeholder="Add a link"
+          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
+          aria-label="Post link"
+        />
+        <div *ngIf="form.get('link')?.invalid && form.get('link')?.touched" class="text-red-500 text-sm">
+          Please enter a valid URL.
+        </div>
+      </div>
+
+      <!-- Board -->
+      <div>
+        <select
+          formControlName="board"
+          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
+          aria-label="Select a board"
+        >
+          <option value="" disabled selected>Choose a board</option>
+          <option *ngFor="let b of boards" [value]="b">{{ b }}</option>
+        </select>
+        <div *ngIf="form.get('board')?.invalid && form.get('board')?.touched" class="text-red-500 text-sm">
+          Please select a board.
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div>
+        <input
+          type="text"
+          formControlName="tags"
+          placeholder="Add tags (comma-separated)"
+          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
+          aria-label="Post tags"
+        />
+        <div *ngIf="form.get('tags')?.invalid && form.get('tags')?.touched" class="text-red-500 text-sm">
+          Tags are required.
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        [disabled]="form.invalid"
+        class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 disabled:bg-gray-400"
+        aria-label="Submit post"
+      >
+        Create Post
+      </button>
+    </div>
+  </form>
+</div>

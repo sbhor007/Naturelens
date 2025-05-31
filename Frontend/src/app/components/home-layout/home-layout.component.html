@@ -1,0 +1,127 @@
+<div class="md:px-8 scroll-smooth md:scroll-auto">
+<nav
+    class="sticky top-0 z-50 flex  items-center justify-between px-4 py-4 md:px-5  md:rounded-b-md text-black backdrop-blur-md backdrop-saturate-150"
+    style="backdrop-filter: blur(12px) saturate(150%); -webkit-backdrop-filter: blur(12px) saturate(150%);"
+  >
+    <!-- Logo and Nav Links -->
+    <div class="flex items-center flex-shrink-0 space-x-4 md:space-x-6">
+      <div class="flex items-center space-x-2">
+        <div class="w-6 h-6 bg-blue-600 rounded-md"></div>
+        <span class="text-xl font-bold">Naturelens</span>
+      </div>
+    </div>
+    <!-- Hamburger menu for mobile -->
+    <button
+      class="md:hidden ml-auto cursor-pointer"
+      (click)="isMenuOpen = !isMenuOpen"
+      aria-label="Open Menu"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        ></path>
+      </svg>
+    </button>
+    <!-- Desktop Nav Links -->
+    <div class="hidden md:flex items-center md:justify-center space-x-8">
+      <!-- for loop for nav menu -->
+      @for (item of navMenu; track $index) {
+      <li *ngIf="item.name != 'Sing In'"
+        class="hover:text-blue-400 list-none transition-colors cursor-pointer"
+        routerLink="{{ item.path }}"
+      >
+        {{ item.name }}
+      </li>
+      }
+
+      <!-- <button
+        class="flex items-center space-x-1 hover:text-blue-400 transition-colors"
+      >
+        <span>Pages</span>
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          ></path>
+        </svg>
+      </button> -->
+    </div>
+    <!-- </div> -->
+    <!-- Desktop Actions -->
+    <div class="hidden md:flex items-center space-x-3">
+      <button
+        routerLink="/login"
+        class="font-bold px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+      >
+        login
+      </button>
+      <button
+        routerLink="/register"
+        class="font-bold px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+      >
+        register
+      </button>
+      <!-- for dark mode -->
+      <!-- <button>
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+          ></path>
+        </svg>
+      </button> -->
+    </div>
+    <!-- Mobile Menu -->
+    <div
+      *ngIf="isMenuOpen"
+      class="md:hidden w-full  max-w-11/12 absolute top-full right-4 bg-gray-50 shadow-md z-50 animate-fade-in rounded-md overflow-hidden backdrop-blur-md backdrop-saturate-150"
+      style="backdrop-filter: blur(12px) saturate(150%); -webkit-backdrop-filter: blur(12px) saturate(150%); color: #fff;"
+    >
+      <div class="flex flex-col p-4 text-white/90" style="text-shadow: 0 1px 4px rgba(0,0,0,0.25);">
+        <!-- for loop for nav menu -mobile -->
+        @for (item of navMenu; track $index) {
+        <li
+          routerLink="{{ item.path }}"
+          class="hover:text-black hover:font-bold transition-colors list-none text-center rounded-md hover:bg-gray-300 hover:shadow-md py-2.5 cursor-pointer text-black font-medium"
+          (click)="isMenuOpen = !isMenuOpen"
+        >
+          {{ item.name }}
+        </li>
+        }
+
+        <button
+          class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+          style="text-shadow: 0 1px 4px rgba(0,0,0,0.25);"
+          routerLink="/register"
+        >
+          Sign Up
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- <app-home></app-home> -->
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,74 @@
+import { Routes } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
+import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { ExploreComponent } from './components/explore/explore.component';
+import { DashboardLayoutComponent } from './components/user-dashboard/dashboard-layout/dashboard-layout.component';
+import { ProfileComponent } from './components/user-dashboard/profile/profile.component';
+import path from 'path';
+import { CreatePostComponent } from './components/user-dashboard/create-post/create-post.component';
+
+
+export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
+  {
+    path: '',
+    component: HomeLayoutComponent,
+    children: [
+      {
+        path: 'home',
+        component: HomeComponent,
+      },
+      {
+        path: 'login',
+        component: LoginComponent,
+      },
+      {
+        path: 'register',
+        component: RegisterComponent
+      },
+      {
+        path: 'explore',
+        component: ExploreComponent
+      }
+    ],
+  },
+  {
+    path: 'user',
+    component: DashboardLayoutComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'explore',
+        pathMatch: 'full'
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent
+      },
+      {
+        path: 'explore',
+        component: ExploreComponent
+      },
+      {
+        path: 'create-post',
+        component: CreatePostComponent
+      },
+      // Add search route if you have a search component
+      {
+        path: 'search',
+        component: ExploreComponent // or create a SearchComponent
+      }
+    ]
+  },
+  // Add wildcard route for 404 handling
+  {
+    path: '**',
+    redirectTo: 'home'
+  }
+];
