@@ -1,2 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+env/
+venv/
+ENV/
+.venv/
+env.bak/
+venv.bak/
+
+# Environment variables
 .env
+.env.*
+
+# VS Code settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test and coverage
+.coverage
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+.cache/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Requirements
 requirements.txt
+
+# Migrations (Django/Flask)
+migrations/
+*/migrations/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
