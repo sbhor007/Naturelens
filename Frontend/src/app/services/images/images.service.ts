@@ -10,7 +10,7 @@ export class ImagesService {
 
   constructor(private http:HttpClient) { }
 
-  getImages():Observable<any>{
-    return this.http.get(`${this.API_URL}/images`)
-  }
+  // getImages():Observable<any>{
+  //   return this.http.get(`${this.API_URL}/images`)
+  // }
 }

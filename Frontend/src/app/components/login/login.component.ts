@@ -43,7 +43,12 @@ export class LoginComponent {
     const loginCredentials = this.loginForm.value;
     this.authService.login(loginCredentials).subscribe({
       next: (res) => {
-        console.log(res);
+        console.log(res.access);
+        const tokens = res.tokens
+
+        sessionStorage.setItem('access',tokens.access)
+        sessionStorage.setItem('refresh',tokens.refresh)
+        this.authService.setLoginState(true)
         alert('Login successful')
         this.router.navigate(['user/'])
         

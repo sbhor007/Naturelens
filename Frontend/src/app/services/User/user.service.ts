@@ -15,5 +15,4 @@ export class UserService {
   register(userDetais:any):Observable<any>{
     return this.http.post(`${this.baseURL}register/`,userDetais)
   }
-
 }

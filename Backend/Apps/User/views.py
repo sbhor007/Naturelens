@@ -6,6 +6,7 @@ from .serializers import UserSerializer,UserRegisterSerializer,UserProfileSerial
 from rest_framework import generics 
 from rest_framework.response import Response
 from rest_framework.permissions import  AllowAny
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class UserProfileDetails(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
@@ -21,6 +22,7 @@ class UserDetailsView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
     
 class RegisterView(generics.GenericAPIView):
     serializer_class = UserRegisterSerializer
@@ -49,6 +51,9 @@ class LoginView(generics.GenericAPIView):
 class LogoutView(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     def post(self,req):
+        print('*'*50)
+        print("req.data : ",req.data)
+        print('*'*50)
         serializer = LogoutSerializer(data=req.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()

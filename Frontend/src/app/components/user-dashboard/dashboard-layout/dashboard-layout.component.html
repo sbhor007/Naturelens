@@ -1,6 +1,6 @@
 <!-- responsive-layout.component.html -->
 <div *ngIf="!isMobile" class="desktop-layout text-gray-800">
-  <!-- Enhanced Sidebar -->
+  <!-- Sidebar -->
   <div
     class="fixed bg-white/95 backdrop-blur-sm px-3 py-6 h-screen w-20 z-50 shadow-xl border-r border-gray-200/50"
   >
@@ -54,13 +54,15 @@
             ></div>
           </div>
         </div>
+        <!-- logout button -->
+         <button class="px-5 py-2 bg-red-600 rounded-full cursor-pointer" (click)="logout()">L</button>
       </div>
     </nav>
   </div>
 
-  <!-- Enhanced Main Content -->
+  <!-- Main Content -->
   <div class="ml-20 min-h-screen bg-gray-50/30">
-    <!-- Enhanced Header -->
+    <!-- Header -->
     <header
       class="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm"
     >

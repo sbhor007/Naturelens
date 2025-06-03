@@ -289,24 +289,24 @@ export class ExploreComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.getImages()
-    console.log(this.images1);
+    // this.getImages()
+    // console.log(this.images1);
     
   }
 
-  getImages(){
-    this.imagesService.getImages().subscribe({
-      next: res =>{
-        this.images1 = res
-        // console.log(res);
+  // getImages(){
+  //   this.imagesService.getImages().subscribe({
+  //     next: res =>{
+  //       this.images1 = res
+  //       // console.log(res);
         
-      },
-      error: err =>{
-        console.log('fail to load images',err);
+  //     },
+  //     error: err =>{
+  //       console.log('fail to load images',err);
         
-      }
-    })
-  }
+  //     }
+  //   })
+  // }
 
   @ViewChildren('card') cards!: QueryList<ElementRef>;
 

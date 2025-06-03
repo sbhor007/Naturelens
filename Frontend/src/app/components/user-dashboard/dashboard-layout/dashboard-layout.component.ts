@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router, RouterLink, RouterModule } from '@angular/router';
+import { AuthService } from '../../../services/Auth/auth.service';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class DashboardLayoutComponent {
 
   constructor(
     private sanitizer: DomSanitizer, 
+    private authService: AuthService,
     public router: Router // Make router public so template can access it
   ) {}
 
@@ -74,5 +76,21 @@ export class DashboardLayoutComponent {
       
       this.router.navigate([path]);
     }
+  }
+
+  logout(){
+    this.authService.logout().subscribe({
+      next: res =>{
+        this.authService.setLoginState(false)
+        this.authService.removeToken()
+        alert('logout successfully')
+        this.router.navigate(['home'])
+      },
+      error: err =>{
+        console.log('error: ',err);
+        
+        alert('logout error')
+      }
+    })
   }
 }

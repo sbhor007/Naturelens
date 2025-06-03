@@ -22,17 +22,17 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id','username','email','profile')    
     
-    def create(self, validated_data):
-        print('ceate functiona call')
-        profile_data = validated_data.pop('profile',{})
-        user = User.objects.create_user(
-            username= validated_data['username'],
-            email=validated_data.get('email',''),
-            password=validated_data.get('password','')
-        )
-        UserProfile.objects.create(user=user,**profile_data)
-        print(f'user-profile : {profile_data}\nu : {UserProfile}')
-        return user
+    # def create(self, validated_data):
+    #     print('ceate functiona call')
+    #     profile_data = validated_data.pop('profile',{})
+    #     user = User.objects.create_user(
+    #         username= validated_data['username'],
+    #         email=validated_data.get('email',''),
+    #         password=validated_data.get('password','')
+    #     )
+    #     UserProfile.objects.create(user=user,**profile_data)
+    #     print(f'user-profile : {profile_data}\nu : {UserProfile}')
+    #     return user
     
     def update(self,instance,validated_data):
         profile_data = validated_data.pop('profile',{})
