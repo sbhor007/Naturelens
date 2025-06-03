@@ -55,28 +55,28 @@
         <hr class="border-gray-600  mt-10" />
         <span
           class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50 px-2 text-gray-400 text-sm text-center"
-          >Or, sign in with your email</span
+          >Or, sign in with your username</span
         >
       </div>
 
       <!-- Form Inputs -->
       <div class="space-y-4">
         <div>
-          <label class="block text-sm mb-1">Your Email</label>
+          <label class="block text-sm mb-1">username</label>
           <input
             type="email"
             placeholder="Enter your Email"
-            formControlName="email"
+            formControlName="username"
             class="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
           />
         <div
           *ngIf="
-            loginForm.get('email')?.invalid &&
-            loginForm.get('email')?.touched
+            loginForm.get('username')?.invalid &&
+            loginForm.get('username')?.touched
           "
           class="text-red-700"
         >
-          Invalid email address.
+          Invalid username.
         </div>
         </div>
         <div>

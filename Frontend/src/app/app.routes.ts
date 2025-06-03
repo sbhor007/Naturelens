@@ -44,7 +44,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'profile', 
+        redirectTo: 'explore', 
         pathMatch: 'full',
       },
       {

@@ -24,7 +24,7 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: [
+      username: [
         '',
         [
           Validators.required,
@@ -40,22 +40,14 @@ export class LoginComponent {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
     }
-    const user = this.loginForm.value;
-    this.authService.login(user.email).subscribe({
+    const loginCredentials = this.loginForm.value;
+    this.authService.login(loginCredentials).subscribe({
       next: (res) => {
-        console.log(res[0].password);
-
-        if (res[0].password == user.password) {
-          console.log('User Login successfully');
-          alert('Login SuccessFull');
-          this.loginForm.reset();
-          this.router.navigate(['/home']);
-          return;
-        }
-        console.log('Invalid Password');
-        alert('Invalid Password');
-        this.loginForm.reset();
-      },
+        console.log(res);
+        alert('Login successful')
+        this.router.navigate(['user/'])
+        
+        },      
       error: (err) => {
         console.error('User Not Found', err);
         alert('User Not Found');

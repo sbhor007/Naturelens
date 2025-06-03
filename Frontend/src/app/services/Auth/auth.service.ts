@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { log } from 'console';
+import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
 // API_URL = import.meta.env.API_URL 
 API_URL='http://localhost:3000'
+private baseURL = environment.baseAPI
 
   constructor(private http:HttpClient) { }
 
@@ -25,9 +26,10 @@ API_URL='http://localhost:3000'
 
   
 
-  login(email:string):Observable<any>{
+  login(loginCredentials:any):Observable<any>{
    
-    return this.http.get(`${this.API_URL}/users?email=${encodeURIComponent(email)}`)
+    return this.http.post(`${this.baseURL}login/`,loginCredentials)
   }
 
 }
+
