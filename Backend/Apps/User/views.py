@@ -27,10 +27,15 @@ class RegisterView(generics.GenericAPIView):
     permission_classes =(permissions.AllowAny,)
     
     def post(self,req):
+        print("req.data : ",req.data)
         serializer = self.serializer_class(data=req.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data,status=status.HTTP_201_CREATED)
+        print(serializer.is_valid())
+        if serializer.is_valid():
+            print('if condition')
+            serializer.save()
+            print('serializer.data: ',serializer.data)
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(generics.GenericAPIView):
     serializer_class = UserLoginSerializer

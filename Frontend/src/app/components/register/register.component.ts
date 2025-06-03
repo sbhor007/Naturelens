@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/Auth/auth.service';
+import { UserService } from '../../services/User/user.service';
 
 @Component({
   selector: 'app-register',
@@ -23,10 +24,13 @@ export class RegisterComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private userService:UserService,
     private router: Router
   ) {
     this.registrationForm = this.fb.group({
-      fullName: ['', Validators.required],
+      first_name:['',Validators.required],
+      last_name:['',Validators.required],
+      username: [''],
       email: [
         '',
         [
@@ -37,6 +41,10 @@ export class RegisterComponent {
       ],
       password: ['', [Validators.required, this.passwordValidator]],
     });
+
+    this.registrationForm.get('email')?.valueChanges.subscribe((email) => {
+  this.registrationForm.get('username')?.setValue(email, { emitEvent: false });
+});
   }
 
   register(): void {
@@ -45,7 +53,7 @@ export class RegisterComponent {
       return;
     }
 
-    this.authService.register(this.registrationForm.value).subscribe({
+    this.userService.register(this.registrationForm.value).subscribe({
       next: (res) => {
         console.log('Registration Successfully');
         alert('Registration Successful!');

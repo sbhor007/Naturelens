@@ -3,3 +3,13 @@ dist
 .git
 .vscode
 .env
+
+
+# Environment files
+.env
+.env.*
+.envrc
+.env.local
+.env.development
+.env.production
+/environment/

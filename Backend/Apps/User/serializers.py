@@ -23,6 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id','username','email','profile')    
     
     def create(self, validated_data):
+        print('ceate functiona call')
         profile_data = validated_data.pop('profile',{})
         user = User.objects.create_user(
             username= validated_data['username'],
@@ -50,15 +51,17 @@ class UserSerializer(serializers.ModelSerializer):
     
         
 class UserRegisterSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(max_length = 40,write_only=True)
+    last_name = serializers.CharField(max_length = 40,write_only=True)
     password = serializers.CharField(max_length = 68,min_length=8,write_only=True)
     class Meta:
         model = User
-        fields = ('username','email','password')
+        fields = ('first_name','last_name','username','email','password')
         
     def validate(self,attrs):
         email = attrs.get('email','')
         username = attrs.get('username','')
-        if not username.isalnum():
+        if not username:
             raise serializers.ValidationError(
                 self.default_error_messages
             )
