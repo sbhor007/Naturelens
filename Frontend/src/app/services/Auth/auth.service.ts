@@ -10,19 +10,23 @@ export class AuthService {
   // API_URL = import.meta.env.API_URL
   API_URL = 'http://localhost:3000';
   private baseURL = environment.baseAPI;
-  private isLoggedIn$ = new BehaviorSubject<boolean>(false);
+  // private isLoggedIn$ = new BehaviorSubject<boolean>(false);
+  private isLoggedIn$ = false;
 
   constructor(private http: HttpClient) {
-    this.isLoggedIn$.next(!!sessionStorage.getItem('access'));
+    
+      this.isLoggedIn$ = !!sessionStorage.getItem('access')
+    
+    // this.isLoggedIn$.next(!!sessionStorage.getItem('access'));
   }
   /* set login state */
   setLoginState(state: boolean) {
-    this.isLoggedIn$.next(state);
+    this.isLoggedIn$ = state;
   }
 
   /* check user is authenticated or not */
-  isAuthenticated(): Observable<boolean> {
-    return this.isLoggedIn$.asObservable();
+  isAuthenticated() {
+    return this.isLoggedIn$
   }
 
   // /* JSON API -> Testing */
@@ -53,10 +57,7 @@ export class AuthService {
   /* call Logout API */
   logout() {
     console.log('refresh Token : ', this.getRefreshToken());
-    // const accessToken = this.getAccessToken();
-    // const headers: { [header: string]: string } = accessToken
-    //   ? { Authorization: `Bearer ${accessToken}` }
-    //   : {};
+   
 
     return this.http.post(
       `${this.baseURL}logout/`,
@@ -82,5 +83,6 @@ export class AuthService {
   removeToken() {
     sessionStorage.removeItem('access');
     sessionStorage.removeItem('refresh');
+    this.isLoggedIn$ = false
   }
 }

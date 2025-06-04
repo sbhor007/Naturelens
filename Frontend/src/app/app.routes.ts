@@ -8,6 +8,7 @@ import { DashboardLayoutComponent } from './components/user-dashboard/dashboard-
 import { ProfileComponent } from './components/user-dashboard/profile/profile.component';
 import { CreatePostComponent } from './components/user-dashboard/create-post/create-post.component';
 import { NotFoundComponent } from './components/not-found/not-found.component'; // Add a 404 component
+import { authGuard } from './guard/auth.guard';
 
 export const routes: Routes = [
   {
@@ -41,10 +42,11 @@ export const routes: Routes = [
   {
     path: 'user',
     component: DashboardLayoutComponent,
+    canActivate:[authGuard],
     children: [
       {
         path: '',
-        redirectTo: 'profile', 
+        redirectTo: 'explore', 
         pathMatch: 'full',
       },
       {
