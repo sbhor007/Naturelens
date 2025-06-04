@@ -6,14 +6,11 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    refresh = serializers.CharField()
+    user = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = UserProfile
-        fields = '__all__'
+        fields = ['id', 'profile_image', 'bio', 'user']
     
-    def validate(self, attr):
-        self.token = attr['refresh']
-        return attr
     
 
 class UserSerializer(serializers.ModelSerializer):
@@ -21,18 +18,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id','username','email','profile')    
-    
-    # def create(self, validated_data):
-    #     print('ceate functiona call')
-    #     profile_data = validated_data.pop('profile',{})
-    #     user = User.objects.create_user(
-    #         username= validated_data['username'],
-    #         email=validated_data.get('email',''),
-    #         password=validated_data.get('password','')
-    #     )
-    #     UserProfile.objects.create(user=user,**profile_data)
-    #     print(f'user-profile : {profile_data}\nu : {UserProfile}')
-    #     return user
     
     def update(self,instance,validated_data):
         profile_data = validated_data.pop('profile',{})

@@ -7,16 +7,33 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import  AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.core.exceptions import PermissionDenied,ValidationError
 
 class UserProfileDetails(viewsets.ModelViewSet):
-    queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
     
-# class CreateUserView(generics.CreateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     AllowAny()
+    def get_queryset(self):
+        return UserProfile.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        print('create: ',self.request.data)
+        if UserProfile.objects.filter(user=self.request.user).exists():
+            raise ValidationError("Profile already exists.")
+        serializer.save(user=self.request.user)
+
+    def perform_update(self, serializer):
+        if serializer.instance.user != self.request.user:
+            raise PermissionDenied("You cannot update another user's profile.")
+        serializer.save()
+    
+    def perform_destroy(self, instance):
+        if instance.user != self.request.user:
+            raise PermissionDenied("You cannot delete another user's profile.")
+        instance.delete()
+    
+
     
 class UserDetailsView(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -24,18 +41,15 @@ class UserDetailsView(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
     
+    
 class RegisterView(generics.GenericAPIView):
     serializer_class = UserRegisterSerializer
     permission_classes =(permissions.AllowAny,)
     
     def post(self,req):
-        print("req.data : ",req.data)
         serializer = self.serializer_class(data=req.data)
-        print(serializer.is_valid())
         if serializer.is_valid():
-            print('if condition')
             serializer.save()
-            print('serializer.data: ',serializer.data)
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
@@ -50,10 +64,7 @@ class LoginView(generics.GenericAPIView):
 
 class LogoutView(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated,)
-    def post(self,req):
-        print('*'*50)
-        print("req.data : ",req.data)
-        print('*'*50)
+    def post(self,req): 
         serializer = LogoutSerializer(data=req.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
