@@ -14,7 +14,7 @@
             <div class="w-5 h-5 bg-white rounded-md opacity-90"></div>
           </div>
           <div
-            class="absolute inset-0 text-4xl"
+            class="absolute inset-0 text-4xl" [routerLink]="'/user'"
           >🌿</div>
         </div>
       </div>
@@ -23,7 +23,7 @@
       <div class="flex-1 space-y-2">
         <div *ngFor="let item of icons" class="relative group">
           <a
-            [routerLink]="item.route"
+            (click)="handleNavigation(item)"
             routerLinkActive="active-nav-item"
             class="nav-item flex items-center justify-center w-14 h-14 rounded-xl transition-all duration-300 hover:bg-gray-100 hover:scale-105 cursor-pointer relative overflow-hidden"
           >
@@ -55,7 +55,10 @@
           </div>
         </div>
         <!-- logout button -->
-         <button class="px-5 py-2 bg-red-600 rounded-full cursor-pointer" (click)="logout()">L</button>
+         <!-- <div (click)="logout()">
+          <svg fill="#000000" width="24px" height="24" viewBox="0 0 200 200" data-name="Layer 1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"><title></title><path d="M156.31,43.63a9.9,9.9,0,0,0-14,14,60.1,60.1,0,1,1-85,0,9.9,9.9,0,0,0-14-14c-31,31-31,82,0,113s82,31,113,0A79.37,79.37,0,0,0,156.31,43.63Zm-56.5,66.5a10,10,0,0,0,10-10v-70a10,10,0,0,0-20,0v70A10,10,0,0,0,99.81,110.13Z"></path></svg>
+         </div> -->
+         <!-- <button class="px-5 py-2 bg-red-600 rounded-full cursor-pointer" (click)="logout()">L</button> -->
       </div>
     </nav>
   </div>
@@ -123,9 +126,9 @@
           <!-- Profile Avatar -->
           <div class="relative group">
             <div
-              class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-semibold cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
             >
-              P
+              {{user | uppercase }}
             </div>
             <div
               class="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur opacity-20 group-hover:opacity-40 transition-opacity duration-300"
@@ -154,9 +157,9 @@
     <div class="flex items-center justify-between">
       <!-- Logo -->
       <div
-        class="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center"
+        class="w-8 h-8  rounded-lg flex items-center justify-center"
       >
-        <div class="w-4 h-4 bg-white rounded opacity-90"></div>
+        <div class="text-2xl" [routerLink]="'/user'">🌿</div>
       </div>
 
       <!-- Search -->
@@ -185,9 +188,9 @@
 
       <!-- Profile -->
       <div
-        class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-semibold"
+        class="w-8 h-8 bg-gray-300  rounded-full flex items-center justify-center text-black text-sm font-semibold"
       >
-        P
+        {{user | uppercase}}
       </div>
     </div>
   </header>
@@ -204,7 +207,7 @@
     <div class="flex items-center justify-around px-2 py-2">
       <a
         *ngFor="let item of icons"
-        [routerLink]="item.route"
+        (click)="handleNavigation(item)"
         routerLinkActive="active-mobile-nav"
         class="mobile-nav-item flex flex-col items-center justify-center px-3 py-2 rounded-xl transition-all duration-300 hover:bg-gray-50 min-w-0 flex-1"
       >

@@ -15,4 +15,8 @@ export class UserService {
   register(userDetais:any):Observable<any>{
     return this.http.post(`${this.baseURL}register/`,userDetais)
   }
+
+  createProfile(profileDetails:any):Observable<any>{
+    return this.http.post(`${this.baseURL}users-profile/`,profileDetails)
+  }
 }

@@ -9,6 +9,9 @@ import { ProfileComponent } from './components/user-dashboard/profile/profile.co
 import { CreatePostComponent } from './components/user-dashboard/create-post/create-post.component';
 import { NotFoundComponent } from './components/not-found/not-found.component'; // Add a 404 component
 import { authGuard } from './guard/auth.guard';
+import { PostsComponent } from './components/user-dashboard/posts/posts.component';
+import { SavedComponent } from './components/user-dashboard/saved/saved.component';
+import { EditProfileComponent } from './components/user-dashboard/edit-profile/edit-profile.component';
 
 export const routes: Routes = [
   {
@@ -38,23 +41,33 @@ export const routes: Routes = [
       },
     ],
   },
- 
+
   {
     path: 'user',
     component: DashboardLayoutComponent,
-    canActivate:[authGuard],
+    // canActivate:[authGuard],
     children: [
       {
         path: '',
-        redirectTo: 'explore', 
+        redirectTo: 'explore',
         pathMatch: 'full',
       },
       {
         path: 'profile',
         component: ProfileComponent,
+        children: [
+          {
+            path: 'posts',
+            component: PostsComponent,
+          },
+          {
+            path: 'saved',
+            component: SavedComponent,
+          },
+        ],
       },
       {
-        path: 'explore', 
+        path: 'explore',
         component: ExploreComponent,
       },
       {
@@ -65,10 +78,14 @@ export const routes: Routes = [
         path: 'search',
         component: CreatePostComponent,
       },
+      {
+        path:'edit-profile',
+        component:EditProfileComponent
+      }
     ],
   },
   {
     path: '**',
-    component: NotFoundComponent, 
+    component: NotFoundComponent,
   },
 ];

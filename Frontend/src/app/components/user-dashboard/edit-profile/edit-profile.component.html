@@ -1,0 +1,61 @@
+<div class="max-w-md mx-auto mt-10 p-8 bg-white rounded-lg shadow-md">
+  <form [formGroup]="profileForm" (ngSubmit)="createProfile()">
+    <div class="mb-6 flex flex-col items-center">
+    <div
+        class="relative border-4 border-green-400 w-40 h-40 rounded-full bg-gradient-to-br from-green-100 to-green-300 flex items-center justify-center shadow-lg cursor-pointer hover:scale-105 transition-transform duration-300"
+        (click)="fileInput.click()"
+        title="Click to upload profile image"
+    >
+        <input
+            #fileInput
+            type="file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            class="hidden"
+            aria-hidden="true"
+        />
+
+        <ng-container *ngIf="imagePreview; else placeholder">
+            <img
+                *ngIf="isImage"
+                [src]="imagePreview"
+                class="object-cover w-36 h-36 rounded-full border-2 border-white shadow-md"
+                alt="Preview of uploaded image"
+            />
+        </ng-container>
+
+        <ng-template #placeholder>
+            <div class="flex flex-col items-center justify-center w-full h-full text-green-500">
+                <svg class="w-12 h-12 mb-2 opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                </svg>
+                <span class="text-xs font-medium">Upload Image</span>
+            </div>
+        </ng-template>
+
+        <div
+            *ngIf="profileForm.get('profile_image')?.invalid && profileForm.get('profile_image')?.touched"
+            class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full mt-2 text-red-500 text-xs bg-white px-2 py-1 rounded shadow"
+        >
+            Please upload a valid image file.
+        </div>
+    </div>
+    </div>
+    <div class="mb-6">
+      <label class="block text-gray-700 font-semibold mb-2">Bio</label>
+      <textarea
+        name="bio"
+        formControlName="bio"
+        rows="4"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+        placeholder="Tell us about yourself..."
+      ></textarea>
+    </div>
+    <button
+      type="submit"
+      class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition duration-200"
+    >
+      Submit
+    </button>
+  </form>
+</div>

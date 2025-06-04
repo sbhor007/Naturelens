@@ -48,6 +48,7 @@ export class LoginComponent {
 
         sessionStorage.setItem('access',tokens.access)
         sessionStorage.setItem('refresh',tokens.refresh)
+        sessionStorage.setItem('username',res.username)
         this.authService.setLoginState(true)
         alert('Login successful')
         this.router.navigate(['user/'])

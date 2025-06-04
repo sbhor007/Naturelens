@@ -14,11 +14,14 @@ export class AuthService {
   private isLoggedIn$ = false;
 
   constructor(private http: HttpClient) {
-    
       this.isLoggedIn$ = !!sessionStorage.getItem('access')
-    
-    // this.isLoggedIn$.next(!!sessionStorage.getItem('access'));
   }
+
+  /* Retrive Username */
+  getUsername(){
+    return sessionStorage.getItem('username')
+  }
+
   /* set login state */
   setLoginState(state: boolean) {
     this.isLoggedIn$ = state;
@@ -28,16 +31,6 @@ export class AuthService {
   isAuthenticated() {
     return this.isLoggedIn$
   }
-
-  // /* JSON API -> Testing */
-  // getAllUsers(): Observable<any> {
-  //   return this.http.get(`${this.API_URL}/users`);
-  // }
-
-  // /* JSON API -> Testing */
-  // register(user: any): Observable<any> {
-  //   return this.http.post(`${this.API_URL}/users`, user);
-  // }
 
   /* call Login API */
   login(loginCredentials: any): Observable<any> {

@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, signal, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { routes } from '../../../app.routes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-post',
@@ -9,6 +11,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './create-post.component.css'
 })
 export class CreatePostComponent {
+removeFile($event: MouseEvent) {
+throw new Error('Method not implemented.');
+}
 
   form: FormGroup;
   isDragOver = signal(false);
@@ -18,7 +23,7 @@ export class CreatePostComponent {
 
   boards = ['Photography', 'Design', 'Art', 'Technology'];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private router:Router) {
     this.form = this.fb.group({
       file: [null, Validators.required],
       title: ['', Validators.required],
@@ -94,8 +99,12 @@ export class CreatePostComponent {
         ...this.form.value,
         tags: this.form.value.tags.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag),
       };
-      alert('Post created successfully')
       console.log('Form submitted:', formData);
+      alert('Post created successfully')
+
+      this.router.navigate(['/user/profile/posts'])
+      
+
       // TODO:Add logic to send formData to a backend service
     }
   }

@@ -1,7 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
-import gsap from 'gsap'
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
+import gsap from 'gsap';
 import { ImagesService } from '../../services/images/images.service';
+import Masonry from 'masonry-layout';
 
 @Component({
   selector: 'app-explore',
@@ -283,15 +290,12 @@ export class ExploreComponent implements OnInit {
       description: 'Colorful stalls with fresh produce.',
     },
   ];
-  images1:any[] | undefined 
+  images1: any[] | undefined;
 
-  constructor(private imagesService:ImagesService){
-
-  }
+  constructor(private imagesService: ImagesService) {}
   ngOnInit(): void {
     // this.getImages()
     // console.log(this.images1);
-    
   }
 
   // getImages(){
@@ -299,11 +303,11 @@ export class ExploreComponent implements OnInit {
   //     next: res =>{
   //       this.images1 = res
   //       // console.log(res);
-        
+
   //     },
   //     error: err =>{
   //       console.log('fail to load images',err);
-        
+
   //     }
   //   })
   // }
@@ -320,10 +324,17 @@ export class ExploreComponent implements OnInit {
         scrollTrigger: {
           trigger: card.nativeElement,
           start: 'top 80%',
-          toggleActions: 'play none none none'
-        }
+          toggleActions: 'play none none none',
+        },
       });
     });
   }
 
+  masonry: Masonry | null = null;
+  onImageLoad(event: Event) {
+    // If you use Masonry.js still
+    if (this.masonry && typeof this.masonry.layout === 'function') {
+      this.masonry.layout();
+    }
+  }
 }

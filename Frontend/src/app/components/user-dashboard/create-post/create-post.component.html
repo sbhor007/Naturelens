@@ -1,10 +1,9 @@
 <div id="input-data" class="w-full md:h-fit md:flex  px-2 pb-11 md:p-0">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="w-full md:h-fit md:flex">
     <!-- Upload Area -->
-    <div  id="upload-photo" class="w-full md:pt-0 px-2 md:px-0 h-[50vh] md:w-[30vw] mt-10">
+    <div id="upload-photo" class="w-full md:pt-0 px-2 md:px-0 h-[50vh] md:w-[30vw] mt-10 flex flex-col items-center">
       <div
-      
-        class="border-2 border-dashed rounded-2xl md:p-8 text-center cursor-pointer transition-all duration-300 h-[50vh] flex items-center justify-center flex-col gap-4 md:h-[80vh]"
+        class="border-2 border-dashed rounded-2xl bg-white shadow-md md:p-8 text-center cursor-pointer transition-all duration-300 h-[50vh] flex items-center justify-center flex-col gap-4 md:h-[70vh] hover:border-blue-400 hover:bg-blue-50"
         [class.border-blue-500]="isDragOver()"
         (dragover)="onDragOver($event)"
         (dragleave)="onDragLeave($event)"
@@ -23,18 +22,35 @@
         />
 
         <ng-container *ngIf="imagePreview; else placeholder">
-          <img *ngIf="isImage" [src]="imagePreview" class="md:max-h-[80vh] max-h-[50vh] rounded shadow" alt="Preview of uploaded image" />
-          <video *ngIf="!isImage" [src]="imagePreview" class="max-h-48 rounded shadow" controls></video>
+          <img
+            *ngIf="isImage"
+            [src]="imagePreview"
+            class="md:max-h-[60vh] max-h-[40vh] rounded-lg shadow-lg border border-gray-200 object-contain transition-transform duration-200 hover:scale-105"
+            alt="Preview of uploaded image"
+          />
+          <video
+            *ngIf="!isImage"
+            [src]="imagePreview"
+            class="max-h-48 rounded-lg shadow-lg border border-gray-200 object-contain"
+            controls
+          ></video>
+          
         </ng-container>
 
         <ng-template #placeholder>
-          <span class="text-gray-600">Choose a file or drag and drop it here</span>
-          <p class="text-xs text-gray-500">
-            We recommend using high-quality .jpg files < 20MB or .mp4 files < 200MB.
-          </p>
+          <div class="flex flex-col items-center gap-2">
+            <svg class="w-12 h-12 text-blue-400 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4a1 1 0 011-1h8a1 1 0 011 1v12m-4 4v-4m0 0l-2-2m2 2l2-2"></path>
+            </svg>
+            <span class="text-gray-700 font-medium">Choose a file or drag and drop</span>
+            <p class="text-xs text-gray-500">
+              High-quality <span class="font-semibold">.jpg</span> files &lt; 20MB or <span class="font-semibold">.mp4</span> files &lt; 200MB.
+            </p>
+            <span class="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs">Browse Files</span>
+          </div>
         </ng-template>
 
-        <div *ngIf="form.get('file')?.invalid && form.get('file')?.touched" class="text-red-500 text-sm">
+        <div *ngIf="form.get('file')?.invalid && form.get('file')?.touched" class="text-red-500 text-sm mt-2">
           Please upload a valid image or video file.
         </div>
       </div>
