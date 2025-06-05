@@ -1,23 +1,61 @@
 <div class="min-h-screen bg-white text-gray-800">
-  <!-- Header -->
+  <!-- Header Section: Displays profile info and edit button -->
   <div
-    class="flex md:justify-between justify-center flex-wrap items-center  py-4"
+    class="flex md:justify-between justify-center flex-wrap items-center py-4"
   >
     <h1 class="text-3xl font-bold">Your saved ideas</h1>
     <div
       class="flex items-center gap-4 flex-wrap md:flex-nowrap justify-center md:justify-normal"
     >
       <div class="flex items-center gap-3 w-full justify-around mt-3 md:mt-0">
-        <div
-          class="px-6 md:px-4 py-4 md:py-2 rounded-full bg-gray-300 flex items-center justify-center text-3xl md:text-lg font-semibold"
-        >
-          R
-        </div>
+        
+        <!-- Profile Image or Placeholder -->
+        <ng-container *ngIf="imagePreview && isImage; else placeholder">
+          <div class="relative group">
+            <img
+              [src]="imagePreview"
+              class="object-cover w-24 h-24 rounded-full border-4 border-green-400 shadow-lg transition-transform duration-300 group-hover:scale-105"
+              alt="Preview of uploaded image"
+            />
+            <div
+              class="absolute inset-0 bg-black bg-opacity-20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 10l4.553-4.553a2.121 2.121 0 00-3-3L12 7m0 0L7.447 2.447a2.121 2.121 0 00-3 3L9 10m3-3v12"
+                />
+              </svg>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #placeholder>
+          <div
+            class="w-24 h-24 rounded-full bg-gradient-to-br from-green-300 to-blue-400 flex items-center justify-center text-4xl font-bold text-white shadow-lg border-4 border-green-400"
+          >
+            {{ ch.toUpperCase() }}
+          </div>
+        </ng-template>
+
+        <!-- Username and Following Info -->
         <div>
-          <p class="font-semibold">Rechonna+tryh</p>
+          <p class="font-semibold text-xl">{{ username }}</p>
           <p class="text-sm text-gray-500">0 following</p>
         </div>
-        <div class="mt-2 px-2 py-2 cursor-pointer hover:bg-gray-200 rounded-full transition-all duration-200" [routerLink]="'/user/edit-profile'" routerLinkActive="active-nav-item">
+
+        <!-- Edit Profile Button -->
+        <div
+          class="mt-2 px-2 py-2 cursor-pointer hover:bg-gray-200 rounded-full transition-all duration-200"
+          [routerLink]="'/user/edit-profile'"
+          routerLinkActive="active-nav-item"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -33,19 +71,39 @@
     </div>
   </div>
 
-  <!-- Tabs -->
-  <div class="flex items-center justify-between  md:py-6 space-x-4 text-lg font-medium py-3">
+  <!-- Tabs Section: Navigation between Posts and Saved -->
+  <div
+    class="flex items-center justify-between md:py-6 space-x-4 text-lg font-medium py-3"
+  >
     <div class="flex gap-4">
-      <div class="cursor-pointer" [routerLink] = "'/user/profile/posts'" routerLinkActive="active-nav-item">Posts</div>
-      <div class="cursor-pointer" [routerLink] = "'/user/profile/saved'" routerLinkActive="active-nav-item">Saved</div>
+      <!-- Posts Tab -->
+      <div
+        class="cursor-pointer"
+        [routerLink]="'/user/profile/posts'"
+        routerLinkActive="active-nav-item"
+      >
+        Posts
+      </div>
+      <!-- Saved Tab -->
+      <div
+        class="cursor-pointer"
+        [routerLink]="'/user/profile/saved'"
+        routerLinkActive="active-nav-item"
+      >
+        Saved
+      </div>
     </div>
-    <div class="px-2 py-2 rounded-full hover:bg-gray-200 transition-all duration-200 cursor-pointer" [routerLink]="'/user/create-post'">
+    <!-- Create Post Button -->
+    <div
+      class="px-2 py-2 rounded-full hover:bg-gray-200 transition-all duration-200 cursor-pointer"
+      [routerLink]="'/user/create-post'"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 128 128"
         width="24"
         height="24"
-        style="enable-background: new 0 0 128 128; font-weight: 900;"
+        style="enable-background: new 0 0 128 128; font-weight: 900"
         xml:space="preserve"
       >
         <path
@@ -56,8 +114,8 @@
     </div>
   </div>
 
-  <!-- router outlet -->
+  <!-- Main Content: Router Outlet for child routes -->
   <div>
-      <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
   </div>
 </div>

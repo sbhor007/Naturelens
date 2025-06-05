@@ -35,11 +35,12 @@ class UserProfileDetails(viewsets.ModelViewSet):
     
 
     
-class UserDetailsView(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+class UserDetailsView(viewsets.ModelViewSet):    
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
+    def get_queryset(self):
+        return User.objects.filter(username=self.request.user.username)
     
     
 class RegisterView(generics.GenericAPIView):

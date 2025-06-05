@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/User/user.service';
-import { eventNames } from 'process';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,13 +9,15 @@ import { CommonModule } from '@angular/common';
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css'
 })
-export class EditProfileComponent {
+export class EditProfileComponent implements OnInit {
 
   profileForm: FormGroup
   selectedFile:File | null = null
   imagePreview:string | ArrayBuffer | null = null
   isImage = true
   errorMessage:string | null = null
+  profileData:any | null = null
+  isProfileAvailable:boolean = false
 
 
 
@@ -27,16 +28,33 @@ export class EditProfileComponent {
       profile_image:[null],
       bio:['']
     })
-
-     
   }
 
-
+  ngOnInit(): void {
+      this.isProfileAvailable = this.userService.isProfileAvailable()
+      if(this.isProfileAvailable){
+        this.profileData = this.userService.getProfileData()
+        console.log('profile data : ',this.profileData);
+        
+        this.profileForm.patchValue({
+          bio:this.profileData.bio || ''
+        })
+        // setting image preview if it is available
+        if(this.profileData.profile_image){
+          this.imagePreview = this.profileData.profile_image
+          this.isImage = true
+        }
+      }
+  }
+  
   onFileSelected($event: Event) {
-    const input = event?.target as HTMLInputElement;
+    const input = $event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
+      this.selectedFile = file;
       this.validateAndSetFile(file);
+      console.log('selected file : ',this.selectedFile);
+      
     }
   }
 
@@ -59,7 +77,8 @@ export class EditProfileComponent {
     }
 
     this.isImage = isImage;
-    this.profileForm.patchValue({ file });
+    this.profileForm.patchValue({ profile_image: file });
+
 
     // Generate preview
     const reader = new FileReader();
@@ -72,24 +91,57 @@ export class EditProfileComponent {
     reader.readAsDataURL(file);
   }
 
-  createProfile(){
+  onSubmit(){
+    if(this.profileForm.invalid){
+      return this.profileForm.markAllAsTouched()
+    }
+
     if(this.profileForm.invalid){
       return this.profileForm.markAllAsTouched()
     }
     
     const formData = new FormData();
     if (this.selectedFile) {
+      console.log('is File selected');
       formData.append('profile_image', this.selectedFile, this.selectedFile.name);
+      
     }
     formData.append('bio', this.profileForm.get('bio')?.value || '');
 
-    console.log('profile credentials : ',formData);
+    // PROPERLY LOG CONTENTS OF FormData 
+    // TODO:remove in future
+    console.log('FormData content:');
+  formData.forEach((value, key) => {
+    console.log(`${key}:`, value);
+  });
     
+
+    if(this.isProfileAvailable){
+      this.updateProfile(formData)
+    }else{
+      this.createProfile(formData)
+    }
+  }
+// 
+  createProfile(formData:any){
     this.userService.createProfile(formData).subscribe({
       next: res =>{
         alert('user profile created')
-        console.log(res);
+        console.log(res);  
+      },
+      error: err =>{
+        alert('something went wrong')
+        console.log(err);
         
+      }
+    })
+  }
+// 
+  updateProfile(formData:any){
+    this.userService.updateProfile(formData,this.profileData.id).subscribe({
+      next: res =>{
+        alert('user profile created')
+        console.log(res);  
       },
       error: err =>{
         alert('something went wrong')

@@ -9,7 +9,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = UserProfile
-        fields = ['id', 'profile_image', 'bio', 'user']
+        fields = ['id','profile_image', 'bio', 'user']
     
     
 
@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
     profile = UserProfileSerializer()
     class Meta:
         model = User
-        fields = ('id','username','email','profile')    
+        fields = ('id','first_name','last_name','username','email','profile')    
     
     def update(self,instance,validated_data):
         profile_data = validated_data.pop('profile',{})
