@@ -5,56 +5,52 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-edit-profile',
-  imports: [ReactiveFormsModule,CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './edit-profile.component.html',
-  styleUrl: './edit-profile.component.css'
+  styleUrl: './edit-profile.component.css',
 })
 export class EditProfileComponent implements OnInit {
+  profileForm: FormGroup;
+  selectedFile: File | null = null;
+  imagePreview: string | ArrayBuffer | null = null;
+  isImage = true;
+  errorMessage: string | null = null;
+  profileData: any | null = null;
+  isProfileAvailable: boolean = false;
 
-  profileForm: FormGroup
-  selectedFile:File | null = null
-  imagePreview:string | ArrayBuffer | null = null
-  isImage = true
-  errorMessage:string | null = null
-  profileData:any | null = null
-  isProfileAvailable:boolean = false
-
-
-
-  constructor(private fb: FormBuilder,
-    private userService:UserService
-  ){
+  constructor(private fb: FormBuilder, private userService: UserService) {
     this.profileForm = this.fb.group({
-      profile_image:[null],
-      bio:['']
-    })
+      profile_image: [null],
+      bio: [''],
+    });
   }
 
   ngOnInit(): void {
-      this.isProfileAvailable = this.userService.isProfileAvailable()
-      if(this.isProfileAvailable){
-        this.profileData = this.userService.getProfileData()
-        console.log('profile data : ',this.profileData);
-        
-        this.profileForm.patchValue({
-          bio:this.profileData.bio || ''
-        })
-        // setting image preview if it is available
-        if(this.profileData.profile_image){
-          this.imagePreview = this.profileData.profile_image
-          this.isImage = true
-        }
+    this.userService.getUserProfile()
+
+    this.isProfileAvailable = this.userService.isProfileAvailable();
+    if (this.isProfileAvailable) {
+      this.profileData = this.userService.getProfileData();
+      console.log('profile data : ', this.profileData);
+
+      this.profileForm.patchValue({
+        bio: this.profileData.bio || '',
+      });
+      // setting image preview if it is available
+      if (this.profileData.profile_image) {
+        this.imagePreview = 'https://res.cloudinary.com/dcyq171sr/' + this.profileData.profile_image;
+        this.isImage = true;
       }
+    }
   }
-  
+
   onFileSelected($event: Event) {
     const input = $event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
       this.selectedFile = file;
       this.validateAndSetFile(file);
-      console.log('selected file : ',this.selectedFile);
-      
+      console.log('selected file : ', this.selectedFile);
     }
   }
 
@@ -79,7 +75,6 @@ export class EditProfileComponent implements OnInit {
     this.isImage = isImage;
     this.profileForm.patchValue({ profile_image: file });
 
-
     // Generate preview
     const reader = new FileReader();
     reader.onload = () => {
@@ -91,63 +86,64 @@ export class EditProfileComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  onSubmit(){
-    if(this.profileForm.invalid){
-      return this.profileForm.markAllAsTouched()
+  onSubmit() {
+    if (this.profileForm.invalid) {
+      return this.profileForm.markAllAsTouched();
     }
 
-    if(this.profileForm.invalid){
-      return this.profileForm.markAllAsTouched()
+    if (this.profileForm.invalid) {
+      return this.profileForm.markAllAsTouched();
     }
-    
+
     const formData = new FormData();
     if (this.selectedFile) {
       console.log('is File selected');
-      formData.append('profile_image', this.selectedFile, this.selectedFile.name);
-      
+      formData.append(
+        'profile_image',
+        this.selectedFile,
+        this.selectedFile.name
+      );
     }
     formData.append('bio', this.profileForm.get('bio')?.value || '');
 
-    // PROPERLY LOG CONTENTS OF FormData 
+    // PROPERLY LOG CONTENTS OF FormData
     // TODO:remove in future
     console.log('FormData content:');
-  formData.forEach((value, key) => {
-    console.log(`${key}:`, value);
-  });
-    
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
 
-    if(this.isProfileAvailable){
-      this.updateProfile(formData)
-    }else{
-      this.createProfile(formData)
+    if (this.isProfileAvailable) {
+      this.updateProfile(formData);
+    } else {
+      this.createProfile(formData);
     }
   }
-// 
-  createProfile(formData:any){
+  //
+  createProfile(formData: any) {
     this.userService.createProfile(formData).subscribe({
-      next: res =>{
-        alert('user profile created')
-        console.log(res);  
+      next: (res) => {
+        alert('user profile created');
+        console.log(res);
       },
-      error: err =>{
-        alert('something went wrong')
+      error: (err) => {
+        alert('something went wrong');
         console.log(err);
-        
-      }
-    })
+      },
+    });
   }
-// 
-  updateProfile(formData:any){
-    this.userService.updateProfile(formData,this.profileData.id).subscribe({
-      next: res =>{
-        alert('user profile created')
-        console.log(res);  
+  //
+  updateProfile(formData: any) {
+    this.userService.updateProfile(formData, this.profileData.id).subscribe({
+      next: (res) => {
+        this.userService.getUserProfile()
+        alert('user profile updated');
+        console.log(res);
       },
-      error: err =>{
-        alert('something went wrong')
+      error: (err) => {
+        alert('something went wrong');
         console.log(err);
-        
-      }
-    })
+      },
+    });
   }
 }

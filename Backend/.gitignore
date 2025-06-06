@@ -49,3 +49,6 @@ migrations/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
+
+.dockerignore
+Dockerfile

@@ -1,7 +1,7 @@
 <div id="input-data" class="w-full md:h-fit md:flex  px-2 pb-11 md:p-0">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="w-full md:h-fit md:flex">
     <!-- Upload Area -->
-    <div id="upload-photo" class="w-full md:pt-0 px-2 md:px-0 h-[50vh] md:w-[30vw] mt-10 flex flex-col items-center">
+    <div id="upload-photo" class="w-full md:pt-0 px-2 md:px-0 h-[70vh] md:w-[30vw] mt-10 flex flex-col items-center">
       <div
         class="border-2 border-dashed rounded-2xl bg-white shadow-md md:p-8 text-center cursor-pointer transition-all duration-300 h-[50vh] flex items-center justify-center flex-col gap-4 md:h-[70vh] hover:border-blue-400 hover:bg-blue-50"
         [class.border-blue-500]="isDragOver()"
@@ -57,7 +57,7 @@
     </div>
 
     <!-- Form Fields -->
-    <div class="w-full md:w-[70vw] h-fit  p-4 flex flex-col gap-4 justify-center  my-10 md:mt-32 md:mr-20 md:pl-10">
+    <div class="w-full md:w-[70vw] h-fit  p-4 flex flex-col gap-4 justify-center  my-10 md:mt-15 md:mr-20 md:pl-10">
       <!-- Title -->
       <div>
         <input

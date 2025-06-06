@@ -51,3 +51,10 @@ note.md
 .env.development
 .env.production
 /environment/
+
+
+.dockerignore
+Dockerfile
+
+package-lock.json
+package.json

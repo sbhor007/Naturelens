@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from rest_framework_simplejwt.tokens import RefreshToken
+from cloudinary.models import CloudinaryField
 
 # Create your models here.4\
 class User(AbstractUser):
@@ -18,8 +19,14 @@ class User(AbstractUser):
     
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    profile_image = models.ImageField(upload_to='profile_image/',blank=True,null=True)
+    profile_image = CloudinaryField('image', blank=True, null=True, folder='profile_image/')
     bio = models.TextField(blank=True,null=True)
     
     def __str__(self):
         return self.user.username
+    
+    @property
+    def profile_image_url(self):
+        if self.profile_image:
+            return self.profile_image.url
+        return None

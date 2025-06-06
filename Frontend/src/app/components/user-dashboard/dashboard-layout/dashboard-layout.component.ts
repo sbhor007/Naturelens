@@ -70,12 +70,13 @@ export class DashboardLayoutComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.userService.getUserProfile()
     this.isMobile = window.innerWidth < 768;
     window.addEventListener('resize', () => {
       this.isMobile = window.innerWidth < 768;
     });
     this.user = this.authService.getUsername()?.charAt(0)
-    this.getProfile()
+    
     
   }
 
@@ -112,42 +113,6 @@ export class DashboardLayoutComponent implements OnInit {
         
         alert('logout error')
       }
-    })
-  }
-
-  getProfile(){
-    this.userService.getProfile().subscribe({
-      next: res =>{
-        if (res.length > 0){
-          this.userService.setProfileState(true)
-          // this.isProfileAvailable = true
-          this.userService.setProfileData(res[0])
-          // this.profileData = res[0]
-
-          // this.profileForm.patchValue({
-          //   bio:this.profileData.bio || ''
-          // })
-          
-          // setting image preview if it is available
-          // if(this.profileData.profile_image){
-          //   this.imagePreview = this.profileData.profile_image
-          //   this.isImage = true
-          // }          
-        }else{
-          this.userService.setProfileState(false)
-          // this.isProfileAvailable = false
-        }
-        // alert('profile Available')        
-      },
-      error: err =>{
-        this.userService.setProfileState(false)
-        // this.isProfileAvailable = false
-        // this.profileData = null
-        this.userService.setProfileData(null)
-        // this.imagePreview = null
-        console.log('error : ',err);
-        alert('profile not Available')        
-      } 
     })
   }
 }

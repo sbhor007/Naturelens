@@ -4,47 +4,63 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
+  private baseURL = environment.baseAPI;
+  private profileData: any | null = null;
+  private profileState: boolean = false;
 
-  private baseURL = environment.baseAPI
-  private profileData:any | null = null
-  private profileState:boolean = false
+  constructor(private http: HttpClient) {}
 
-  constructor(private http:HttpClient) { }
-
-  isProfileAvailable(){
-    return this.profileState
+  isProfileAvailable() {
+    return this.profileState;
   }
 
-  setProfileState(state:boolean){
-    this.profileState = state
+  setProfileState(state: boolean) {
+    this.profileState = state;
   }
 
-  setProfileData(profileData:any){
-    this.profileData = profileData
+  setProfileData(profileData: any) {
+    this.profileData = profileData;
   }
 
-  getProfileData(){
-    return this.profileData
+  getProfileData() {
+    return this.profileData;
   }
 
-
-
-  register(userDetails:any):Observable<any>{
-    return this.http.post(`${this.baseURL}register/`,userDetails)
+  getUserProfile() {
+    this.getProfile().subscribe({
+      next: (res) => {
+        if (res.length > 0) {
+          this.setProfileState(true);
+          this.setProfileData(res[0]);
+        } else {
+          this.setProfileState(false);
+        }
+      },
+      error: (err) => {
+        this.setProfileState(false);
+        this.setProfileData(null);
+        console.log('error : ', err);
+        alert('profile not Available');
+      },
+    });
   }
 
-  createProfile(profileDetails:any):Observable<any>{
-    return this.http.post(`${this.baseURL}users-profile/`,profileDetails)
+  register(userDetails: any): Observable<any> {
+    return this.http.post(`${this.baseURL}register/`, userDetails);
   }
 
-  getProfile():Observable<any>{
-    return this.http.get(`${this.baseURL}users-profile/`)
+  createProfile(profileDetails: any): Observable<any> {
+    return this.http.post(`${this.baseURL}users-profile/`, profileDetails);
   }
 
-  updateProfile(profileDetails:any,id:number):Observable<any>{
-    return this.http.put(`${this.baseURL}users-profile/${id}/`,profileDetails)
+  private getProfile(): Observable<any> {
+    return this.http.get(`${this.baseURL}users-profile/`);
+  }
+
+  updateProfile(profileDetails: any, id: number): Observable<any> {
+    return this.http.put(`${this.baseURL}users-profile/${id}/`, profileDetails);
   }
 }
