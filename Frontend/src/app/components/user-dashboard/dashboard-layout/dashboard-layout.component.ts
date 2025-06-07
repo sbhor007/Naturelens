@@ -101,18 +101,6 @@ export class DashboardLayoutComponent implements OnInit {
   }
 
   logout(){
-    this.authService.logout().subscribe({
-      next: res =>{
-        this.authService.setLoginState(false)
-        this.authService.removeToken()
-        alert('logout successfully')
-        this.router.navigate(['home'])
-      },
-      error: err =>{
-        console.log('error: ',err);
-        
-        alert('logout error')
-      }
-    })
+    this.authService.logout()
   }
 }

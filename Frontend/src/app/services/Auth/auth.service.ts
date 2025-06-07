@@ -1,81 +1,139 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { ApiService } from '../API/api.service';
+import { Router } from '@angular/router';
+import { LoginState } from '../../model/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  // API_URL = import.meta.env.API_URL
-  API_URL = 'http://localhost:3000';
-  private baseURL = environment.baseAPI;
-  // private isLoggedIn$ = new BehaviorSubject<boolean>(false);
-  private isLoggedIn$ = false;
 
-  constructor(private http: HttpClient) {
-      this.isLoggedIn$ = !!sessionStorage.getItem('access')
+  constructor(
+    private http: HttpClient,
+    private apiService: ApiService,
+    private router: Router
+  ) {
+    this.loginStateSubject.next({
+      loading: false,
+      error: null,
+      authenticated: !!sessionStorage.getItem('access'),
+    });
   }
 
-  /* Retrive Username */
-  getUsername(){
-    return sessionStorage.getItem('username')
+  private loginStateSubject = new BehaviorSubject<LoginState>({
+    loading: false,
+    error: null,
+    authenticated: false,
+  });
+
+  readonly loginState$ = this.loginStateSubject.asObservable();
+
+  isAuthenticated(): boolean {
+    return this.loginStateSubject.getValue().authenticated;
   }
 
-  /* set login state */
-  setLoginState(state: boolean) {
-    this.isLoggedIn$ = state;
+  getUsername() {
+    return sessionStorage.getItem('username');
   }
 
-  /* check user is authenticated or not */
-  isAuthenticated() {
-    return this.isLoggedIn$
-  }
-
-  /* call Login API */
-  login(loginCredentials: any): Observable<any> {
-    return this.http.post(`${this.baseURL}login/`, loginCredentials);
-  }
-
-  /* get Access Token */
   getAccessToken() {
     return sessionStorage.getItem('access');
   }
 
-  /* get refresh token */
   getRefreshToken() {
     return sessionStorage.getItem('refresh');
   }
 
-  /* call Logout API */
+  login(loginCredentials: any) {
+    console.log('login-1.2');
+    this.loginStateSubject.next({
+      loading: true,
+      error: null,
+      authenticated: true,
+    });
+    console.log('login:', this.loginState$);
+
+    // debugger
+    this.apiService.login(loginCredentials).subscribe({
+      next: (res) => {
+        console.log(res.access);
+        const tokens = res.tokens;
+        sessionStorage.setItem('access', tokens.access);
+        sessionStorage.setItem('refresh', tokens.refresh);
+        sessionStorage.setItem('username', res.username);
+        this.loginStateSubject.next({
+          loading: false,
+          error: null,
+          authenticated: true,
+        });
+        console.log('login-1:', this.loginState$);
+        this.router.navigate(['user/']);
+        alert('Login successful');
+      },
+      error: (err) => {
+        this.loginStateSubject.next({
+          loading: false,
+          error: err.error?.message || 'Login failed',
+          authenticated: false,
+        });
+        console.log('login-2:', this.loginState$);
+      },
+    });
+  }
+
+  refreshAccessToken(): Observable<any> {
+  const refreshToken = this.getRefreshToken();
+  if (!refreshToken) {
+    return throwError(() => new Error('No refresh token found'));
+  }
+  return this.apiService.refreshAccessToken(refreshToken).pipe(
+    tap((res) => {
+      const token = res.token;
+      console.log(token);
+      
+      sessionStorage.setItem('access', res.access);
+      // Optionally update state:
+      this.loginStateSubject.next({
+        loading: false,
+        error: null,
+        authenticated: true,
+      });
+    })
+  );
+}
+
   logout() {
-    console.log('refresh Token : ', this.getRefreshToken());
-   
-
-    return this.http.post(
-      `${this.baseURL}logout/`,
-      { refresh: this.getRefreshToken() },
-    );
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      console.error('No refresh token found.');
+    } else {
+      this.apiService.logout(refreshToken).subscribe({
+        next: (res) => {
+          this.loginStateSubject.next({
+            loading: false,
+            error: null,
+            authenticated: false,
+          });
+          this.removeToken();
+          alert('logout successfully');
+          this.router.navigate(['home']);
+        },
+        error: (err) => {
+          console.log('error: ', err);
+          alert('logout error');
+        },
+      });
+    }
   }
 
-  /* refresh access Token */
-  refreshAccessToken() {
-    return this.http
-      .post<any>(`${this.baseURL}token/refresh/`, {
-        refresh: this.getRefreshToken(),
-      })
-      .pipe(
-        tap((res) => {
-          const token = res.tokens;
-          sessionStorage.setItem('access', token.access);
-        })
-      );
-  }
-
-  /* remove tokens */
   removeToken() {
     sessionStorage.removeItem('access');
     sessionStorage.removeItem('refresh');
-    this.isLoggedIn$ = false
+    sessionStorage.removeItem('username');
   }
+
+  
 }

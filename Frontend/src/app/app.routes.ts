@@ -12,6 +12,7 @@ import { authGuard } from './guard/auth.guard';
 import { PostsComponent } from './components/user-dashboard/posts/posts.component';
 import { SavedComponent } from './components/user-dashboard/saved/saved.component';
 import { EditProfileComponent } from './components/user-dashboard/edit-profile/edit-profile.component';
+import { LoadingComponent } from './loading/loading.component';
 
 export const routes: Routes = [
   {
@@ -38,6 +39,10 @@ export const routes: Routes = [
       {
         path: 'explore',
         component: ExploreComponent,
+      },
+      {
+        path: 'loading',
+        component: LoadingComponent,
       },
     ],
   },

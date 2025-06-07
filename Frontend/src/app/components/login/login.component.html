@@ -1,3 +1,9 @@
+<ng-container *ngIf="loginState$ | async as state">
+  <app-loading *ngIf="state.loading"></app-loading>
+
+  <div *ngIf="state.error" class="error">{{ state.error }}</div>
+</ng-container>
+
 <div
   class="bg-gradient-to-br  text-black min-h-[90vh] flex items-center justify-center overflow-hidden"
 >

@@ -1,3 +1,5 @@
+ <app-loading *ngIf="isLoading"></app-loading>
+
 <div class="max-w-md mx-auto mt-10 py-8 px-3 md:p-8 bg-white rounded-lg shadow-md">
   <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
     <div class="mb-6 flex flex-col items-center">

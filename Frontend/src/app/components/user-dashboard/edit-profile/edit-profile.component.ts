@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/User/user.service';
 import { CommonModule } from '@angular/common';
+import { LoadingComponent } from "../../../loading/loading.component";
 
 @Component({
   selector: 'app-edit-profile',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoadingComponent],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css',
 })
@@ -17,6 +18,7 @@ export class EditProfileComponent implements OnInit {
   errorMessage: string | null = null;
   profileData: any | null = null;
   isProfileAvailable: boolean = false;
+  isLoading: boolean = false;
 
   constructor(private fb: FormBuilder, private userService: UserService) {
     this.profileForm = this.fb.group({
@@ -121,29 +123,10 @@ export class EditProfileComponent implements OnInit {
   }
   //
   createProfile(formData: any) {
-    this.userService.createProfile(formData).subscribe({
-      next: (res) => {
-        alert('user profile created');
-        console.log(res);
-      },
-      error: (err) => {
-        alert('something went wrong');
-        console.log(err);
-      },
-    });
+    this.userService.createProfile(formData)
   }
   //
   updateProfile(formData: any) {
-    this.userService.updateProfile(formData, this.profileData.id).subscribe({
-      next: (res) => {
-        this.userService.getUserProfile()
-        alert('user profile updated');
-        console.log(res);
-      },
-      error: (err) => {
-        alert('something went wrong');
-        console.log(err);
-      },
-    });
+    this.userService.updateProfile(formData,this.profileData.id)    
   }
 }

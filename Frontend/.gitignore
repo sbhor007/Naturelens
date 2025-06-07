@@ -51,6 +51,10 @@ note.md
 .env.development
 .env.production
 /environment/
+environments/
+src/environments/
+**/src/environments/**
+
 
 
 .dockerignore

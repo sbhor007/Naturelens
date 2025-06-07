@@ -52,19 +52,8 @@ export class RegisterComponent {
       this.registrationForm.markAllAsTouched();
       return;
     }
-
-    this.userService.register(this.registrationForm.value).subscribe({
-      next: (res) => {
-        console.log('Registration Successfully');
-        alert('Registration Successful!');
-        this.registrationForm.reset();
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        console.error('Registration failed:', err);
-        alert('Registration failed. Please try again.');
-      },
-    });
+    this.userService.register(this.registrationForm.value)
+    this.registrationForm.reset();
   }
 
   passwordValidator(control: AbstractControl): ValidationErrors | null {
