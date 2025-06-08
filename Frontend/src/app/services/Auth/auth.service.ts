@@ -47,6 +47,8 @@ export class AuthService {
     return sessionStorage.getItem('refresh');
   }
 
+  
+
   login(loginCredentials: any) {
     console.log('login-1.2');
     this.loginStateSubject.next({

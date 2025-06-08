@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/User/user.service';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from "../../../loading/loading.component";
+import { Observable } from 'rxjs';
+import { UserProfileState } from '../../../model/models';
 
 @Component({
   selector: 'app-edit-profile',
@@ -16,34 +18,50 @@ export class EditProfileComponent implements OnInit {
   imagePreview: string | ArrayBuffer | null = null;
   isImage = true;
   errorMessage: string | null = null;
-  profileData: any | null = null;
+  // profileData: any | null = null;
   isProfileAvailable: boolean = false;
-  isLoading: boolean = false;
+  // isLoading: boolean = false;
+
+  userProfileState$:Observable<UserProfileState>
 
   constructor(private fb: FormBuilder, private userService: UserService) {
     this.profileForm = this.fb.group({
       profile_image: [null],
       bio: [''],
     });
+
+    this.userProfileState$ = this.userService.userProfileState$
   }
 
   ngOnInit(): void {
-    this.userService.getUserProfile()
+    this.userProfileState$ = this.userService.userProfileState$
 
-    this.isProfileAvailable = this.userService.isProfileAvailable();
-    if (this.isProfileAvailable) {
-      this.profileData = this.userService.getProfileData();
-      console.log('profile data : ', this.profileData);
+    this.userProfileState$.subscribe(
+      state => {
+        // this.isLoading = state.loading
+        this.errorMessage = state.error
+        // this.profileData = state.profile
+        this.isProfileAvailable = state.available
+        
+        // TODO:my logic
+        if(state.available){
+          // this.profileData = state.profile
+          console.log('profile data : ', state.profile);
 
-      this.profileForm.patchValue({
-        bio: this.profileData.bio || '',
-      });
-      // setting image preview if it is available
-      if (this.profileData.profile_image) {
-        this.imagePreview = 'https://res.cloudinary.com/dcyq171sr/' + this.profileData.profile_image;
+          this.profileForm.patchValue({
+            bio:state.profile.bio || '',
+          })
+
+          if(state.profile.profile_image){
+            console.log('profile image:',state.profile.profile_image);
+            
+            this.imagePreview = 'https://res.cloudinary.com/dcyq171sr/' + state.profile.profile_image;
         this.isImage = true;
+          }
+        }
       }
-    }
+
+    )
   }
 
   onFileSelected($event: Event) {
@@ -115,11 +133,15 @@ export class EditProfileComponent implements OnInit {
       console.log(`${key}:`, value);
     });
 
-    if (this.isProfileAvailable) {
+    this.userProfileState$.subscribe(
+      state => {
+        if (state.available) {
       this.updateProfile(formData);
     } else {
       this.createProfile(formData);
     }
+      }
+    )
   }
   //
   createProfile(formData: any) {
@@ -127,6 +149,10 @@ export class EditProfileComponent implements OnInit {
   }
   //
   updateProfile(formData: any) {
-    this.userService.updateProfile(formData,this.profileData.id)    
+    this.userProfileState$.subscribe(
+      state =>{
+        this.userService.updateProfile(formData,state.profile.id)    
+      }
+    )
   }
 }

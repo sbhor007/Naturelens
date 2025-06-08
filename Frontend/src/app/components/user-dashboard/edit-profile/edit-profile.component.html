@@ -1,4 +1,9 @@
- <app-loading *ngIf="isLoading"></app-loading>
+
+<ng-container *ngIf="userProfileState$ | async as state">
+  <app-loading *ngIf="state.loading"></app-loading>
+
+  <div *ngIf="state.error" class="error">{{ state.error }}</div>
+</ng-container> 
 
 <div class="max-w-md mx-auto mt-10 py-8 px-3 md:p-8 bg-white rounded-lg shadow-md">
   <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiService } from '../API/api.service';
 import { Router } from '@angular/router';
+import { UserProfileState } from '../../model/models';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +12,22 @@ import { Router } from '@angular/router';
 export class UserService {
   private profileData: any | null = null;
   private profileState: boolean = false;
+  private userProfileStateSubject = new BehaviorSubject<UserProfileState>({
+    loading:false,
+    error:null,
+    profile:null,
+    available:false
+  })
+
+  readonly userProfileState$ = this.userProfileStateSubject.asObservable()
+
+
+
+
 
   constructor(private http: HttpClient,private apiService:ApiService,private router:Router) {}
+
+
 
   isProfileAvailable() {
     return this.profileState;
@@ -26,18 +41,44 @@ export class UserService {
     return this.profileData;
   }
 
+  updateUserProfileState(partial: Partial<UserProfileState>) {
+  this.userProfileStateSubject.next({
+    ...this.userProfileStateSubject.getValue(),
+    ...partial,
+  });
+}
+
   // TODO:done
   getUserProfile() {
+    this.updateUserProfileState({
+      loading:true
+    })
     this.apiService.getProfile().subscribe({
       next: (res) => {
         if (res.length > 0) {
+          this.updateUserProfileState({
+            loading:false,
+            profile:res[0],
+            available:true
+          })
           this.setProfileState(true);
           this.profileData = (res[0]);
         } else {
           this.setProfileState(false);
+          this.updateUserProfileState({
+            loading:false,
+            profile:null,
+            available:false
+          })
         }
       },
       error: (err) => {
+        this.updateUserProfileState({
+            loading:false,
+            profile:null,
+            error:err,
+            available:false
+          })
         this.setProfileState(false);
         this.profileData = (null);
         console.log('error : ', err);
@@ -47,13 +88,22 @@ export class UserService {
   }
 
   register(userDetails: any){
+    this.updateUserProfileState({
+      loading:true
+    })
     this.apiService.register(userDetails).subscribe({
       next: (res) => {
+        this.updateUserProfileState({
+            loading:false
+          })
         console.log('Registration Successfully');
         alert('Registration Successful!');
         this.router.navigate(['/login']);
       },
       error: (err) => {
+        this.updateUserProfileState({
+            loading:false
+          })
         console.error('Registration failed:', err);
         alert('Registration failed. Please try again.');
       },
