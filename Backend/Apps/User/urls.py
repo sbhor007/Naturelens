@@ -4,8 +4,8 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 
 router = DefaultRouter()
-router.register('users-profile',views.UserProfileDetails,basename='userprofile')
-router.register('users-details',views.UserDetailsView,basename='userdetail')
+router.register('profile',views.UserProfileDetails,basename='userprofile')
+router.register('details',views.UserDetailsView,basename='userdetail')
 
 
 
