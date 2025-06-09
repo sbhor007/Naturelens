@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { AuthService } from '../Auth/auth.service';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({
@@ -18,37 +17,37 @@ export class ApiService {
   /*auth API */
 
   login(loginCredentials: any): Observable<any> {
-    return this.http.post(`${this.baseURL}login/`, loginCredentials);
+    return this.http.post(`${this.baseURL}user/login/`, loginCredentials);
   }
 
   logout(refreshToken: string) {
     console.log('refresh Token : ', refreshToken);
-    return this.http.post(`${this.baseURL}logout/`, {
+    return this.http.post(`${this.baseURL}user/logout/`, {
       refresh: refreshToken,
     });
   }
 
   refreshAccessToken(refreshToken: string) {
-    return this.http.post<any>(`${this.baseURL}token/refresh/`, {
+    return this.http.post<any>(`${this.baseURL}user/token/refresh/`, {
       refresh: refreshToken,
     });
   }
 
   /* User API */
   register(userDetails: any): Observable<any> {
-    return this.http.post(`${this.baseURL}register/`, userDetails);
+    return this.http.post(`${this.baseURL}user/register/`, userDetails);
   }
 
   createProfile(profileDetails: any): Observable<any> {
-    return this.http.post(`${this.baseURL}users-profile/`, profileDetails);
+    return this.http.post(`${this.baseURL}user/profile/`, profileDetails);
   }
 
   getProfile(): Observable<any> {
-    return this.http.get(`${this.baseURL}users-profile/`);
+    return this.http.get(`${this.baseURL}user/profile/`);
   }
 
   updateProfile(profileDetails: any, id: number): Observable<any> {
-    return this.http.put(`${this.baseURL}users-profile/${id}/`, profileDetails);
+    return this.http.put(`${this.baseURL}user/profile/${id}/`, profileDetails);
   }
 
   
