@@ -20,7 +20,7 @@ SECRET_KEY =  os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-5pgkpm#-ez(v4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,192.168.1.105').split(',')
 
 # CSRF_TRUSTED_ORIGIN = os.environ("DJANGO_CSRF_TRUSTED_ORIGINS",'HTTPS://127.0.0.1').slit(',')
 # Application definition
@@ -63,6 +63,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:4200",
     "http://localhost:80",
     "http://127.0.0.1:80",
+    "http://192.168.1.42:4200",
     
 ]
 
@@ -121,7 +122,7 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME', 'naturelens_db'),
         'USER': os.environ.get('DB_USER', 'root'),
         'PASSWORD': os.environ.get('DB_PASSWORD','Mysql80'),
-        'HOST': os.environ.get('DB_HOST','mysql_db'),
+        'HOST': os.environ.get('DB_HOST','mysql'),
         'PORT': os.environ.get('DB_PORT','3306'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",

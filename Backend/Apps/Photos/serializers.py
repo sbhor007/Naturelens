@@ -55,7 +55,11 @@ class PhotoSerializer(serializers.ModelSerializer):
             tag, _ = Tags.objects.get_or_create(name=tag_name)
             tags.append(tag)
         
-        print(f"{'-'*50}\n{tags}\n{'-'*50}")
+        print(f"{'-'*50}")
+        print(str(tags))
+        print(tag_names)
+        
+        print('-'*50)
         
         user = self.context['request'].user
         validated_data['uploaded_by'] = user

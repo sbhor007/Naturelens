@@ -2,3 +2,4 @@ mediafiles
 mysql-init
 docker-compose.yml
 nginx.conf
+.env
