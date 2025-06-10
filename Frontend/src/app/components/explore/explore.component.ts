@@ -294,23 +294,11 @@ export class ExploreComponent implements OnInit {
 
   constructor(private imagesService: ImagesService) {}
   ngOnInit(): void {
-    // this.getImages()
-    // console.log(this.images1);
+    // this.imagesService.getAllPhotos()
+    // this.imagesService.getPhotoCategories()
+    // this.imagesService.getTags()
   }
 
-  // getImages(){
-  //   this.imagesService.getImages().subscribe({
-  //     next: res =>{
-  //       this.images1 = res
-  //       // console.log(res);
-
-  //     },
-  //     error: err =>{
-  //       console.log('fail to load images',err);
-
-  //     }
-  //   })
-  // }
 
   @ViewChildren('card') cards!: QueryList<ElementRef>;
 

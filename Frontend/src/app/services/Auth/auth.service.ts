@@ -81,6 +81,7 @@ export class AuthService {
           error: err.error?.message || 'Login failed',
           authenticated: false,
         });
+        alert("invalid credentials")
         console.log('login-2:', this.loginState$);
       },
     });

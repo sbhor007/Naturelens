@@ -1,37 +1,89 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, signal, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { routes } from '../../../app.routes';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { ImagesService } from '../../../services/images/images.service';
 
 @Component({
   selector: 'app-create-post',
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,CommonModule],
   templateUrl: './create-post.component.html',
-  styleUrl: './create-post.component.css'
+  styleUrl: './create-post.component.css',
 })
-export class CreatePostComponent {
-removeFile($event: MouseEvent) {
-throw new Error('Method not implemented.');
-}
+export class CreatePostComponent implements OnInit {
+  removeFile($event: MouseEvent) {
+    throw new Error('Method not implemented.');
+  }
 
   form: FormGroup;
   isDragOver = signal(false);
   imagePreview: string | ArrayBuffer | null = null;
   isImage = true; // To differentiate between image and video
   errorMessage: string | null = null;
+   categories:any
+  tags:any
 
   boards = ['Photography', 'Design', 'Art', 'Technology'];
 
-  constructor(private fb: FormBuilder,private router:Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private imageService: ImagesService
+  ) {
     this.form = this.fb.group({
-      file: [null, Validators.required],
+      image: [null, Validators.required],
       title: ['', Validators.required],
       description: ['', Validators.required],
-      link: ['', [Validators.pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/)]],
-      board: ['', Validators.required],
-      tags: ['', Validators.required]
+      location: ['', Validators.required],
+      link: [
+        '',
+        [
+          Validators.pattern(
+            /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/
+          ),
+        ],
+      ],
+      category_name: ['', Validators.required],
+      tag_name: ['', Validators.required],
+      
     });
+
+    this.imageService.getPhotoCategories()
+    this.imageService.getTags()
+  }
+
+  ngOnInit(): void {
+    this.imageService.getPhotoCategories()
+    this.imageService.getTags()
+    
+    this.imageService.photoCategoriesState$.subscribe(
+      state =>{
+        this.categories = state
+      }
+    )
+
+    this.imageService.tagsState$.subscribe(
+      state =>{
+        this.tags = state
+      }
+    )
+
+    console.log('Categories:',this.categories);
+    
+
   }
 
   onDragOver(event: DragEvent) {
@@ -80,7 +132,7 @@ throw new Error('Method not implemented.');
     }
 
     this.isImage = isImage;
-    this.form.patchValue({ file });
+    this.form.patchValue({ image: file });
 
     // Generate preview
     const reader = new FileReader();
@@ -97,13 +149,15 @@ throw new Error('Method not implemented.');
     if (this.form.valid) {
       const formData = {
         ...this.form.value,
-        tags: this.form.value.tags.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag),
+        tags: this.form.value.tag_name
+          .split(',')
+          .map((tag: string) => tag.trim())
+          .filter((tag: string) => tag),
       };
       console.log('Form submitted:', formData);
-      alert('Post created successfully')
+      alert('Post created successfully');
 
-      this.router.navigate(['/user/profile/posts'])
-      
+      this.router.navigate(['/user/profile/posts']);
 
       // TODO:Add logic to send formData to a backend service
     }
@@ -115,5 +169,4 @@ throw new Error('Method not implemented.');
     this.isImage = true;
     this.errorMessage = null;
   }
-  
 }

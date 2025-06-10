@@ -17,12 +17,13 @@ export class EditProfileComponent implements OnInit {
   selectedFile: File | null = null;
   imagePreview: string | ArrayBuffer | null = null;
   isImage = true;
-  errorMessage: string | null = null;
+  errorMessage: string | null | undefined = null;
   // profileData: any | null = null;
   isProfileAvailable: boolean = false;
   // isLoading: boolean = false;
 
   userProfileState$:Observable<UserProfileState>
+  private latestProfileState:UserProfileState | null = null
 
   constructor(private fb: FormBuilder, private userService: UserService) {
     this.profileForm = this.fb.group({
@@ -38,30 +39,30 @@ export class EditProfileComponent implements OnInit {
 
     this.userProfileState$.subscribe(
       state => {
+        this.latestProfileState = state
+      }
+    )
         // this.isLoading = state.loading
-        this.errorMessage = state.error
+        this.errorMessage = this.latestProfileState?.error
         // this.profileData = state.profile
-        this.isProfileAvailable = state.available
+        this.isProfileAvailable = this.latestProfileState?.available ?? false
         
         // TODO:my logic
-        if(state.available){
+        if(this.isProfileAvailable){
           // this.profileData = state.profile
-          console.log('profile data : ', state.profile);
+          console.log('profile data : ', this.latestProfileState?.profile);
 
           this.profileForm.patchValue({
-            bio:state.profile.bio || '',
+            bio:this.latestProfileState?.profile.bio || '',
           })
 
-          if(state.profile.profile_image){
-            console.log('profile image:',state.profile.profile_image);
+          if(this.latestProfileState?.profile.profile_image){
+            console.log('profile image:',this.latestProfileState?.profile.profile_image);
             
-            this.imagePreview = 'https://res.cloudinary.com/dcyq171sr/' + state.profile.profile_image;
+            this.imagePreview = 'https://res.cloudinary.com/dcyq171sr/' + this.latestProfileState?.profile.profile_image;
         this.isImage = true;
           }
         }
-      }
-
-    )
   }
 
   onFileSelected($event: Event) {
@@ -133,15 +134,11 @@ export class EditProfileComponent implements OnInit {
       console.log(`${key}:`, value);
     });
 
-    this.userProfileState$.subscribe(
-      state => {
-        if (state.available) {
+     if (this.latestProfileState?.available) {
       this.updateProfile(formData);
     } else {
       this.createProfile(formData);
     }
-      }
-    )
   }
   //
   createProfile(formData: any) {
@@ -149,10 +146,8 @@ export class EditProfileComponent implements OnInit {
   }
   //
   updateProfile(formData: any) {
-    this.userProfileState$.subscribe(
-      state =>{
-        this.userService.updateProfile(formData,state.profile.id)    
-      }
-    )
+   if (this.latestProfileState?.profile?.id) {
+      this.userService.updateProfile(formData, this.latestProfileState.profile.id);
+    }
   }
 }

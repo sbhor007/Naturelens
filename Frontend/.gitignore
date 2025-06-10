@@ -59,6 +59,3 @@ src/environments/
 
 .dockerignore
 Dockerfile
-
-package-lock.json
-package.json

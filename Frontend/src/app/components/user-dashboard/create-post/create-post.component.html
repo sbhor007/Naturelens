@@ -85,7 +85,19 @@
           Description is required.
         </div>
       </div>
-
+      <!-- location -->
+       <div>
+        <input
+          type="text"
+          formControlName="location"
+          placeholder="Add a location"
+          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
+          aria-label="Post text"
+        />
+        <div *ngIf="form.get('location')?.invalid && form.get('location')?.touched" class="text-red-500 text-sm">
+          Location is Required.
+        </div>
+      </div>
       <!-- Link -->
       <div>
         <input
@@ -102,15 +114,19 @@
 
       <!-- Board -->
       <div>
-        <select
-          formControlName="board"
+        <input
+        list="category"
+          formControlName="category_name"
+          placeholder="Enter category"
           class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
           aria-label="Select a board"
-        >
-          <option value="" disabled selected>Choose a board</option>
-          <option *ngFor="let b of boards" [value]="b">{{ b }}</option>
-        </select>
-        <div *ngIf="form.get('board')?.invalid && form.get('board')?.touched" class="text-red-500 text-sm">
+        />
+          <!-- <option value="" disabled selected>Choose a board</option> -->
+           <datalist id="category">
+             <option *ngFor="let c of categories" [value]="c.name"></option>
+           </datalist>
+        
+        <div *ngIf="form.get('category_name')?.invalid && form.get('category_name')?.touched" class="text-red-500 text-sm">
           Please select a board.
         </div>
       </div>
@@ -118,13 +134,22 @@
       <!-- Tags -->
       <div>
         <input
+          
           type="text"
-          formControlName="tags"
+          formControlName="tag_name"
           placeholder="Add tags (comma-separated)"
           class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
           aria-label="Post tags"
         />
-        <div *ngIf="form.get('tags')?.invalid && form.get('tags')?.touched" class="text-red-500 text-sm">
+        <!-- <datalist id="tags"> -->
+          @if(tags != null){
+            @for (item of tags; track $index) {
+
+              <option [value]="item.name"></option>
+            }
+          }
+        <!-- </datalist> -->
+        <div *ngIf="form.get('tag_name')?.invalid && form.get('tag_name')?.touched" class="text-red-500 text-sm">
           Tags are required.
         </div>
       </div>

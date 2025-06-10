@@ -11,3 +11,7 @@ export interface UserProfileState {
   profile: any | null;
   available: boolean;
 }
+
+export interface photoCategoryState{
+  category : any | null;
+}
