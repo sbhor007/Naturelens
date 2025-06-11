@@ -56,7 +56,7 @@ export class ApiService {
   /*start Module Photos API */
   // Photos API
   createPhoto(photoDetails:any):Observable<any>{
-    return this.http.post(`${this.baseURL}photos/photo/`,{photoDetails:photoDetails})
+    return this.http.post(`${this.baseURL}photos/photo/`,photoDetails)
   }
 
   getAllPhotos():Observable<any>{

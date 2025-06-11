@@ -42,15 +42,21 @@ class PhotoSerializer(serializers.ModelSerializer):
         )
     
     def create(self, validated_data):
+        print('*'*50)
+        print(f"validated data : {validated_data}")
+        print('*'*50)
+        
         category_name = validated_data.pop('category_name',None)
         tag_names = validated_data.pop('tag_names',[])
-        
         # get or create category
         if category_name:
             category,_ = Category.objects.get_or_create(name=category_name)
             validated_data['category'] = category
             
         tags = []
+        if len(tag_names) > 0:
+            tag_names = tag_names[0].split(',')
+        
         for tag_name in tag_names:
             tag, _ = Tags.objects.get_or_create(name=tag_name)
             tags.append(tag)
@@ -58,7 +64,6 @@ class PhotoSerializer(serializers.ModelSerializer):
         print(f"{'-'*50}")
         print(str(tags))
         print(tag_names)
-        
         print('-'*50)
         
         user = self.context['request'].user
@@ -67,6 +72,10 @@ class PhotoSerializer(serializers.ModelSerializer):
         photo = Photo.objects.create(**validated_data)
         if tags:
             photo.tags.set(tags)
+            
+        print('*'*50)
+        print(f"photo : {photo}")
+        print('*'*50)
         
         return photo
                 

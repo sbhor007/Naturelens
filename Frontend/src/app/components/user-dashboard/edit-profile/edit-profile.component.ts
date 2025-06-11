@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/User/user.service';
 import { CommonModule } from '@angular/common';
-import { LoadingComponent } from "../../../loading/loading.component";
+import { LoadingComponent } from '../../../loading/loading.component';
 import { Observable } from 'rxjs';
 import { UserProfileState } from '../../../model/models';
 
@@ -22,8 +22,8 @@ export class EditProfileComponent implements OnInit {
   isProfileAvailable: boolean = false;
   // isLoading: boolean = false;
 
-  userProfileState$:Observable<UserProfileState>
-  private latestProfileState:UserProfileState | null = null
+  userProfileState$: Observable<UserProfileState>;
+  private latestProfileState: UserProfileState | null = null;
 
   constructor(private fb: FormBuilder, private userService: UserService) {
     this.profileForm = this.fb.group({
@@ -31,38 +31,41 @@ export class EditProfileComponent implements OnInit {
       bio: [''],
     });
 
-    this.userProfileState$ = this.userService.userProfileState$
+    this.userProfileState$ = this.userService.userProfileState$;
   }
 
   ngOnInit(): void {
-    this.userProfileState$ = this.userService.userProfileState$
+    this.userProfileState$ = this.userService.userProfileState$;
 
-    this.userProfileState$.subscribe(
-      state => {
-        this.latestProfileState = state
-      }
-    )
-        // this.isLoading = state.loading
-        this.errorMessage = this.latestProfileState?.error
-        // this.profileData = state.profile
-        this.isProfileAvailable = this.latestProfileState?.available ?? false
-        
-        // TODO:my logic
-        if(this.isProfileAvailable){
-          // this.profileData = state.profile
-          console.log('profile data : ', this.latestProfileState?.profile);
+    this.userProfileState$.subscribe((state) => {
+      this.latestProfileState = state;
+    });
+    // this.isLoading = state.loading
+    this.errorMessage = this.latestProfileState?.error;
+    // this.profileData = state.profile
+    this.isProfileAvailable = this.latestProfileState?.available ?? false;
 
-          this.profileForm.patchValue({
-            bio:this.latestProfileState?.profile.bio || '',
-          })
+    // TODO:my logic
+    if (this.isProfileAvailable) {
+      // this.profileData = state.profile
+      console.log('profile data : ', this.latestProfileState?.profile);
 
-          if(this.latestProfileState?.profile.profile_image){
-            console.log('profile image:',this.latestProfileState?.profile.profile_image);
-            
-            this.imagePreview = 'https://res.cloudinary.com/dcyq171sr/' + this.latestProfileState?.profile.profile_image;
+      this.profileForm.patchValue({
+        bio: this.latestProfileState?.profile.bio || '',
+      });
+
+      if (this.latestProfileState?.profile.profile_image) {
+        console.log(
+          'profile image:',
+          this.latestProfileState?.profile.profile_image
+        );
+
+        this.imagePreview =
+          'https://res.cloudinary.com/dcyq171sr/' +
+          this.latestProfileState?.profile.profile_image;
         this.isImage = true;
-          }
-        }
+      }
+    }
   }
 
   onFileSelected($event: Event) {
@@ -134,7 +137,7 @@ export class EditProfileComponent implements OnInit {
       console.log(`${key}:`, value);
     });
 
-     if (this.latestProfileState?.available) {
+    if (this.latestProfileState?.available) {
       this.updateProfile(formData);
     } else {
       this.createProfile(formData);
@@ -142,12 +145,15 @@ export class EditProfileComponent implements OnInit {
   }
   //
   createProfile(formData: any) {
-    this.userService.createProfile(formData)
+    this.userService.createProfile(formData);
   }
   //
   updateProfile(formData: any) {
-   if (this.latestProfileState?.profile?.id) {
-      this.userService.updateProfile(formData, this.latestProfileState.profile.id);
+    if (this.latestProfileState?.profile?.id) {
+      this.userService.updateProfile(
+        formData,
+        this.latestProfileState.profile.id
+      );
     }
   }
 }

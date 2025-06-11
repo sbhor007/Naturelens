@@ -111,6 +111,7 @@ export class UserService {
   }
 
   createProfile(profileDetails: any){
+    console.log("profile Details : ",profileDetails);
     this.apiService.createProfile(profileDetails).subscribe({
       next: (res) => {
         alert('user profile created');
@@ -127,6 +128,7 @@ export class UserService {
 
 
   updateProfile(profileDetails: any, id: number) {
+    console.log("profile Details : ",profileDetails);
     
     this.apiService.updateProfile(profileDetails,id).subscribe({
       next: (res) => {

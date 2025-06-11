@@ -99,7 +99,7 @@
         </div>
       </div>
       <!-- Link -->
-      <div>
+      <!-- <div>
         <input
           type="url"
           formControlName="link"
@@ -110,7 +110,7 @@
         <div *ngIf="form.get('link')?.invalid && form.get('link')?.touched" class="text-red-500 text-sm">
           Please enter a valid URL.
         </div>
-      </div>
+      </div> -->
 
       <!-- Board -->
       <div>
@@ -136,7 +136,7 @@
         <input
           
           type="text"
-          formControlName="tag_name"
+          formControlName="tag_names"
           placeholder="Add tags (comma-separated)"
           class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
           aria-label="Post tags"
@@ -149,7 +149,7 @@
             }
           }
         <!-- </datalist> -->
-        <div *ngIf="form.get('tag_name')?.invalid && form.get('tag_name')?.touched" class="text-red-500 text-sm">
+        <div *ngIf="form.get('tag_names')?.invalid && form.get('tag_names')?.touched" class="text-red-500 text-sm">
           Tags are required.
         </div>
       </div>

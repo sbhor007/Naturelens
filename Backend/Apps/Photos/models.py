@@ -15,7 +15,7 @@ class Photo(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False,null=False)
     title = models.CharField(max_length=100,null=False,blank=False)
     description = models.TextField(blank=True,null=True)
-    image = models.ImageField(upload_to='mediafiles',blank=False,null=False)
+    image = models.ImageField(upload_to='mediafiles/',blank=False,null=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tags)

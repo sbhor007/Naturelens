@@ -16,10 +16,11 @@ import { routes } from '../../../app.routes';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ImagesService } from '../../../services/images/images.service';
+import { table } from 'console';
 
 @Component({
   selector: 'app-create-post',
-  imports: [CommonModule, ReactiveFormsModule,CommonModule],
+  imports: [CommonModule, ReactiveFormsModule, CommonModule],
   templateUrl: './create-post.component.html',
   styleUrl: './create-post.component.css',
 })
@@ -33,8 +34,9 @@ export class CreatePostComponent implements OnInit {
   imagePreview: string | ArrayBuffer | null = null;
   isImage = true; // To differentiate between image and video
   errorMessage: string | null = null;
-   categories:any
-  tags:any
+  categories: any;
+  tags: any;
+  selectedFile: File | null = null;
 
   boards = ['Photography', 'Design', 'Art', 'Technology'];
 
@@ -48,42 +50,28 @@ export class CreatePostComponent implements OnInit {
       title: ['', Validators.required],
       description: ['', Validators.required],
       location: ['', Validators.required],
-      link: [
-        '',
-        [
-          Validators.pattern(
-            /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/
-          ),
-        ],
-      ],
+
       category_name: ['', Validators.required],
-      tag_name: ['', Validators.required],
-      
+      tag_names: ['', Validators.required],
     });
 
-    this.imageService.getPhotoCategories()
-    this.imageService.getTags()
+    this.imageService.getPhotoCategories();
+    this.imageService.getTags();
   }
 
   ngOnInit(): void {
-    this.imageService.getPhotoCategories()
-    this.imageService.getTags()
-    
-    this.imageService.photoCategoriesState$.subscribe(
-      state =>{
-        this.categories = state
-      }
-    )
+    this.imageService.getPhotoCategories();
+    this.imageService.getTags();
 
-    this.imageService.tagsState$.subscribe(
-      state =>{
-        this.tags = state
-      }
-    )
+    this.imageService.photoCategoriesState$.subscribe((state) => {
+      this.categories = state;
+    });
 
-    console.log('Categories:',this.categories);
-    
+    this.imageService.tagsState$.subscribe((state) => {
+      this.tags = state;
+    });
 
+    console.log('Categories:', this.categories);
   }
 
   onDragOver(event: DragEvent) {
@@ -109,7 +97,9 @@ export class CreatePostComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
+      this.selectedFile = file;
       this.validateAndSetFile(file);
+      console.log('elected file : ', this.selectedFile);
     }
   }
 
@@ -146,21 +136,55 @@ export class CreatePostComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.form.valid) {
-      const formData = {
-        ...this.form.value,
-        tags: this.form.value.tag_name
-          .split(',')
-          .map((tag: string) => tag.trim())
-          .filter((tag: string) => tag),
-      };
-      console.log('Form submitted:', formData);
-      alert('Post created successfully');
+    // if (this.form.valid) {
+    //   const formData = {
+    //     ...this.form.value,
+    //     tag_names: this.form.value.tag_names
+    //       .split(',')
+    //       .map((tag: string) => tag.trim())
+    //       .filter((tag: string) => tag),
+    //   };
+    //   // console.log('Form submitted:', formData);
+    //   alert('Post created successfully');
 
-      this.router.navigate(['/user/profile/posts']);
+    //   this.imageService.uploadPhotos(formData)
 
-      // TODO:Add logic to send formData to a backend service
+    //   this.router.navigate(['/user/profile/posts']);
+
+    //   // TODO:Add logic to send formData to a backend service
+    // }
+
+    if (this.form.invalid) {
+      return this.form.markAllAsTouched();
     }
+
+    const formData = new FormData();
+    if (this.selectedFile) {
+      console.log('file selected');
+      formData.append('image', this.selectedFile, this.selectedFile.name);
+    }
+    formData.append('title', this.form.get('title')?.value || '');
+    formData.append('description', this.form.get('description')?.value || '');
+    formData.append('location', this.form.get('location')?.value || '');
+    formData.append(
+      'category_name',
+      this.form.get('category_name')?.value || ''
+    );
+    const tags = this.form
+        .get('tag_names')
+        ?.value.split(',')
+        .map((tag: string) => tag.trim())
+        .filter((tag: string) => tag)
+
+    formData.append(
+      'tag_names',
+      tags
+    );
+console.log('tags:',tags);
+
+    this.imageService.uploadPhotos(formData)
+    console.log("create post",formData);
+    
   }
 
   resetForm() {
