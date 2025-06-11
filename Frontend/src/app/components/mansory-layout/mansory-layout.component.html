@@ -1,6 +1,6 @@
 
 
-<!-- <div class="md:py-6 py-6 px-3 md:-px-8  min-h-screen scroll-smooth bg-white md:bg-white/0 "> -->
+<div class="md:py-6 py-6 px-3 md:-px-8  min-h-screen scroll-smooth bg-white md:bg-white/0 ">
 
   <!-- <div class="masonry">
     <div *ngFor="let image of images" class=" rounded-lg shadow md:mb-4 mb-2 md:mx-0.5 break-inside hover:scale-3d hover:rounded-lg">
@@ -12,23 +12,18 @@
     </div>
   </div> -->
   <!-- gallery.component.html -->
-<!-- <div class="columns-2 sm:columns-2 md:columns- lg:columns-5 gap-4">
-  <div *ngFor="let img of userPosts" class="mb-4 break-inside-avoid">
+<div class="columns-2 sm:columns-2 md:columns- lg:columns-5 gap-4">
+  <div *ngFor="let img of photos" class="mb-4 break-inside-avoid">
     <div class="overflow-hidden rounded hover:rounded">
       <img
       [src]="img.image"
       (load)="onImageLoad($event)"
       class="w-full h-auto rounded shadow  hover:scale-200 transition-all hover:rounde"
       alt="Uploaded Image"
+      (click)="photosDetails(img)"
     />
     </div>
   </div>
 </div>
-
-</div> -->
-<app-mansory-layout
-[photos]="userPosts"
-[isUser]="true"
->
-
-</app-mansory-layout>
+{{isUser}}
+</div>

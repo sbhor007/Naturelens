@@ -63,6 +63,9 @@ export class ApiService {
     return this.http.get(`${this.baseURL}photos/photo/`)
   }
 
+  getUserPhotos():Observable<any>{
+    return this.http.get(`${this.baseURL}photos/photo/?mine=true`)
+  }
   getPhotoCategories():Observable<any>{
     return this.http.get(`${this.baseURL}photos/category/`)
   }

@@ -12,10 +12,12 @@ export class ImagesService {
   private photoCategoriesSubject = new BehaviorSubject<any | null>(null);
   private tagsSubject = new BehaviorSubject<any | null>(null);
   private photosSubject = new BehaviorSubject<any | null>(null);
+  private userPhotosSubject = new BehaviorSubject<any | null>(null);
 
   readonly photoCategoriesState$ = this.photoCategoriesSubject.asObservable();
   readonly tagsState$ = this.tagsSubject.asObservable();
   readonly photosState$ = this.photosSubject.asObservable();
+  readonly userPhotosState$ = this.userPhotosSubject.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -82,4 +84,17 @@ export class ImagesService {
       },
     });
   }
+
+  getUserPhotos(){
+    this.apiService.getUserPhotos().subscribe({
+      next: res =>{
+        this.userPhotosSubject.next(res)
+      },
+      error: err =>{
+        console.log('GET_USER_PHOTO : ',err);
+        
+      }
+    })
+  }
+
 }

@@ -9,6 +9,7 @@ import {
 import gsap from 'gsap';
 import { ImagesService } from '../../services/images/images.service';
 import Masonry from 'masonry-layout';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-explore',
@@ -17,7 +18,6 @@ import Masonry from 'masonry-layout';
   styleUrl: './explore.component.css',
 })
 export class ExploreComponent implements OnInit {
-  url: string = 'D:\\NatureLens\\Naturelens\\Frontend\\images\\1.jpg';
   images = [
     {
       src: 'https://images.pexels.com/photos/31464235/pexels-photo-31464235/free-photo-of-romantic-flamingos-displaying-heart-shaped-pose.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
@@ -292,7 +292,7 @@ export class ExploreComponent implements OnInit {
   ];
   images1: any | null;
 
-  constructor(private imagesService: ImagesService) {
+  constructor(private imagesService: ImagesService, private router: Router) {
     this.imagesService.getAllPhotos();
   }
   ngOnInit(): void {
@@ -328,6 +328,16 @@ export class ExploreComponent implements OnInit {
     // If you use Masonry.js still
     if (this.masonry && typeof this.masonry.layout === 'function') {
       this.masonry.layout();
+    }
+  }
+
+  photosDetails(photo: any) {
+    console.log('photo :', photo);
+    console.log('function call');
+    if (photo && photo.id) {
+      this.router.navigate(['user/photo-details', photo.id], { state: { photo:photo } });
+    } else {
+      console.error('Photo object is missing an id:', photo);
     }
   }
 }

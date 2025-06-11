@@ -33,6 +33,11 @@ class PhotoViewSet(ModelViewSet):
         """
         queryset = Photo.objects.all()
         mine = self.request.query_params.get('mine')
+        print('-'*50)
+        print(self.request)
+        print(self)
+        print('-'*50)
+        
         if mine == 'true':
             queryset = queryset.filter(uploaded_by=self.request.user)
         return queryset

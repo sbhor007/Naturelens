@@ -13,6 +13,7 @@ import { PostsComponent } from './components/user-dashboard/posts/posts.componen
 import { SavedComponent } from './components/user-dashboard/saved/saved.component';
 import { EditProfileComponent } from './components/user-dashboard/edit-profile/edit-profile.component';
 import { LoadingComponent } from './loading/loading.component';
+import { PhotoDetailsComponent } from './components/user-dashboard/photo-details/photo-details.component';
 
 export const routes: Routes = [
   {
@@ -50,7 +51,7 @@ export const routes: Routes = [
   {
     path: 'user',
     component: DashboardLayoutComponent,
-    canActivate:[authGuard],
+    // canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -62,6 +63,11 @@ export const routes: Routes = [
         component: ProfileComponent,
         children: [
           {
+            path: '',
+            redirectTo: 'posts',
+            pathMatch: 'full',
+          },
+          {
             path: 'posts',
             component: PostsComponent,
           },
@@ -70,6 +76,10 @@ export const routes: Routes = [
             component: SavedComponent,
           },
         ],
+      },
+      {
+        path: 'photo-details/:id',
+        component: PhotoDetailsComponent,
       },
       {
         path: 'explore',
@@ -84,9 +94,9 @@ export const routes: Routes = [
         component: CreatePostComponent,
       },
       {
-        path:'edit-profile',
-        component:EditProfileComponent
-      }
+        path: 'edit-profile',
+        component: EditProfileComponent,
+      },
     ],
   },
   {
