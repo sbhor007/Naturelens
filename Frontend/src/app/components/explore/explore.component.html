@@ -12,14 +12,16 @@
     </div>
   </div> -->
   <!-- gallery.component.html -->
-<div class="columns-2 sm:columns-2 md:columns-4 lg:columns-4 gap-4">
-  <div *ngFor="let img of images" class="mb-4 break-inside-avoid">
-    <img
-      [src]="img.src"
+<div class="columns-2 sm:columns-2 md:columns- lg:columns-5 gap-4">
+  <div *ngFor="let img of images1" class="mb-4 break-inside-avoid">
+    <div class="overflow-hidden rounded hover:rounded">
+      <img
+      [src]="img.image"
       (load)="onImageLoad($event)"
-      class="w-full h-auto rounded shadow"
+      class="w-full h-auto rounded shadow  hover:scale-200 transition-all hover:rounde"
       alt="Uploaded Image"
     />
+    </div>
   </div>
 </div>
 

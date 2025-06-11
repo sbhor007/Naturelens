@@ -37,6 +37,7 @@ export class CreatePostComponent implements OnInit {
   categories: any;
   tags: any;
   selectedFile: File | null = null;
+  photosData:any
 
   boards = ['Photography', 'Design', 'Art', 'Technology'];
 
@@ -54,15 +55,17 @@ export class CreatePostComponent implements OnInit {
       category_name: ['', Validators.required],
       tag_names: ['', Validators.required],
     });
-
+    this.imageService.getAllPhotos()
     this.imageService.getPhotoCategories();
     this.imageService.getTags();
   }
 
   ngOnInit(): void {
-    this.imageService.getPhotoCategories();
-    this.imageService.getTags();
-
+    this.imageService.photosState$.subscribe(
+      state => {
+        this.photosData = state
+      }
+    )
     this.imageService.photoCategoriesState$.subscribe((state) => {
       this.categories = state;
     });
@@ -71,7 +74,7 @@ export class CreatePostComponent implements OnInit {
       this.tags = state;
     });
 
-    console.log('Categories:', this.categories);
+    console.log('Photos Data:', this.photosData);
   }
 
   onDragOver(event: DragEvent) {
@@ -136,24 +139,7 @@ export class CreatePostComponent implements OnInit {
   }
 
   onSubmit() {
-    // if (this.form.valid) {
-    //   const formData = {
-    //     ...this.form.value,
-    //     tag_names: this.form.value.tag_names
-    //       .split(',')
-    //       .map((tag: string) => tag.trim())
-    //       .filter((tag: string) => tag),
-    //   };
-    //   // console.log('Form submitted:', formData);
-    //   alert('Post created successfully');
-
-    //   this.imageService.uploadPhotos(formData)
-
-    //   this.router.navigate(['/user/profile/posts']);
-
-    //   // TODO:Add logic to send formData to a backend service
-    // }
-
+    
     if (this.form.invalid) {
       return this.form.markAllAsTouched();
     }

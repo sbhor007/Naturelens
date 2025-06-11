@@ -21,12 +21,19 @@ export class ImagesService {
     private http: HttpClient,
     private apiService: ApiService,
     private router: Router
-  ) {}
+  ) {
+    console.log('component loaded');
+    this.getAllPhotos()
+    this.getPhotoCategories()
+    this.getTags()
+    
+  }
 
   getAllPhotos() {
     this.apiService.getAllPhotos().subscribe({
       next: (res) => {
-        console.log('res : ', res);
+        this.photosSubject.next(res)
+        // console.log('res : ', res);
       },
       error: (err) => {
         console.error('ERROR:', err);
@@ -38,10 +45,10 @@ export class ImagesService {
     this.apiService.getPhotoCategories().subscribe({
       next: (res) => {
         this.photoCategoriesSubject.next(res);
-        console.log(res);
+        // console.log(res);
       },
       error: (err) => {
-        console.error(err);
+        // console.error(err);
       },
     });
   }
@@ -50,10 +57,10 @@ export class ImagesService {
     this.apiService.getTags().subscribe({
       next: (res) => {
         this.tagsSubject.next(res);
-        console.log(res);
+        // console.log(res);
       },
       error: (err) => {
-        console.error(err);
+        // console.error(err);
       },
     });
   }

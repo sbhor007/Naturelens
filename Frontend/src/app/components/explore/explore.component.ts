@@ -290,15 +290,20 @@ export class ExploreComponent implements OnInit {
       description: 'Colorful stalls with fresh produce.',
     },
   ];
-  images1: any[] | undefined;
+  images1: any | null;
 
-  constructor(private imagesService: ImagesService) {}
+  constructor(private imagesService: ImagesService) {
+    this.imagesService.getAllPhotos();
+  }
   ngOnInit(): void {
-    // this.imagesService.getAllPhotos()
+    // this.imagesService.getAllPhotos();
     // this.imagesService.getPhotoCategories()
     // this.imagesService.getTags()
+    this.imagesService.photosState$.subscribe((state) => {
+      this.images1 = state;
+    });
+    console.log(this.images1);
   }
-
 
   @ViewChildren('card') cards!: QueryList<ElementRef>;
 
