@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     # 'Apps.User',
     'Apps.User.apps.UserConfig',
     'Apps.Photos',
+    'Apps.Social',
+    'drf_api_logger',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +54,18 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    
+    'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware',
 ]
+
+DRF_API_LOGGER_DATABASE = False
+DRF_API_LOGGER_SIGNAL = True
+DRF_LOGGER_QUEUE_MAX_SIZE = 50
+DRF_LOGGER_INTERVAL = 10
+DRF_API_LOGGER_EXCLUDE_KEYS = ['password', 'token', 'access', 'refresh']
+DRF_API_LOGGER_PATH_TYPE = 'ABSOLUTE'  # or 'RAW_URI'
+DRF_API_LOGGER_SKIP_URL_NAME = ['admin:login']  # Skip logging specific views
+
 ROOT_URLCONF = 'Backend.urls'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
@@ -193,26 +206,38 @@ AUTH_USER_MODEL = 'User.User'
 
 
 
-# Logging configuration for Docker
+# Logging configuration 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'simple',
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
-    },
+
     'loggers': {
-        'django': {
+        'drf_api_logger': {
             'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'level': 'DEBUG',  # or 'INFO'
+            'propagate': False,
         },
     },
 }
+
 
 # cloudinary storage
 

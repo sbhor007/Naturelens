@@ -1,29 +1,26 @@
+<!-- gallery.component.html -->
 
-
-<div class="md:py-6 py-6 px-3 md:-px-8  min-h-screen scroll-smooth custom-scrollbar custom-scrollbar scrollbar-hide bg-white md:bg-white/0 ">
-
-  <!-- <div class="masonry">
-    <div *ngFor="let image of images" class=" rounded-lg shadow md:mb-4 mb-2 md:mx-0.5 break-inside hover:scale-3d hover:rounded-lg">
-      <div class="group w-full overflow-hidden">
-        <img [src]="image.src" alt="Card Image" class="w-full rounded  hover:scale-200 transition-all hover:rounded-md">
+<div
+  class="bg-red-500 md:py-6 py-6 px-3 md:-px-8 min-h-screen scroll-smooth overflow-auto custom-scrollbar scrollbar-hide bg-white md:bg-white/0"
+>
+  <div
+    class="columns-2 sm:columns-2 md:columns-3 lg:columns-5 gap-4 custom-scrollbar scrollbar-hide"
+    infiniteScroll
+  >
+    <div
+      *ngFor="let img of images1"
+      class="mb-4 break-inside-avoid custom-scrollbar scrollbar-hide"
+    >
+      <div class="overflow-hidden rounded hover:rounded">
+        <img
+          [src]="img.image"
+          loading="lazy"
+          (load)="onImageLoad($event)"
+          class="w-full h-auto rounded shadow hover:scale-200 transition-all hover:rounded"
+          alt="Uploaded Image"
+          (click)="photosDetails(img)"
+        />
       </div>
-      <h2 class="text-lg text-gray-950/80 font-semibold">{{ image.title }}</h2>
-      <p class="text-sm text-gray-600/80">{{ image.description }}</p>
-    </div>
-  </div> -->
-  <!-- gallery.component.html -->
-<div class="columns-2 sm:columns-2 md:columns- lg:columns-5 gap-4 custom-scrollbar scrollbar-hide">
-  <div *ngFor="let img of images1" class="mb-4 break-inside-avoid custom-scrollbar scrollbar-hide">
-    <div class="overflow-hidden   rounded hover:rounded">
-      <img
-      [src]="img.image"
-      (load)="onImageLoad($event)"
-      class="w-full h-auto rounded shadow  hover:scale-200 transition-all hover:rounde"
-      alt="Uploaded Image"
-      (click)="photosDetails(img)"
-    />
     </div>
   </div>
-</div>
-
 </div>

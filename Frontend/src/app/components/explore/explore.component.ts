@@ -10,10 +10,13 @@ import gsap from 'gsap';
 import { ImagesService } from '../../services/images/images.service';
 import Masonry from 'masonry-layout';
 import { Router } from '@angular/router';
+import { ScrollingModule } from '@angular/cdk/scrolling'; // Import ScrollingModule
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 
 @Component({
   selector: 'app-explore',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule,ScrollingModule],
   templateUrl: './explore.component.html',
   styleUrl: './explore.component.css',
 })

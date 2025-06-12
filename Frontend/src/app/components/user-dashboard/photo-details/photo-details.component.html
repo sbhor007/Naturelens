@@ -114,7 +114,7 @@
     </div>
 
     <!-- Description -->
-    <p class="text-gray-700 mb-8 text-lg leading-relaxed">
+    <p class="text-gray-700 mb-8 text-sm leading-relaxed">
       Short description about the photo goes here. You can add more details as
       needed.
     </p>
@@ -123,7 +123,9 @@
     <div
       class="flex flex-col h-[25rem] rounded-xl shadow-inner border border-gray-200"
     >
-      <div class="flex-1 overflow-y-auto custom-scrollbar scrollbar-hide  p-4 space-y-4">
+      <div
+        class="flex-1 overflow-y-auto custom-scrollbar scrollbar-hide p-4 space-y-4"
+      >
         @for (s of [].constructor(10); track $index) {
         <div class="bg-gray-100 rounded-lg p-3 shadow-sm text-gray-800">
           comment- 1

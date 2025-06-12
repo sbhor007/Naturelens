@@ -41,10 +41,3 @@ class PhotoViewSet(ModelViewSet):
         if mine == 'true':
             queryset = queryset.filter(uploaded_by=self.request.user)
         return queryset
-    
-     
-    
-    
-
-        
-    

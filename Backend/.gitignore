@@ -46,7 +46,7 @@ requirements.txt
 # Migrations (Django/Flask)
 migrations/
 */migrations/
-
+*/__pycache__/
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 

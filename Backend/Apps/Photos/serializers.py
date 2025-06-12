@@ -23,6 +23,7 @@ class PhotoSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     tags = TagsSerializer(many=True,read_only=True)
     uploaded_by = UserSerializer(read_only=True)
+    like_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Photo 
@@ -38,7 +39,8 @@ class PhotoSerializer(serializers.ModelSerializer):
             'category', 
             'tags',
             'category_name', 
-            'tag_names'
+            'tag_names',
+            'like_count'
         )
     
     def create(self, validated_data):
@@ -79,7 +81,8 @@ class PhotoSerializer(serializers.ModelSerializer):
         
         return photo
                 
-    
+    def get_like_count(self,obj):
+        return obj.likes.count()
     # To allow writing category and tags, add their id fields
     # category_id = serializers.PrimaryKeyRelatedField(
     #     queryset=Category.objects.all(), source='category', write_only=True, required=False
