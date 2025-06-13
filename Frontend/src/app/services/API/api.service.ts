@@ -78,6 +78,16 @@ export class ApiService {
 
   /*end Photos API */
 
+  /* social model APi */
+
+  likeDislike(likeDetails:any):Observable<any>{
+    return this.http.post<any>(`${this.baseURL}social/photo-like/`,likeDetails)
+  }
+
+  totalLikes(id:string):Observable<any>{
+    return this.http.get(`${this.baseURL}social/photo-like/like-count/?id=${id}`)
+  }
+
 
   
 }

@@ -8,3 +8,11 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+.red{
+  background-color: red;
+}
+
+.white {
+  background-color: white;
+}

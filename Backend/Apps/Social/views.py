@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from .serializers import PhotoLikeSerializer,CommentSerializer
 import logging
 from rest_framework import status
+from Apps.Photos.models import Photo
+from Apps.Photos.serializers import PhotoSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -21,18 +23,11 @@ class PhotoLikeViewSet(ModelViewSet):
         return PhotoLike.objects.all()
     
     @action(detail=False, methods=['get'], url_path='like-count')
-    def like_count(self, request,*arg,**kwargs):
-        
-        print('-'*50)
-        print('req : ',self.request.data['user'])
-        print('-'*50)
-        
+    def like_count(self, request,*arg,**kwargs):        
         photo_id = request.query_params.get("id")
-        
-        if not photo_id:
-            return Response({"error": "photo id is required"}, status=400)
-        total_likes = self.queryset.filter(photo=photo_id).count()        
-        return Response({'total_likes':total_likes},status=status.HTTP_200_OK)
+        photo = Photo.objects.get(id=photo_id)
+        serializer = PhotoSerializer(photo)
+        return Response(serializer.data['like_count'],status=status.HTTP_200_OK)
     
     def create(self, request, *args, **kwargs):
         print('-'*50)

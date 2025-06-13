@@ -42,6 +42,9 @@ class PhotoSerializer(serializers.ModelSerializer):
             'tag_names',
             'like_count'
         )
+
+    def __str__(self):
+        return f"Photo(id={self.id}, title={self.title})"
     
     def create(self, validated_data):
         print('*'*50)
@@ -83,10 +86,4 @@ class PhotoSerializer(serializers.ModelSerializer):
                 
     def get_like_count(self,obj):
         return obj.likes.count()
-    # To allow writing category and tags, add their id fields
-    # category_id = serializers.PrimaryKeyRelatedField(
-    #     queryset=Category.objects.all(), source='category', write_only=True, required=False
-    # )
-    # tags_ids = serializers.PrimaryKeyRelatedField(
-    #     queryset=Tags.objects.all(), source='tags', many=True, write_only=True, required=False
-    # )
+    
