@@ -15,3 +15,4 @@ export interface UserProfileState {
 export interface photoCategoryState{
   category : any | null;
 }
+

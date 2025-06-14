@@ -103,7 +103,7 @@ class CommentViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
     
-    @action(detail=False, methods=['get'], url_path='phot-comments')
+    @action(detail=False, methods=['get'], url_path='photo-comments')
     def get_photo_comments(self,request,*args, **kwargs):
         photo_id = request.query_params.get('id')
         if not photo_id:
@@ -123,4 +123,4 @@ class CommentViewSet(ModelViewSet):
         print('PHOTO ID : ',photo_id)
         print('SERIALIZE_DATA : ',serializer.data)
         print('*'*50)
-        return Response(serializer.data,status=status.HTTP_302_FOUND)
+        return Response(serializer.data,status=status.HTTP_200_OK)

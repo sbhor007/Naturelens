@@ -1,25 +1,41 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SocialService } from '../../../services/social/social.service';
 import { CommonModule } from '@angular/common';
+import { LikeService } from '../../../services/social/like/like.service';
+import { CommentService } from '../../../services/social/comment/comment.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-photo-details',
-  imports: [CommonModule],
+  imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './photo-details.component.html',
   styleUrl: './photo-details.component.css',
 })
 export class PhotoDetailsComponent implements OnInit {
+deleteComment(_t26: any) {
+throw new Error('Method not implemented.');
+}
+editComment(_t26: any) {
+throw new Error('Method not implemented.');
+}
   photo: any = null;
   isLiked:boolean | null =  null
   totalLikes:any = null
+  comments:any | null = null
+  commentForm:FormGroup;
 
   constructor(
+    private fb:FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private socialService: SocialService
+    private likeService:LikeService,
+    private commentService:CommentService
   ) {
 
+    this.commentForm = this.fb.group({
+      comment:['',Validators.required]
+    })
+    
     const navigation = this.router.getCurrentNavigation();
 
     // Check if we have state data from navigation
@@ -48,29 +64,55 @@ export class PhotoDetailsComponent implements OnInit {
 
     console.log('Final photo details:', this.photo);
     
-    this.socialService.isLiked(this.photo.id)
-    this.socialService.totalLikes(this.photo.id)
+    this.commentService.getPhotoComments(this.photo.id)
+    this.likeService.isLiked(this.photo.id)
+    this.likeService.totalLikes(this.photo.id)
   }
 
   ngOnInit(): void {
     
 
-    this.socialService.totalLikesState$.subscribe(
+    this.likeService.totalLikesState$.subscribe(
       res =>{
         this.totalLikes = res
         console.log('total likes : ', this.totalLikes);
       }
     )
-    this.socialService.isLikedState$.subscribe(
+
+    this.likeService.isLikedState$.subscribe(
       res =>{
         this.isLiked = res
         console.log('is_liked: ', this.isLiked);
       }
     )
+
+    this.commentService.photoCommentState$.subscribe(
+      res =>{
+        this.comments = res.sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+        
+      }
+      
+    )
+
+
   }
 
   isLikeOrDislike(likeDetails:any) {
-    this.socialService.likeOrDislike(likeDetails)
+    this.likeService.likeOrDislike(likeDetails)
+  }
+
+  createComment(id:string){
+    if(this.commentForm.invalid){
+      this.commentForm.markAllAsTouched()
+      alert('invalid')
+      return
+    }
+
+    const commentData = new FormData()
+    commentData.append('photo',id)
+    commentData.append('comment',this.commentForm.get('comment')?.value || '')
+    this.commentService.createComment(commentData)
+    this.commentForm.reset()
   }
 }
 

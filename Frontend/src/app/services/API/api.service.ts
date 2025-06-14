@@ -91,7 +91,14 @@ export class ApiService {
   isLiked(id:string):Observable<any>{
     return this.http.get(`${this.baseURL}social/photo-like/is-liked/?id=${id}`)
   }
+  
+  createComment(commentDetails:any):Observable<any>{
+    return this.http.post(`${this.baseURL}social/comment/`,commentDetails)
+  }
 
+  getPhotoComments(id:string):Observable<any>{
+    return this.http.get(`${this.baseURL}social/comment/photo-comments/?id=${id}`)
+  }
 
   
 }

@@ -1,155 +1,193 @@
 <div
-  class="w-full md:min-h-[82vh] mx-auto shadow-lg overflow-hidden flex flex-col lg:flex-row"
+  class="max-w-5xl mx-auto mb-8 bg-white rounded-2xl shadow-xl flex flex-col lg:flex-row overflow-hidden"
 >
   <!-- Image Section -->
-  <div class="lg:flex-1 md:w-[60vh] flex items-center justify-center">
+  <div class="lg:w-1/2 flex items-center justify-center bg-gray-50 p-6">
     <img
-      src="https://images.pexels.com/photos/158607/cairn-fog-mystical-background-158607.jpeg?auto=compress&cs=tinysrgb&w=800"
+      [src]="photo.image"
       alt="Photo"
-      class="w-full h-auto max-h-[60vh] lg:max-h-[70vh] object-contain md:rounded-l-lg rounded-t-lg shadow-md"
+      class="rounded-xl shadow-lg w-full max-h-[70vh] object-contain"
     />
   </div>
 
   <!-- Content Section -->
-  <div class="w-full lg:w-[40rem] p-3 flex flex-col gap-2.5">
-    <!-- Header: Title & Actions -->
-    <div class="flex flex-col md:flex-row md:justify-between">
-      <div class="flex gap-5 py-2">
-        <!-- like -->
+  <div class="lg:w-1/2 flex flex-col px-6 gap-6">
+    <!-- Title & Description -->
+    <div class="shadow-orange-300">
+      <h2 class="text-3xl font-bold text-gray-900 mb-2 truncate">
+        {{photo.title}}
+      </h2>
+      <p class="text-gray-600 text-base leading-relaxed mb-4 truncate">
+        {{photo.description}}
+      </p>
+      <div class="flex gap-4">
+        <!-- Like Button -->
         <button
-          class="flex items-center gap-1 text-gray-600 hover:text-blue-600 transition"
-          (click)="isLikeOrDislike({'photo':photo.id})"
+          class="flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition"
+          (click)="isLikeOrDislike({ photo: photo.id })"
+          [attr.aria-pressed]="isLiked"
         >
-          <div [ngClass]="{'bg-red-500': isLiked, 'st0': !isLiked}">
-            <svg
-          
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            version="1.1"
-            id="Uploaded to svgrepo.com"
-            width="25px"
-            height="25px"
-            viewBox="0 0 32 32"
-            xml:space="preserve"
+          <span
+            class="flex items-center justify-center w-8 h-8 rounded-full transition"
+            [ngClass]="{ 'bg-red-100': isLiked, 'bg-white': !isLiked }"
           >
-            <style type="text/css">
-              .bentblocks_een {
-                fill: #0b1719;
-                fill-opacity: 0.8;
-              }
-              .st0 {
-                fill: #0b1719;
-              }
-            </style>
-            <path
-              d="M21.081,6C23.752,6.031,26,8.766,26,12c0,5.106-6.47,10.969-10.001,13.593  C12.466,22.974,6,17.12,6,12c0-3.234,2.248-5.969,4.918-6C13.586,6.175,13.926,6.801,16,8.879C18.069,6.806,18.418,6.173,21.081,6   M20.911,4.006L20.912,4C18.993,4,17.259,4.785,16,6.048C14.741,4.785,13.007,4,11.088,4l0.001,0.006C7.044,3.936,4,7.719,4,12  c0,8,11.938,16,11.938,16h0.124C16.062,28,28,20,28,12C28,7.713,24.951,3.936,20.911,4.006z"
-            />
-          </svg>
-          </div>
-
-          {{ totalLikes }}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 32 32"
+            >
+              <path
+                [attr.fill]="isLiked ? '#ef4444' : '#0b1719'"
+                d="M21.081,6C23.752,6.031,26,8.766,26,12c0,5.106-6.47,10.969-10.001,13.593C12.466,22.974,6,17.12,6,12c0-3.234,2.248-5.969,4.918-6C13.586,6.175,13.926,6.801,16,8.879C18.069,6.806,18.418,6.173,21.081,6 M20.911,4.006L20.912,4C18.993,4,17.259,4.785,16,6.048C14.741,4.785,13.007,4,11.088,4l0.001,0.006C7.044,3.936,4,7.719,4,12c0,8,11.938,16,11.938,16h0.124C16.062,28,28,20,28,12C28,7.713,24.951,3.936,20.911,4.006z"
+              />
+            </svg>
+          </span>
+          <span class="font-semibold text-gray-700">{{ totalLikes }}</span>
         </button>
-        <!-- share icon -->
+        <!-- Share Button -->
         <button
-          class="flex items-center gap-1 text-gray-600 hover:text-blue-600 transition"
+          class="flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition"
+          title="Share"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="25px"
-            height="25px"
+            width="22"
+            height="22"
             viewBox="0 0 24 24"
             fill="none"
           >
-            <g id="Communication / Share_iOS_Export">
-              <path
-                id="Vector"
-                d="M9 6L12 3M12 3L15 6M12 3V13M7.00023 10C6.06835 10 5.60241 10 5.23486 10.1522C4.74481 10.3552 4.35523 10.7448 4.15224 11.2349C4 11.6024 4 12.0681 4 13V17.8C4 18.9201 4 19.4798 4.21799 19.9076C4.40973 20.2839 4.71547 20.5905 5.0918 20.7822C5.5192 21 6.07899 21 7.19691 21H16.8036C17.9215 21 18.4805 21 18.9079 20.7822C19.2842 20.5905 19.5905 20.2839 19.7822 19.9076C20 19.4802 20 18.921 20 17.8031V13C20 12.0681 19.9999 11.6024 19.8477 11.2349C19.6447 10.7448 19.2554 10.3552 18.7654 10.1522C18.3978 10 17.9319 10 17 10"
-                stroke="#000000"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </g>
+            <path
+              d="M9 6L12 3M12 3L15 6M12 3V13M7.00023 10C6.06835 10 5.60241 10 5.23486 10.1522C4.74481 10.3552 4.35523 10.7448 4.15224 11.2349C4 11.6024 4 12.0681 4 13V17.8C4 18.9201 4 19.4798 4.21799 19.9076C4.40973 20.2839 4.71547 20.5905 5.0918 20.7822C5.5192 21 6.07899 21 7.19691 21H16.8036C17.9215 21 18.4805 21 18.9079 20.7822C19.2842 20.5905 19.5905 20.2839 19.7822 19.9076C20 19.4802 20 18.921 20 17.8031V13C20 12.0681 19.9999 11.6024 19.8477 11.2349C19.6447 10.7448 19.2554 10.3552 18.7654 10.1522C18.3978 10 17.9319 10 17 10"
+              stroke="#2563eb"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
-          1255
+          <span class="font-semibold text-gray-700">1255</span>
         </button>
-        <!-- comment -->
+        <!-- Comment Button -->
         <button
-          class="flex items-center gap-1 text-gray-600 hover:text-blue-600 transition"
+          class="flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition"
+          title="Comments"
         >
           <svg
-            width="25px"
-            height="25px"
-            viewBox="0 0 32 32"
-            version="1.1"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
           >
-            <title>comment-3</title>
-            <desc>Created with Sketch Beta.</desc>
-            <defs></defs>
-            <g
-              id="Page-1"
-              stroke="none"
-              stroke-width="1"
-              fill="none"
-              fill-rule="evenodd"
-              sketch:type="MSPage"
-            >
-              <g
-                id="Icon-Set"
-                sketch:type="MSLayerGroup"
-                transform="translate(-204.000000, -255.000000)"
-                fill="#000000"
-              >
-                <path
-                  d="M228,267 C226.896,267 226,267.896 226,269 C226,270.104 226.896,271 228,271 C229.104,271 230,270.104 230,269 C230,267.896 229.104,267 228,267 L228,267 Z M220,281 C218.832,281 217.704,280.864 216.62,280.633 L211.912,283.463 L211.975,278.824 C208.366,276.654 206,273.066 206,269 C206,262.373 212.268,257 220,257 C227.732,257 234,262.373 234,269 C234,275.628 227.732,281 220,281 L220,281 Z M220,255 C211.164,255 204,261.269 204,269 C204,273.419 206.345,277.354 210,279.919 L210,287 L217.009,282.747 C217.979,282.907 218.977,283 220,283 C228.836,283 236,276.732 236,269 C236,261.269 228.836,255 220,255 L220,255 Z M212,267 C210.896,267 210,267.896 210,269 C210,270.104 210.896,271 212,271 C213.104,271 214,270.104 214,269 C214,267.896 213.104,267 212,267 L212,267 Z M220,267 C218.896,267 218,267.896 218,269 C218,270.104 218.896,271 220,271 C221.104,271 222,270.104 222,269 C222,267.896 221.104,267 220,267 L220,267 Z"
-                  id="comment-3"
-                  sketch:type="MSShapeGroup"
-                ></path>
-              </g>
-            </g>
+            <path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+              fill="#6366f1"
+            />
           </svg>
-          5525
+          <span class="font-semibold text-gray-700">{{ comments.length }}</span>
         </button>
       </div>
-      <h2 class="text-3xl font-extrabold text-gray-900">Photo Title</h2>
+      <div class="w-full py-2 shadow-lg"></div>
     </div>
 
-    <!-- Description -->
-    <p class="text-gray-700 mb-8 text-sm leading-relaxed">
-      Short description about the photo goes here. You can add more details as
-      needed.
-    </p>
-
     <!-- Comments Section -->
-    <div
-      class="flex flex-col h-[25rem] rounded-xl shadow-inner border border-gray-200"
-    >
+    <div class="flex flex-col rounded-xl h-[25rem]">
       <div
-        class="flex-1 overflow-y-auto custom-scrollbar scrollbar-hide p-4 space-y-4"
+        class="flex-1 overflow-y-auto px-4 space-y-4 custom-scrollbar scrollbar-hide"
       >
-        @for (s of [].constructor(10); track $index) {
-        <div class="bg-gray-100 rounded-lg p-3 shadow-sm text-gray-800">
-          comment- 1
+        @for (comment of comments; track $index) {
+        <!-- <div class="bg-white rounded-xl shadow p-4 border border-gray-100 flex gap-4 items-start"> -->
+        <div class="bg-white rounded-xl px-4 flex gap-4 items-start">
+          <div class="w-10 h-10 bg-gray-200 rounded-full flex-shrink-0"></div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-semibold text-gray-800 text-base"
+                >{{ comment.user.first_name }}
+                {{ comment.user.last_name }}</span
+              >
+              <span class="text-xs text-gray-400">{{
+                comment.updated_at | date : "yyyy-MM-dd HH:mm:ss"
+              }}</span>
+              <div class="flex items-center gap-1">
+                <!-- Edit Icon -->
+                <button
+                  class="ml-2 p-1 rounded hover:bg-gray-100"
+                  title="Edit Comment"
+                  (click)="editComment(comment)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M4 21h17M18.5 2.5a2.121 2.121 0 0 1 3 3L7 20.5H4v-3L18.5 2.5Z"
+                      stroke="#6366f1"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+                <!-- Delete Icon -->
+                <button
+                  class="ml-2 p-1 rounded hover:bg-gray-100"
+                  title="Delete Comment"
+                  (click)="deleteComment(comment)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6h16Z"
+                      stroke="#ef4444"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M10 11v6M14 11v6"
+                      stroke="#ef4444"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="text-gray-700 text-sm mb-2">
+              {{ comment.comment }}
+            </div>
+          </div>
         </div>
+        <div class="w-full py-2 shadow-lg"></div>
         }
       </div>
-      <div
-        class="flex flex-wrap items-center gap-3 px-4 py-3 bg-gray-50 rounded-b-xl"
-      >
-        <input
-          type="text"
-          placeholder="Add a comment..."
-          class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-        />
-        <button
-          class="bg-blue-600 w-full md:w-20 text-white px-5 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 transition"
+      <!-- Add Comment Form -->
+      <form [formGroup]="commentForm" (ngSubmit)="createComment(photo.id)">
+        <div
+          class="flex items-center gap-3 px-4 py-3 bg-white border-t border-gray-100 rounded-b-xl"
         >
-          Post
-        </button>
-      </div>
+          <input
+            type="text"
+            placeholder="Add a comment..."
+            formControlName="comment"
+            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          />
+          <button
+            class="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 transition"
+          >
+            Post
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
