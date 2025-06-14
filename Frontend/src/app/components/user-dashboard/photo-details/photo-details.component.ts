@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocialService } from '../../../services/social/social.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-photo-details',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './photo-details.component.html',
   styleUrl: './photo-details.component.css',
 })
 export class PhotoDetailsComponent implements OnInit {
   photo: any = null;
-  isLiked = false
+  isLiked:boolean | null =  null
   totalLikes:any = null
 
   constructor(
@@ -47,6 +48,7 @@ export class PhotoDetailsComponent implements OnInit {
 
     console.log('Final photo details:', this.photo);
     
+    this.socialService.isLiked(this.photo.id)
     this.socialService.totalLikes(this.photo.id)
   }
 
@@ -59,9 +61,12 @@ export class PhotoDetailsComponent implements OnInit {
         console.log('total likes : ', this.totalLikes);
       }
     )
-    
-
-    
+    this.socialService.isLikedState$.subscribe(
+      res =>{
+        this.isLiked = res
+        console.log('is_liked: ', this.isLiked);
+      }
+    )
   }
 
   isLikeOrDislike(likeDetails:any) {

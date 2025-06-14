@@ -40,7 +40,7 @@ class PhotoSerializer(serializers.ModelSerializer):
             'tags',
             'category_name', 
             'tag_names',
-            'like_count'
+            'like_count',
         )
 
     def __str__(self):
@@ -53,7 +53,6 @@ class PhotoSerializer(serializers.ModelSerializer):
         
         category_name = validated_data.pop('category_name',None)
         tag_names = validated_data.pop('tag_names',[])
-        # get or create category
         if category_name:
             category,_ = Category.objects.get_or_create(name=category_name)
             validated_data['category'] = category

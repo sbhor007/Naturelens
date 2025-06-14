@@ -88,6 +88,10 @@ export class ApiService {
     return this.http.get(`${this.baseURL}social/photo-like/like-count/?id=${id}`)
   }
 
+  isLiked(id:string):Observable<any>{
+    return this.http.get(`${this.baseURL}social/photo-like/is-liked/?id=${id}`)
+  }
+
 
   
 }

@@ -11,6 +11,7 @@ from rest_framework import status
 from Apps.Photos.models import Photo
 from Apps.Photos.serializers import PhotoSerializer
 
+
 logger = logging.getLogger(__name__)
 
 class PhotoLikeViewSet(ModelViewSet):
@@ -28,6 +29,21 @@ class PhotoLikeViewSet(ModelViewSet):
         photo = Photo.objects.get(id=photo_id)
         serializer = PhotoSerializer(photo)
         return Response(serializer.data['like_count'],status=status.HTTP_200_OK)
+    
+    @action(detail=False,methods=['get'],url_path='is-liked')
+    def is_liked(self,request,*arg,**kwargs):
+        photo_id =request.query_params.get('id')
+        if not photo_id:
+            return Response(
+                {
+                    "message": "Missing 'photo' ID."
+                    },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if self.get_queryset().filter(photo_id=photo_id,user=self.request.user).exists():
+            return Response({'isLiked':True})
+        return Response({'isLiked':False})
+        
     
     # like and dislike
     def create(self, request, *args, **kwargs):
