@@ -9,7 +9,7 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register('photo-like',views.PhotoLikeViewSet,basename='photoLike')
 router.register('comment',views.CommentViewSet,basename='comments')
-path('', include(router.urls))
+# path('', include(router.urls))
 
 urlpatterns = [
    path('', include(router.urls))

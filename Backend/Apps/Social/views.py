@@ -92,8 +92,7 @@ class PhotoLikeViewSet(ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
     
-    def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
+    
     
     
         
@@ -103,3 +102,25 @@ class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
+    
+    @action(detail=False, methods=['get'], url_path='phot-comments')
+    def get_photo_comments(self,request,*args, **kwargs):
+        photo_id = request.query_params.get('id')
+        if not photo_id:
+            return Response(
+                {
+                    "message":"Missing 'photo' ID."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        comments = self.queryset.filter(photo=photo_id)
+        
+        # if not comments > 0:
+        #     return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = self.serializer_class(comments,many=True)
+        print('*'*50)
+        print(comments.exists())
+        print('PHOTO ID : ',photo_id)
+        print('SERIALIZE_DATA : ',serializer.data)
+        print('*'*50)
+        return Response(serializer.data,status=status.HTTP_302_FOUND)
