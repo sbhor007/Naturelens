@@ -69,5 +69,3 @@ export class PhotoDetailsComponent implements OnInit {
   }
 }
 
-
-// TODO: Change User ID 

@@ -9,6 +9,7 @@ class PhotoLike(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,editable=False)
     photo = models.ForeignKey(Photo,on_delete=models.CASCADE,related_name='likes')
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='photo_likes')
+    created_at = models.DateTimeField(auto_now_add=True)
     
     '''
     when using ForeignKey fields in Django models, you can't apply unique=True directly to multiple fields together. Instead, Django uses the Meta class with unique_together or the newer constraints syntax to enforce multi-field uniqueness
@@ -22,6 +23,9 @@ class Comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,editable=False)
     photo = models.ForeignKey(Photo,on_delete=models.CASCADE)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    comment = models.TextField(blank=True,null=True)
-    
-    
+    comment = models.TextField(blank=False,null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+     
+    def __str__(self):
+        return f"Comment by {self.user.username} on {self.photo.title}"

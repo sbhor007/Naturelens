@@ -29,26 +29,52 @@ class PhotoLikeViewSet(ModelViewSet):
         serializer = PhotoSerializer(photo)
         return Response(serializer.data['like_count'],status=status.HTTP_200_OK)
     
+    # like and dislike
     def create(self, request, *args, **kwargs):
         print('-'*50)
-        print(request.data['photo'],request.data['user'])
+        print(request.user)
         print('-'*50)
-        photo_liked = self.get_queryset().filter(
-            photo=self.request.data['photo'],
-            user=self.request.data['user']
+        user = self.request.user
+        photo_id = request.data.get('photo')
+        
+        if not photo_id:
+            return Response(
+                {
+                    "message": "Missing 'photo' ID."
+                    },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        existing_like = self.get_queryset().filter(
+            photo=photo_id,
+            user=user
         )
-        print('-'*50)
-        print(photo_liked.exists())
-        print('-'*50)
-        if photo_liked.exists():
-            photo_liked.delete()
-            return Response({'message':'Dislike Success','status':status.HTTP_200_OK})
+        if existing_like.exists():
+            existing_like.delete()
+            return Response(
+                {
+                    'message':'Dislike Success',
+                    'isLike':False
+                },
+                status=status.HTTP_200_OK,
+                )
         else:
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data,status=status.HTTP_200_OK)
-            return Response({'message':'Something went to wrong','status':status.HTTP_400_BAD_REQUEST})
+                return Response(
+                    {
+                        'data':serializer.data,
+                        'isLike':True
+                    },
+                    status=status.HTTP_200_OK,
+                    )
+            return Response(
+                    {
+                        'message':serializer.errors,
+                        'isLike':False
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
     
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
