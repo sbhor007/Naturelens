@@ -11,6 +11,9 @@ import { LoginState } from '../../model/models';
 })
 export class AuthService {
 
+  // private usernameSubject = new BehaviorSubject<string | null>(null)
+  // readonly username
+
   constructor(
     private http: HttpClient,
     private apiService: ApiService,

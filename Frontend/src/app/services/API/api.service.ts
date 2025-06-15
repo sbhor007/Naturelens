@@ -8,6 +8,7 @@ import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
   providedIn: 'root',
 })
 export class ApiService {
+  
   private baseURL = environment.baseAPI;
   private isLoggedIn$ = false;
 
@@ -98,6 +99,14 @@ export class ApiService {
 
   getPhotoComments(id:string):Observable<any>{
     return this.http.get(`${this.baseURL}social/comment/photo-comments/?id=${id}`)
+  }
+
+  deleteComment(commentId:string):Observable<any>{
+    return this.http.delete(`${this.baseURL}social/comment/${commentId}/`)
+  }
+
+  updateComment(formData: FormData, commentId: string):Observable<any> {
+    return this.http.patch(`${this.baseURL}social/comment/${commentId}/`,formData)
   }
 
   
