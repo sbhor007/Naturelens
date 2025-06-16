@@ -1,4 +1,4 @@
-from .models import Category,Tags,Photo
+from .models import Category,Tags,Photo, SavePhotos
 from Apps.User.serializers import UserSerializer
 from rest_framework import serializers
 
@@ -86,3 +86,18 @@ class PhotoSerializer(serializers.ModelSerializer):
     def get_like_count(self,obj):
         return obj.likes.count()
     
+
+class SavePhotosSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    
+    class Meta:
+        model = SavePhotos
+        fields = '__all__'
+        read_only_fields = ('user','created_at')
+        
+    def __str__(self):
+            return f"Saved by {self.user.username} on {self.photo.title}"
+        
+    def create(self,validated_data):
+        user = self.context.get('request').user
+        return SavePhotos.objects.create(user=user,**validated_data)

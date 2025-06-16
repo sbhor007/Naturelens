@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .serializers import CategorySerializer,TagsSerializer,PhotoSerializer
-from .models import Tags,Category,Photo
+from .serializers import CategorySerializer,TagsSerializer,PhotoSerializer, SavePhotosSerializer
+from .models import Tags,Category,Photo,SavePhotos
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import permissions
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -41,3 +41,10 @@ class PhotoViewSet(ModelViewSet):
         if mine == 'true':
             queryset = queryset.filter(uploaded_by=self.request.user)
         return queryset
+    
+class SavePhotosViewSet(ModelViewSet):
+    queryset = SavePhotos.objects.all()
+    serializer_class = SavePhotosSerializer
+    # permission_classes = (permissions.IsAuthenticated,)
+    # authentication_classes = (JWTAuthentication,)  
+    
