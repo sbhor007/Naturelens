@@ -23,52 +23,66 @@ import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
 })
 export class ExploreComponent implements OnInit {
   
-  images1: any | null;
+ images1: any[] = [];
+
+  @ViewChildren('card') cards!: QueryList<ElementRef>;
 
   constructor(private imagesService: ImagesService, private router: Router) {
     this.imagesService.getAllPhotos();
   }
+
   ngOnInit(): void {
-    
     this.imagesService.photosState$.subscribe((state) => {
       this.images1 = state.map((img: any) => ({ ...img, isLoaded: false }));
     });
-    console.log(this.images1);
   }
 
-  
-
-  @ViewChildren('card') cards!: QueryList<ElementRef>;
-
   ngAfterViewInit() {
+    // Register ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animate each card as it comes into view
+    this.cards.changes.subscribe((cards: QueryList<ElementRef>) => {
+      cards.forEach((card, i) => {
+        gsap.from(card.nativeElement, {
+          opacity: 0,
+          y: 50,
+          duration: 0.8,
+          delay: i * 0.05,
+          scrollTrigger: {
+            trigger: card.nativeElement,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        });
+      });
+    });
+
+    // Also animate already-rendered cards
     this.cards.forEach((card, i) => {
       gsap.from(card.nativeElement, {
         opacity: 0,
         y: 50,
         duration: 0.8,
-        delay: i * 0.1,
+        delay: i * 0.05,
         scrollTrigger: {
           trigger: card.nativeElement,
-          start: 'top 80%',
+          start: 'top 85%',
           toggleActions: 'play none none none',
         },
       });
     });
   }
 
-  masonry: Masonry | null = null;
-onImageLoad(event: Event, img: any) {
-    img.isLoaded = true; // Mark image as loaded
-    if (this.masonry && typeof this.masonry.layout === 'function') {
-      this.masonry.layout();
-    }
+  onImageLoad(event: Event, img: any) {
+    img.isLoaded = true;
   }
 
   photosDetails(photo: any) {
-    console.log('photo :', photo);
-    console.log('function call');
     if (photo && photo.id) {
-      this.router.navigate(['user/photo-details', photo.id], { state: { photo:photo } });
+      this.router.navigate(['user/photo-details', photo.id], {
+        state: { photo: photo },
+      });
     } else {
       console.error('Photo object is missing an id:', photo);
     }
