@@ -59,3 +59,67 @@
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
+
+
+.shimmer-effect {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.masonry-grid {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.masonry-item {
+  width: calc(50% - 8px); /* 2 columns on small screens */
+  break-inside: avoid;
+}
+
+@media (min-width: 640px) {
+  .masonry-item {
+    width: calc(33.33% - 10.66px); /* 3 columns on medium screens */
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry-item {
+    width: calc(20% - 12.8px); /* 5 columns on large screens */
+  }
+}
+
+img {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.shimmer-effect {
+  height: 200px; /* Adjust based on your image sizes */
+  width: 100%;
+  border-radius: 0.5rem;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

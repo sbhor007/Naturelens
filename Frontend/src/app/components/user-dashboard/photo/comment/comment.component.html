@@ -1,0 +1,197 @@
+<div class="flex flex-col flex-1 min-h-0 ">
+  <h3 class="text-lg font-semibold text-gray-900 mb-4">Comments</h3>
+
+  <!-- Comments List -->
+  <div
+    class="flex-1 overflow-y-auto space-y-4 pr-2 max-h-64 w-full sm:max-h-80 md:max-h-96 lg:max-h-[30vh] custom-scrollbar scroll-smooth"
+    style="scroll-behavior: smooth"
+  >
+    @for (comment of comments; track $index) {
+    <div
+      class="bg-gray-50 rounded-2xl p-4 hover:bg-gray-100 transition-colors duration-200"
+    >
+      <div class="flex items-start gap-3">
+        <!-- Avatar -->
+        <div
+          class="w-8 h-8 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-full flex-shrink-0 flex items-center justify-center"
+        >
+          <svg
+            class="w-4 h-4 text-indigo-600"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+            />
+          </svg>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1 min-w-0">
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center md:flex-row flex-col gap-2 min-w-0">
+              <span class="font-medium text-gray-900 text-sm truncate">
+                {{ comment.user.first_name }} {{ comment.user.last_name }}
+              </span>
+              <span class="text-xs text-gray-500 w-full md:w-auto">
+                {{ comment.updated_at | date : "MMM dd" }}
+              </span>
+            </div>
+
+            <!-- Actions for comment owner -->
+
+            @if (comment.user.username == username) {
+            <div
+              class="flex items-center gap-1 opacity-70 group-hover:opacity-100 transition-opacity duration-200"
+            >
+              <button
+                class="p-1.5 rounded-lg hover:bg-white transition-colors duration-200 group cursor-pointer"
+                title="Edit Comment"
+                (click)="editComment(comment.id, comment.comment)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="text-gray-500 group-hover:text-indigo-600 transition-colors duration-200"
+                >
+                  <path
+                    d="M4 21h17M18.5 2.5a2.121 2.121 0 0 1 3 3L7 20.5H4v-3L18.5 2.5Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="p-1.5 rounded-lg hover:bg-white transition-colors duration-200 group cursor-pointer"
+                title="Delete Comment"
+                (click)="deleteComment(comment.id, photoId!)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="text-gray-500 group-hover:text-red-600 transition-colors duration-200"
+                >
+                  <path
+                    d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6h16Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M10 11v6M14 11v6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+            }
+          </div>
+
+          <!-- Comment Text or Edit Form -->
+          <div
+            *ngIf="
+              isDisable === false && commentId === comment.id;
+              else showCommentText
+            "
+          >
+            <form
+              [formGroup]="updateCommentForm"
+              (ngSubmit)="
+                updateComment(comment?.id, comment?.photo, photoOwnerId)
+              "
+            >
+              <div class="relative">
+                <textarea
+                  formControlName="message"
+                  class="w-full outline-none bg-white text-gray-800 text-sm resize-none overflow-y-auto p-3 pr-10 rounded-xl border border-gray-200 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 transition-all duration-200 placeholder-gray-400"
+                  rows="2"
+                  placeholder="Edit your comment..."
+                  style="
+                    overflow-wrap: break-word;
+                    word-break: break-word;
+                    min-height: 2.5rem;
+                  "
+                ></textarea>
+
+                <button
+                  class="absolute right-2 bottom-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full p-1.5 transition-all duration-200 transform hover:scale-105"
+                  type="submit"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <ng-template #showCommentText>
+            <div class="text-gray-700 text-sm leading-relaxed">
+              {{ comment.comment }}
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  <!-- Add Comment Form -->
+  <form
+    [formGroup]="commentForm"
+    (ngSubmit)="createComment(photoId!)"
+    class="mt-4"
+  >
+    <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl">
+      <div
+        class="w-8 h-8 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex-shrink-0 flex items-center justify-center"
+      >
+        <svg
+          class="w-4 h-4 text-gray-600"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+          />
+        </svg>
+      </div>
+      <input
+        id="comment"
+        type="text"
+        placeholder="Add a comment..."
+        formControlName="comment"
+        class="flex-1 px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition-all duration-200 text-sm placeholder-gray-500"
+      />
+      <button
+        type="submit"
+        class="bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-medium shadow-sm hover:bg-indigo-700 hover:shadow-md transition-all duration-200 text-sm cursor-pointer"
+      >
+        Post
+      </button>
+    </div>
+  </form>
+</div>

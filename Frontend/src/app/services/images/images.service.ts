@@ -34,6 +34,9 @@ export class ImagesService {
   getAllPhotos() {
     this.apiService.getAllPhotos().subscribe({
       next: (res) => {
+        // if (Array.isArray(res)) {
+        //   res = res.sort(() => Math.random() - 0.5);
+        // }
         this.photosSubject.next(res)
         // console.log('res : ', res);
       },

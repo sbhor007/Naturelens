@@ -1,22 +1,16 @@
-<!-- gallery.component.html -->
-
-<div
-  class="bg-red-500 md:py-6 py-6 px-3 md:-px-8 min-h-screen scroll-smooth overflow-auto custom-scrollbar scrollbar-hide bg-white md:bg-white/0"
->
-  <div
-    class="columns-2 sm:columns-2 md:columns-3 lg:columns-5 gap-4 custom-scrollbar scrollbar-hide"
-    infiniteScroll
-  >
-    <div
-      *ngFor="let img of images1"
-      class="mb-4 break-inside-avoid custom-scrollbar scrollbar-hide"
-    >
-      <div class="overflow-hidden rounded hover:rounded">
+<div class="md:py-6 py-6 px-3 md:-px-8 min-h-screen scroll-smooth overflow-auto custom-scrollbar scrollbar-hide bg-white md:bg-white/0">
+  <div class="columns-2 sm:columns-2 md:columns-3 lg:columns-5 gap-4 custom-scrollbar scrollbar-hide" infiniteScroll>
+    <div *ngFor="let img of images1" class="mb-4 break-inside-avoid custom-scrollbar scrollbar-hide">
+      <div class="overflow-hidden rounded hover:rounded relative">
+        <!-- Shimmer Placeholder -->
+        <ngx-shimmer-loading *ngIf="!img.isLoaded" class="w-full h-48 rounded shimmer-effect"></ngx-shimmer-loading>
+        <!-- Image -->
         <img
           [src]="img.image"
           loading="lazy"
-          (load)="onImageLoad($event)"
-          class="w-full h-auto rounded shadow hover:scale-200 transition-all hover:rounded"
+          (load)="onImageLoad($event, img)"
+          class="w-full h-auto rounded shadow hover:scale-105 transition-transform duration-300 hover:rounded"
+          [ngClass]="{'opacity-0': !img.isLoaded, 'opacity-100': img.isLoaded}"
           alt="Uploaded Image"
           (click)="photosDetails(img)"
         />
