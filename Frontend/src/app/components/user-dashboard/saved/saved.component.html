@@ -1,1 +1,37 @@
-<p>saved works!</p>
+<div
+  class="md:py-6 py-6 px-3 md:px-8 min-h-screen scroll-smooth overflow-auto custom-scrollbar scrollbar-hide bg-white md:bg-white/0"
+>
+  <div class="columns-2 sm:columns-2 md:columns-3 lg:columns-5 gap-4" infiniteScroll>
+    <div
+      #card
+      *ngFor="let img of savedPhotosDetails$"
+      class="mb-4 break-inside-avoid custom-scrollbar scrollbar-hide"
+    >
+      <div class="overflow-hidden rounded hover:rounded relative cursor-pointer">
+        <!-- Debug URL -->
+        {{ img.image | json }}
+
+        <!-- Shimmer Placeholder -->
+        <ngx-shimmer-loading
+          *ngIf="!img.isLoaded"
+          class="w-full h-48 rounded shimmer-effect"
+        ></ngx-shimmer-loading>
+
+        <!-- Image -->
+        <img
+          [src]="img.photo.image"
+          loading="lazy"
+          (load)="onImageLoad($event, img)"
+          (error)="onImageError(img.photo)"
+          (click)="photosDetails(img.photo)"
+          alt="Uploaded Image"
+          class="w-full h-auto rounded shadow transition-opacity duration-700 ease-in-out transform hover:rounded"
+          [ngClass]="{
+            'opacity-0': !img.isLoaded,
+            'opacity-100': img.isLoaded
+          }"
+        />
+      </div>
+    </div>
+  </div>
+</div>

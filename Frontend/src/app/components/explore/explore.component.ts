@@ -10,8 +10,7 @@ import gsap from 'gsap';
 import { ImagesService } from '../../services/images/images.service';
 import Masonry from 'masonry-layout';
 import { Router } from '@angular/router';
-import { ScrollingModule } from '@angular/cdk/scrolling'; // Import ScrollingModule
-import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { ScrollingModule } from '@angular/cdk/scrolling'; 
 import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
 
 @Component({

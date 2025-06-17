@@ -31,7 +31,7 @@ export class ApiService {
   refreshAccessToken(refreshToken: string) {
     return this.http.post<any>(`${this.baseURL}user/token/refresh/`, {
       refresh: refreshToken,
-    });
+    })
   }
   
   /*End auth API */
@@ -75,6 +75,15 @@ export class ApiService {
     return this.http.get(`${this.baseURL}photos/tag/`)
   }
 
+  /* save photos */
+  savePhoto(savePhotoDetails:any):Observable<any>{
+    return this.http.post(`${this.baseURL}photos/save-photo/`,savePhotoDetails)
+  }
+
+  getAllSavedPhotos():Observable<any>{
+    return this.http.get(`${this.baseURL}photos/save-photo/`)
+  }
+
   // updatePhotos(updatePhotoDetails:any,id)
 
   /*end Photos API */
@@ -108,6 +117,10 @@ export class ApiService {
   updateComment(formData: FormData, commentId: string):Observable<any> {
     return this.http.patch(`${this.baseURL}social/comment/${commentId}/`,formData)
   }
+
+
+  
+
 
   
 }

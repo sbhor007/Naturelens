@@ -1,34 +1,40 @@
+<!-- 
+<app-mansory-layout
+[photos]="userPosts"
+ >
 
+</app-mansory-layout> -->
+<p>worked</p>
+<div
+  class="md:py-6 py-6 px-3 md:px-8 min-h-screen scroll-smooth overflow-auto custom-scrollbar scrollbar-hide bg-white md:bg-white/0"
+>
+  <div class="columns-2 sm:columns-2 md:columns-3 lg:columns-5 gap-4" infiniteScroll>
+    <div
+      #card
+      *ngFor="let img of userPosts"
+      class="mb-4 break-inside-avoid custom-scrollbar scrollbar-hide"
+    >
+      <div class="overflow-hidden rounded hover:rounded relative cursor-pointer">
+        <!-- Shimmer Placeholder -->
+        <ngx-shimmer-loading
+          *ngIf="!img.isLoaded"
+          class="w-full h-48 rounded shimmer-effect"
+        ></ngx-shimmer-loading>
 
-<!-- <div class="md:py-6 py-6 px-3 md:-px-8  min-h-screen scroll-smooth bg-white md:bg-white/0 "> -->
-
-  <!-- <div class="masonry">
-    <div *ngFor="let image of images" class=" rounded-lg shadow md:mb-4 mb-2 md:mx-0.5 break-inside hover:scale-3d hover:rounded-lg">
-      <div class="group w-full overflow-hidden">
-        <img [src]="image.src" alt="Card Image" class="w-full rounded  hover:scale-200 transition-all hover:rounded-md">
+        <!-- Image -->
+        <img
+          [src]="img.image"
+          loading="lazy"
+          (load)="onImageLoad($event, img)"
+          (click)="photosDetails(img)"
+          alt="Uploaded Image"
+          class="w-full h-auto rounded shadow transition-opacity duration-700 ease-in-out transform  hover:rounded"
+          [ngClass]="{
+            'opacity-0': !img.isLoaded,
+            'opacity-100': img.isLoaded
+          }"
+        />
       </div>
-      <h2 class="text-lg text-gray-950/80 font-semibold">{{ image.title }}</h2>
-      <p class="text-sm text-gray-600/80">{{ image.description }}</p>
-    </div>
-  </div> -->
-  <!-- gallery.component.html -->
-<!-- <div class="columns-2 sm:columns-2 md:columns- lg:columns-5 gap-4">
-  <div *ngFor="let img of userPosts" class="mb-4 break-inside-avoid">
-    <div class="overflow-hidden rounded hover:rounded">
-      <img
-      [src]="img.image"
-      (load)="onImageLoad($event)"
-      class="w-full h-auto rounded shadow  hover:scale-200 transition-all hover:rounde"
-      alt="Uploaded Image"
-    />
     </div>
   </div>
 </div>
-
-</div> -->
-<app-mansory-layout
-[photos]="userPosts"
-[isUser]="true"
->
-
-</app-mansory-layout>

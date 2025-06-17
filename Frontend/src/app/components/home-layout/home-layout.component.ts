@@ -22,7 +22,7 @@ export class HomeLayoutComponent {
     },
     {
       'name':'Explore',
-      'path':'/explore'
+      'path':'#'
     },
     {
       'name':'Support',

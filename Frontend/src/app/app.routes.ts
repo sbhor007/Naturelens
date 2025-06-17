@@ -51,7 +51,7 @@ export const routes: Routes = [
   {
     path: 'user',
     component: DashboardLayoutComponent,
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: '',

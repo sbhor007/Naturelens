@@ -67,18 +67,18 @@ export class PhotoDetailsComponent implements OnInit {
     }
 
 
-    this.likeService.totalLikesState$.subscribe((res) => {
-      this.totalLikes = res;
-    });
+      this.likeService.totalLikesState$.subscribe((res) => {
+        this.totalLikes = res;
+      });
 
-    this.likeService.isLikedState$.subscribe((res) => {
-      this.isLiked = res;
-    });
+      this.likeService.isLikedState$.subscribe((res) => {
+        this.isLiked = res;
+      });
 
-    this.likeService.isLikedState$.subscribe((res) => {
-      this.isLiked = res;
-      console.log('is_liked: ', this.isLiked);
-    });
+      this.likeService.isLikedState$.subscribe((res) => {
+        this.isLiked = res;
+        console.log('is_liked: ', this.isLiked);
+      });
 
 
   }
