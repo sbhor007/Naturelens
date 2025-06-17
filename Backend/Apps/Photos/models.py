@@ -31,6 +31,11 @@ class SavePhotos(models.Model):
     
     class Meta:
         db_table = 'saved_photo'
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'photo'], name='unique_save_photo')
+        ]
+    
+    
     
     
 

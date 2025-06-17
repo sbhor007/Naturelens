@@ -89,6 +89,7 @@ class PhotoSerializer(serializers.ModelSerializer):
 
 class SavePhotosSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)
+    # photo = PhotoSerializer()
     
     class Meta:
         model = SavePhotos
@@ -97,7 +98,21 @@ class SavePhotosSerializer(serializers.ModelSerializer):
         
     def __str__(self):
             return f"Saved by {self.user.username} on {self.photo.title}"
+    
+    def validate(self, attr):
+        user = self.context['request'].user
+        photo = attr.get('photo')
+        if SavePhotos.objects.filter(user=user,photo=photo).exists():
+            raise serializers.ValidationError(f"{user.username} has already saved this photo")
+        return attr
         
     def create(self,validated_data):
-        user = self.context.get('request').user
+        user = self.context['request'].user
+        
         return SavePhotos.objects.create(user=user,**validated_data)
+    
+    def to_representation(self, instance):
+        """Customize output to include full photo data."""
+        rep =  super().to_representation(instance)
+        rep['photo'] = PhotoSerializer(instance.photo,context=self.context).data
+        return rep
