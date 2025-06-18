@@ -38,7 +38,7 @@ export class ImagesService {
         //   res = res.sort(() => Math.random() - 0.5);
         // }
         this.photosSubject.next(res)
-        // console.log('res : ', res);
+        console.log('get-all-photos-res : ', res);
       },
       error: (err) => {
         console.error('ERROR:', err);

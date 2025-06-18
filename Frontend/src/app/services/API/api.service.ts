@@ -84,6 +84,10 @@ export class ApiService {
     return this.http.get(`${this.baseURL}photos/save-photo/`)
   }
 
+  removeSavedPhoto(removableObjectId:string):Observable<any>{
+    return this.http.delete(`${this.baseURL}photos/save-photo/${removableObjectId}/`)
+  }
+
   // updatePhotos(updatePhotoDetails:any,id)
 
   /*end Photos API */
