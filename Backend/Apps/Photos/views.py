@@ -52,10 +52,10 @@ class SavePhotosViewSet(ModelViewSet):
     authentication_classes = (JWTAuthentication,) 
     
     def get_queryset(self):
-        # user = self.request.user
-        # queryset = SavePhotos.objects.filter(user=user)
-        # return queryset
-        return SavePhotos.objects.all()
+        user = self.request.user
+        queryset = SavePhotos.objects.filter(user=user)
+        return queryset
+        # return SavePhotos.objects.all()
     
     @action(detail=False,methods=['get'],url_path='count')
     def save_photo_count(self,request,*args, **kwargs):
@@ -67,7 +67,7 @@ class SavePhotosViewSet(ModelViewSet):
                     },
                 status=status.HTTP_400_BAD_REQUEST
             )
-        count = self.get_queryset().filter(photo=photo_id).count()
+        count = SavePhotos.objects.filter(photo=photo_id).count()
         print('*'*50,count,'*'*50)
         return Response(count,status=status.HTTP_200_OK)
     

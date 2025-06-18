@@ -116,17 +116,10 @@ export class PhotoDetailsComponent implements OnInit {
   }
 
   savePhoto(photoId:string){
-    this.savePhotoService.savePhoto({photo:photoId})
+    this.savePhotoService.savePhoto(photoId)
   }
 
   removeSavePhoto(photoId:string){
-    // console.log('removePhoto : ',photoId);
-    // console.log('removePhoto : ',this.savedPhotoObj);
-    // this.savedPhotoObj.forEach((data:any) =>{
-    //   console.log(data.photoId == photoId);
-    //   console.log(data.photoId,'-', photoId);
-      
-    // })
     const removableObj = this.savedPhotoObj.filter((data:any) => data.photoId == photoId)
     console.log('removePhoto : ',removableObj);
     this.savePhotoService.removeSavedPhoto(removableObj[0].objId,photoId)

@@ -13,18 +13,19 @@ import { stat } from 'fs';
   styleUrl: './saved.component.css',
 })
 export class SavedComponent implements OnInit {
+
   savedPhotosDetails$: any[] = [];
 
   @ViewChildren('card') cards!: QueryList<ElementRef>;
   constructor(
-    private savePhotos: SavePhotoService,
+    private savePhotoService: SavePhotoService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.savePhotos.getSavedPhotos();
-    this.savePhotos.savedPhotosState$.subscribe(
+    this.savePhotoService.getSavedPhotos();
+    this.savePhotoService.savedPhotosState$.subscribe(
       (res) => {
         this.savedPhotosDetails$ = res.map((img: any) => ({ ...img, isLoaded: false }));
         this.cdr.detectChanges();
@@ -90,4 +91,25 @@ export class SavedComponent implements OnInit {
       console.error('Photo object is missing an id:', photo);
     }
   }
+
+   removeSavePhoto(photoId:string){
+    console.log('removePhoto : ',photoId);
+    // const removableObj = this.savedPhotoObj.filter((data:any) => data.photoId == photoId)
+    const removableObj = this.getSavedObject(photoId)
+    console.log('removePhoto : ',removableObj);
+    this.savePhotoService.removeSavedPhoto(removableObj[0].id,photoId)
+  }
+
+  getSavedObject(photoId:string){
+    this.savedPhotosDetails$.forEach((data:any) =>{
+      if(data.photo.id == photoId){
+        console.log(data.photo.id,'----',data.id);
+      }
+      console.log(data.photo);
+      console.log(data.photo.id,'----',photoId);
+      
+    })
+    return this.savedPhotosDetails$.filter((data:any) => data.photo.id == photoId)
+  }
 }
+

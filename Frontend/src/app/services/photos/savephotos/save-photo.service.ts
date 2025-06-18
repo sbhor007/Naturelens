@@ -17,9 +17,9 @@ export class SavePhotoService {
   constructor(private apiService: ApiService) {}
 
   savePhoto(photoDetails: any) {
-    console.log(photoDetails);
+    console.log('SAVE-PHOTO-SERVICE : SAVE-PHOTO : ',photoDetails);
 
-    this.apiService.savePhoto(photoDetails).subscribe({
+    this.apiService.savePhoto({photo:photoDetails}).subscribe({
       next: (res) => {
         this.getSavedPhotos();
         console.log('SAVE-PHOTO-SERVICE : SAVE-PHOTO : RES : \n', res);
@@ -64,8 +64,8 @@ export class SavePhotoService {
 
   
 
-  removeSavedPhoto(removableObjectId: string,photoId:string) {
-    this.apiService.removeSavedPhoto(removableObjectId).subscribe({
+  removeSavedPhoto(objectId:string,photoId:string) {
+    this.apiService.removeSavedPhoto(objectId).subscribe({
       next: (res) => {
         alert('photo unsave')
         this.getSavedPhotos()

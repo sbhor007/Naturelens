@@ -27,10 +27,10 @@
       </p>
 
       <!-- Action Buttons -->
-      <div class="flex items-start gap-2">
+      <div class="flex  items-start gap-2">
         <!-- Like Button -->
         <button
-          class="flex items-center gap-2 px-4 py-2.5 rounded-full cursor-pointer transition-all duration-200 group"
+          class="flex flex-col md:flex-row items-center gap-1 px-4 py-2.5 rounded-full cursor-pointer transition-all duration-200 group"
           (click)="isLikeOrDislike({ photo: photo.id })"
           [attr.aria-pressed]="isLiked"
         >
@@ -67,7 +67,7 @@
 
         <!-- Share Button -->
         <button
-          class="flex items-center gap-2 px-4 py-2.5 rounded-full cursor-pointer transition-all duration-200 group"
+          class="flex  flex-col md:flex-row items-center gap-1 px-4 py-2.5 rounded-full cursor-pointer transition-all duration-200 group"
           title="Share"
         >
           <div
@@ -96,7 +96,7 @@
         <!-- Comment Button -->
         <label for="comment">
           <button
-            class="flex items-center gap-2 px-4 py-2.5 rounded-full cursor-pointer transition-all duration-200 group"
+            class="flex  flex-col md:flex-row items-center gap-1 px-4 py-2.5 rounded-full cursor-pointer transition-all duration-200 group"
             title="Comments"
           >
             <div
@@ -125,7 +125,7 @@
         <!-- save button -->
 
         <button
-          class="flex items-center gap-2 px-4 py-2.5 rounded-full cursor-pointer transition-all duration-200 group"
+          class="flex  flex-col md:flex-row items-center gap-1 px-4 py-2.5 rounded-full cursor-pointer transition-all duration-200 group"
         >
           @if (getSavedObject(photo.id).length == 0) {
           <div
