@@ -114,15 +114,9 @@ export class ExploreComponent implements OnInit {
 
   removeSavePhoto(photoId:string){
     console.log('removePhoto : ',photoId);
-    // console.log('removePhoto : ',this.savedPhotoObj);
-    // this.savedPhotoObj.forEach((data:any) =>{
-    //   console.log(data.photoId == photoId);
-    //   console.log(data.photoId,'-', photoId);
-      
-    // })
     const removableObj = this.savedPhotoObj.filter((data:any) => data.photoId == photoId)
     console.log('removePhoto : ',removableObj);
-    this.savePhotoService.removeSavedPhoto(removableObj[0].objId)
+    this.savePhotoService.removeSavedPhoto(removableObj[0].objId,photoId)
   }
 
   getSavedObject(photoId:string){

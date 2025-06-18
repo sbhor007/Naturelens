@@ -10,7 +10,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../../services/Auth/auth.service';
-import { CommentComponent } from "../photo/comment/comment.component";
+import { CommentComponent } from '../photo/comment/comment.component';
+import { SavePhotoService } from '../../../services/photos/savephotos/save-photo.service';
 
 @Component({
   selector: 'app-photo-details',
@@ -24,14 +25,18 @@ export class PhotoDetailsComponent implements OnInit {
   totalLikes: number | null = 0;
   totalComments: number = 0;
   username: string | null = null;
+  savedPhotoObj: any[] = [];
+  savedPhotoIds: any[] = [];
+
+  totalSavedPhotoCount:number = 0
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private likeService: LikeService,
-    private authService: AuthService
+    private authService: AuthService,
+    private savePhotoService: SavePhotoService
   ) {
-    
     this.username = authService.getUsername();
     const navigation = this.router.getCurrentNavigation();
 
@@ -60,39 +65,74 @@ export class PhotoDetailsComponent implements OnInit {
     }
 
     console.log('Final photo details:', this.photo);
+    
+
+
 
     if (this.photo) {
       this.likeService.isLiked(this.photo.id);
       this.likeService.totalLikes(this.photo.id);
+      this.savePhotoService.totalSavedPhotos(this.photo.id)
     }
 
+    this.likeService.totalLikesState$.subscribe((res) => {
+      this.totalLikes = res;
+    });
 
-      this.likeService.totalLikesState$.subscribe((res) => {
-        this.totalLikes = res;
-      });
+    this.likeService.isLikedState$.subscribe((res) => {
+      this.isLiked = res;
+    });
 
-      this.likeService.isLikedState$.subscribe((res) => {
-        this.isLiked = res;
-      });
+    this.likeService.isLikedState$.subscribe((res) => {
+      this.isLiked = res;
+      console.log('is_liked: ', this.isLiked);
+    });
 
-      this.likeService.isLikedState$.subscribe((res) => {
-        this.isLiked = res;
-        console.log('is_liked: ', this.isLiked);
-      });
-
-
+    this,savePhotoService.totalSavedPhotoState$.subscribe(
+      res =>{
+        this.totalSavedPhotoCount = res
+        console.log('totalsave:',this.totalSavedPhotoCount);
+        
+      }
+    )
   }
 
   ngOnInit(): void {
+    this.savePhotoService.totalSavedPhotos(this.photo.id)
+    this.savePhotoService.savedPhotoIdsState$.subscribe((res) => {
+      this.savedPhotoObj = res;
+      this.savedPhotoIds = res.map((data: any) => data.photoId);
+    });
+    console.log('---',this.getSavedObject(this.photo.id));
+    
   }
 
   isLikeOrDislike(likeDetails: any) {
     this.likeService.likeOrDislike(likeDetails);
   }
 
-
   onCommentCountChange(count: number) {
-  this.totalComments = count;
-}
-  
+    this.totalComments = count;
+  }
+
+  savePhoto(photoId:string){
+    this.savePhotoService.savePhoto({photo:photoId})
+  }
+
+  removeSavePhoto(photoId:string){
+    // console.log('removePhoto : ',photoId);
+    // console.log('removePhoto : ',this.savedPhotoObj);
+    // this.savedPhotoObj.forEach((data:any) =>{
+    //   console.log(data.photoId == photoId);
+    //   console.log(data.photoId,'-', photoId);
+      
+    // })
+    const removableObj = this.savedPhotoObj.filter((data:any) => data.photoId == photoId)
+    console.log('removePhoto : ',removableObj);
+    this.savePhotoService.removeSavedPhoto(removableObj[0].objId,photoId)
+  }
+
+  getSavedObject(photoId:string){
+    return this.savedPhotoObj.filter((data:any) => data.photoId == photoId)
+  }
 }

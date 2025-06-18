@@ -8,9 +8,11 @@ import { ApiService } from '../../API/api.service';
 export class SavePhotoService {
   private savedPhotosSubject = new BehaviorSubject<any | null>(null);
   private savedPhotoIdsSubject = new BehaviorSubject<string[]>([]);
+  private totalSavedPhotoSubject = new BehaviorSubject<number>(0) //count how how many users can save that particular photo
 
   readonly savedPhotosState$ = this.savedPhotosSubject.asObservable();
   readonly savedPhotoIdsState$ = this.savedPhotoIdsSubject.asObservable();
+  readonly totalSavedPhotoState$ = this.totalSavedPhotoSubject.asObservable();
 
   constructor(private apiService: ApiService) {}
 
@@ -21,6 +23,7 @@ export class SavePhotoService {
       next: (res) => {
         this.getSavedPhotos();
         console.log('SAVE-PHOTO-SERVICE : SAVE-PHOTO : RES : \n', res);
+        this.totalSavedPhotos(photoDetails)
         alert('photo saved');
       },
       error: (err) => {
@@ -35,6 +38,7 @@ export class SavePhotoService {
       next: (res) => {
         this.savedPhotosSubject.next(res);
         this.savedPhotoIds(res);
+        
 
         console.log('SAVE-PHOTO-SERVICE : GET-SAVED-PHOTOS : RES : ', res);
       },
@@ -60,11 +64,12 @@ export class SavePhotoService {
 
   
 
-  removeSavedPhoto(removableObjectId: string) {
+  removeSavedPhoto(removableObjectId: string,photoId:string) {
     this.apiService.removeSavedPhoto(removableObjectId).subscribe({
       next: (res) => {
         alert('photo unsave')
         this.getSavedPhotos()
+        this.totalSavedPhotos(photoId)
         console.log('SAVE-PHOTO-SERVICE : REMOVE-SAVED-PHOTOS : RES : ', res);
       },
       error: err =>{
@@ -72,6 +77,19 @@ export class SavePhotoService {
 
       }
     });
+  }
+
+  //count how how many users can save that particular photo
+  totalSavedPhotos(photoId:string){
+    this.apiService.totalSavedPhotos(photoId).subscribe({
+      next: res =>{
+        console.log('SAVE-PHOTO-SERVICE : TOTAL-SAVED-PHOTOS : RES : ',res);
+        this.totalSavedPhotoSubject.next(res)
+      },
+      error: err =>{
+         console.log('SAVE-PHOTO-SERVICE : TOTAL-SAVED-PHOTOS : RES : ',err);
+      }
+    })
   }
 
   hasUserSavedPhoto(photoId: string) {}

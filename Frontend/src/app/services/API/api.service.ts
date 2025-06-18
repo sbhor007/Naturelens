@@ -88,6 +88,9 @@ export class ApiService {
     return this.http.delete(`${this.baseURL}photos/save-photo/${removableObjectId}/`)
   }
 
+  totalSavedPhotos(photoId:string):Observable<any>{
+    return this.http.get(`${this.baseURL}photos/save-photo/count/?photoId=${photoId}`)
+  }
   // updatePhotos(updatePhotoDetails:any,id)
 
   /*end Photos API */

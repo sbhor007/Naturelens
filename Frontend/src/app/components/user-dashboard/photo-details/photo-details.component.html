@@ -14,7 +14,7 @@
   <div class="lg:w-2/5 flex flex-col p-8 gap-6">
     <!-- Title & Description -->
     <div class="border-b border-gray-100 pb-2">
-      <h5>{{username}}</h5>
+      <h5>{{ username }}</h5>
       <h2
         class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3 line-clamp-2"
       >
@@ -43,10 +43,10 @@
             }"
           >
             <svg
-            [ngClass]="{
-      'text-red-600 fill-current': isLiked,
-      'text-gray-400': !isLiked
-    }"
+              [ngClass]="{
+                'text-red-600 fill-current': isLiked,
+                'text-gray-400': !isLiked
+              }"
               xmlns="http://www.w3.org/2000/svg"
               width="20"
               height="20"
@@ -122,15 +122,81 @@
             }}</span>
           </button>
         </label>
+        <!-- save button -->
+
+        <button
+          class="flex items-center gap-2 px-4 py-2.5 rounded-full cursor-pointer transition-all duration-200 group"
+        >
+          @if (getSavedObject(photo.id).length == 0) {
+          <div
+            (click)="savePhoto(photo.id)"
+            class="bg-gray-100 rounded-full p-1.5 group hover:bg-green-100/80 transition-all duration-200 cursor-pointer"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M6 4C6 3.44772 6.44772 3 7 3H17C17.5523 3 18 3.44772 18 4V20C18 20.3623 17.8037 20.6921 17.5 20.8661C17.1963 21.0402 16.8204 21.0282 16.5257 20.8333L12 17.882L7.47429 20.8333C7.17963 21.0282 6.80372 21.0402 6.5 20.8661C6.19628 20.6921 6 20.3623 6 20V4ZM8 5V17.118L12 14.118L16 17.118V5H8Z"
+                fill="none"
+                class="group-hover:fill-red-500 fill-gray-600 transition-all duration-200"
+              />
+            </svg>
+          </div>
+          <span class="font-medium text-gray-700 text-sm">{{
+              totalSavedPhotoCount
+            }}</span>
+          }@else {
+          <div
+            (click)="removeSavePhoto(photo.id)"
+            class="bg-gray-100 rounded-full p-1.5 group hover:bg-green-100/80 transition-all duration-200 cursor-pointer"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <!-- Bookmark Icon -->
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M6 4C6 3.44772 6.44772 3 7 3H17C17.5523 3 18 3.44772 18 4V20C18 20.3623 17.8037 20.6921 17.5 20.8661C17.1963 21.0402 16.8204 21.0282 16.5257 20.8333L12 17.882L7.47429 20.8333C7.17963 21.0282 6.80372 21.0402 6.5 20.8661C6.19628 20.6921 6 20.3623 6 20V4ZM8 5V17.118L12 14.118L16 17.118V5H8Z"
+                fill="none"
+                class="group-hover:fill-red-500 fill-gray-600 transition-all duration-200"
+              />
+
+              <!-- Cross Line -->
+              <line
+                x1="6"
+                y1="6"
+                x2="18"
+                y2="18"
+                stroke="red"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <span class="font-medium text-gray-700 text-sm">{{
+              totalSavedPhotoCount
+            }}</span>
+          }
+        </button>
       </div>
     </div>
 
     <!-- Comments Section -->
     <app-comment
-  [photoId]="photo?.id"
-  [photoOwnerId]="photo?.user?.id"
-  (commentCount)="onCommentCountChange($event)"
-></app-comment>
-    
+      [photoId]="photo?.id"
+      [photoOwnerId]="photo?.user?.id"
+      (commentCount)="onCommentCountChange($event)"
+    ></app-comment>
   </div>
 </div>
