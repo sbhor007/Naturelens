@@ -5,6 +5,8 @@ import { environment } from '../../../environments/environment.development';
 import { ApiService } from '../API/api.service';
 import { Router } from '@angular/router';
 
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -14,10 +16,18 @@ export class ImagesService {
   private photosSubject = new BehaviorSubject<any | null>(null);
   private userPhotosSubject = new BehaviorSubject<any | null>(null);
 
+  
+
   readonly photoCategoriesState$ = this.photoCategoriesSubject.asObservable();
   readonly tagsState$ = this.tagsSubject.asObservable();
   readonly photosState$ = this.photosSubject.asObservable();
   readonly userPhotosState$ = this.userPhotosSubject.asObservable();
+
+  private hasGetPhotosCalled = new BehaviorSubject<boolean>(false)
+  private hasGetUserPhotosCalled = new BehaviorSubject<boolean>(false)
+
+  readonly hasGetPhotosCalled$ = this.hasGetPhotosCalled.asObservable()
+  readonly hasGetUserPhotosCalled$ = this.hasGetUserPhotosCalled.asObservable()
 
   constructor(
     private http: HttpClient,
@@ -38,6 +48,7 @@ export class ImagesService {
         //   res = res.sort(() => Math.random() - 0.5);
         // }
         this.photosSubject.next(res)
+        this.hasGetPhotosCalled.next(true)
         console.log('get-all-photos-res : ', res);
       },
       error: (err) => {
@@ -92,6 +103,7 @@ export class ImagesService {
     this.apiService.getUserPhotos().subscribe({
       next: res =>{
         this.userPhotosSubject.next(res)
+        this.hasGetUserPhotosCalled.next(true)
       },
       error: err =>{
         console.log('GET_USER_PHOTO : ',err);

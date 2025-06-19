@@ -25,7 +25,7 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private savePhotos: SavePhotoService
   ) {
-    this.savePhotos.getSavedPhotos();
+    // this.savePhotos.getSavedPhotos();
   }
 
   ngOnInit(): void {

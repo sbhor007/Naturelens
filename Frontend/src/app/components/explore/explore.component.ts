@@ -10,47 +10,55 @@ import gsap from 'gsap';
 import { ImagesService } from '../../services/images/images.service';
 import Masonry from 'masonry-layout';
 import { Router } from '@angular/router';
-import { ScrollingModule } from '@angular/cdk/scrolling'; 
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
 import { SavePhotoService } from '../../services/photos/savephotos/save-photo.service';
 
 @Component({
   selector: 'app-explore',
   standalone: true,
-  imports: [CommonModule,ScrollingModule,NgxShimmerLoadingModule],
+  imports: [CommonModule, ScrollingModule, NgxShimmerLoadingModule],
   templateUrl: './explore.component.html',
   styleUrl: './explore.component.css',
 })
 export class ExploreComponent implements OnInit {
-  
- images1: any[] = [];
- savedPhotoIds:string[] = []
- savedPhotoObj:any
+  images1: any[] = [];
+  savedPhotoIds: string[] = [];
+  savedPhotoObj: any;
 
   @ViewChildren('card') cards!: QueryList<ElementRef>;
 
-  constructor(private imagesService: ImagesService, private router: Router,private savePhotoService:SavePhotoService) {
-    this.imagesService.getAllPhotos();
-    this.savePhotoService.getSavedPhotos()
-  }
+  constructor(
+    private imagesService: ImagesService,
+    private router: Router,
+    private savePhotoService: SavePhotoService
+  ) {}
 
   ngOnInit(): void {
-    
+    this.imagesService.hasGetPhotosCalled$.subscribe((res) => {
+      console.log('imagesService.hasGetPhotosCalled$ : ', res);
+      if (!res) {
+        this.imagesService.getAllPhotos();
+      }
+    });
+
+    this.savePhotoService.hasGetSavedPhotosCalled$.subscribe((res) => {
+      if (!res) {
+        console.log('savePhotoService.hasGetSavedPhotosCalled$ : ', res);
+        this.savePhotoService.getSavedPhotos();
+      }
+    });
+
     this.imagesService.photosState$.subscribe((state) => {
       this.images1 = state.map((img: any) => ({ ...img, isLoaded: false }));
     });
 
     // console.log('images',this.images1);
-    
-    this.savePhotoService.savedPhotoIdsState$.subscribe(
-      res => {
-        this.savedPhotoObj = res
-        this.savedPhotoIds = res.map((data:any) => data.photoId)
-      }
-    )
 
-    
-    
+    this.savePhotoService.savedPhotoIdsState$.subscribe((res) => {
+      this.savedPhotoObj = res;
+      this.savedPhotoIds = res.map((data: any) => data.photoId);
+    });
   }
 
   ngAfterViewInit() {
@@ -95,8 +103,6 @@ export class ExploreComponent implements OnInit {
   }
 
   photosDetails(photo: any) {
-
-
     if (photo && photo.id) {
       this.router.navigate(['user/photo-details', photo.id], {
         state: { photo: photo },
@@ -108,20 +114,19 @@ export class ExploreComponent implements OnInit {
 
   // getSaved
 
-  savePhoto(photoId:string){
-    this.savePhotoService.savePhoto(photoId)
+  savePhoto(photoId: string) {
+    this.savePhotoService.savePhoto(photoId);
   }
 
-  removeSavePhoto(photoId:string){
-    console.log('removePhoto : ',photoId);
+  removeSavePhoto(photoId: string) {
+    console.log('removePhoto : ', photoId);
     // const removableObj = this.savedPhotoObj.filter((data:any) => data.photoId == photoId)
-    const removableObj = this.getSavedObject(photoId)
-    console.log('removePhoto : ',removableObj);
-    this.savePhotoService.removeSavedPhoto(removableObj[0].objId,photoId)
+    const removableObj = this.getSavedObject(photoId);
+    console.log('removePhoto : ', removableObj);
+    this.savePhotoService.removeSavedPhoto(removableObj[0].objId, photoId);
   }
 
-  getSavedObject(photoId:string){
-    return this.savedPhotoObj.filter((data:any) => data.photoId == photoId)
+  getSavedObject(photoId: string) {
+    return this.savedPhotoObj.filter((data: any) => data.photoId == photoId);
   }
-
 }

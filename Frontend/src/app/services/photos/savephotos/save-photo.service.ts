@@ -14,6 +14,10 @@ export class SavePhotoService {
   readonly savedPhotoIdsState$ = this.savedPhotoIdsSubject.asObservable();
   readonly totalSavedPhotoState$ = this.totalSavedPhotoSubject.asObservable();
 
+  private hasGetSavedPhotosCalled = new BehaviorSubject<boolean>(false)
+
+  readonly hasGetSavedPhotosCalled$ = this.hasGetSavedPhotosCalled.asObservable()
+
   constructor(private apiService: ApiService) {}
 
   savePhoto(photoDetails: any) {
@@ -38,7 +42,7 @@ export class SavePhotoService {
       next: (res) => {
         this.savedPhotosSubject.next(res);
         this.savedPhotoIds(res);
-        
+        this.hasGetSavedPhotosCalled.next(true)
 
         console.log('SAVE-PHOTO-SERVICE : GET-SAVED-PHOTOS : RES : ', res);
       },

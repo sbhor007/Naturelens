@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import { SavePhotoService } from '../../../services/photos/savephotos/save-photo.service';
 import { Router } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -13,7 +20,6 @@ import { stat } from 'fs';
   styleUrl: './saved.component.css',
 })
 export class SavedComponent implements OnInit {
-
   savedPhotosDetails$: any[] = [];
 
   @ViewChildren('card') cards!: QueryList<ElementRef>;
@@ -24,17 +30,15 @@ export class SavedComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.savePhotoService.getSavedPhotos();
-    this.savePhotoService.savedPhotosState$.subscribe(
-      (res) => {
-        this.savedPhotosDetails$ = res.map((img: any) => ({ ...img, isLoaded: false }));
-        this.cdr.detectChanges();
-        console.log('Fetched saved posts:', this.savedPhotosDetails$);
-      },
-      (error) => {
-        console.error('Error fetching saved photos:', error);
-      }
-    );
+    // this.savePhotoService.getSavedPhotos();
+    this.savePhotoService.savedPhotosState$.subscribe((res) => {
+      this.savedPhotosDetails$ = res.map((img: any) => ({
+        ...img,
+        isLoaded: false,
+      }));
+      this.cdr.detectChanges();
+      console.log('Fetched saved posts:', this.savedPhotosDetails$);
+    });
   }
 
   ngAfterViewInit() {
@@ -92,24 +96,24 @@ export class SavedComponent implements OnInit {
     }
   }
 
-   removeSavePhoto(photoId:string){
-    console.log('removePhoto : ',photoId);
+  removeSavePhoto(photoId: string) {
+    console.log('removePhoto : ', photoId);
     // const removableObj = this.savedPhotoObj.filter((data:any) => data.photoId == photoId)
-    const removableObj = this.getSavedObject(photoId)
-    console.log('removePhoto : ',removableObj);
-    this.savePhotoService.removeSavedPhoto(removableObj[0].id,photoId)
+    const removableObj = this.getSavedObject(photoId);
+    console.log('removePhoto : ', removableObj);
+    this.savePhotoService.removeSavedPhoto(removableObj[0].id, photoId);
   }
 
-  getSavedObject(photoId:string){
-    this.savedPhotosDetails$.forEach((data:any) =>{
-      if(data.photo.id == photoId){
-        console.log(data.photo.id,'----',data.id);
+  getSavedObject(photoId: string) {
+    this.savedPhotosDetails$.forEach((data: any) => {
+      if (data.photo.id == photoId) {
+        console.log(data.photo.id, '----', data.id);
       }
       console.log(data.photo);
-      console.log(data.photo.id,'----',photoId);
-      
-    })
-    return this.savedPhotosDetails$.filter((data:any) => data.photo.id == photoId)
+      console.log(data.photo.id, '----', photoId);
+    });
+    return this.savedPhotosDetails$.filter(
+      (data: any) => data.photo.id == photoId
+    );
   }
 }
-

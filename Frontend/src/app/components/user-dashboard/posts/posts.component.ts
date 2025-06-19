@@ -28,10 +28,20 @@ export class PostsComponent implements OnInit {
     private router: Router,
     private imageService:ImagesService
   ) {
-    this.imageService.getUserPhotos();
+    
   }
 
   ngOnInit(): void {
+
+    this.imageService.hasGetUserPhotosCalled$.subscribe(
+      res =>{
+        console.log('this.imageService.hasGetUserPhotosCalled$ : ',res);
+        if(!res){  
+          this.imageService.getUserPhotos();
+        }
+      }
+    )
+
     this.imageService.userPhotosState$.subscribe((state) => {
       this.userPosts = state.map((img: any) => ({ ...img, isLoaded: false }));
     });
