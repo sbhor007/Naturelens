@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_extensions',
     'rest_framework_simplejwt.token_blacklist',
+    "debug_toolbar",
     'corsheaders',
     'cloudinary',
     # 'cloudinary_storage',
@@ -54,9 +55,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     
     'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware',
 ]
+
+
 
 DRF_API_LOGGER_DATABASE = False
 DRF_API_LOGGER_SIGNAL = True
@@ -175,6 +179,22 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
 }
 
+
+# configure internal IP's --> debug toolbar
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+# redis configuration
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
