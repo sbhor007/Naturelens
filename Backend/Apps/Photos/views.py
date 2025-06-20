@@ -7,6 +7,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from .permission import IsOwnerOrReadOnly
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 
 # Create your views here.
@@ -28,22 +30,24 @@ class PhotoViewSet(ModelViewSet):
     serializer_class = PhotoSerializer
     permission_classes = (permissions.IsAuthenticated,IsOwnerOrReadOnly)
     authentication_classes = (JWTAuthentication,)   
+    CACHE_KEY_PREFIX = 'photo-view'
     
     def get_queryset(self):
-        """
-        Optionally restricts the returned photos to a given user,
-        by filtering against a `mine` query parameter in the URL.
-        """
         queryset = Photo.objects.all()
-        mine = self.request.query_params.get('mine')
-        print('-'*50)
-        print(self.request)
-        print(self)
-        print('-'*50)
-        
-        if mine == 'true':
-            queryset = queryset.filter(uploaded_by=self.request.user)
         return queryset
+    
+    @method_decorator(cache_page(300, key_prefix=CACHE_KEY_PREFIX))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+    
+    @action(detail=False,methods=['get'],url_path='user-photos')
+    def get_user_photos(self,request,*args, **kwargs):
+        user = self.request.user
+        photos = self.get_queryset().filter(uploaded_by=user)
+        if photos.exists():
+            serializer = self.serializer_class(photos,many=True)
+            return Response(serializer.data)
+        return Response(status=status.HTTP_404_NOT_FOUND)
     
 class SavePhotosViewSet(ModelViewSet):
     queryset = SavePhotos.objects.all()
