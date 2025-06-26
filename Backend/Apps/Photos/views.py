@@ -75,3 +75,100 @@ class SavePhotosViewSet(ModelViewSet):
         print('*'*50,count,'*'*50)
         return Response(count,status=status.HTTP_200_OK)
     
+'''Implementing Elastic search'''
+import abc
+from elasticsearch_dsl import Q
+from .documents import PhotoDocument,UserDocument,CategoryDocument,TagDocument
+from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.views import APIView
+
+class PaginatedElasticSearchAPIView(APIView,LimitOffsetPagination):
+    serializer_class = None
+    document_class = None
+    
+    @abc.abstractmethod
+    def generate_q_expression(self,query):
+        '''This method should be overridden and return a Q() expression'''
+    
+    def get(self,request,query):
+        try:
+            q = self.generate_q_expression(query)
+            search = self.document_class.search().query(q)
+            response = search.execute()
+            print('*'*50)
+            print(f'Found {response.hits.total.value} hit\'s for query: "{query}"')
+            print('*'*50)
+            result = self.paginate_queryset(response,request,view=self)
+            print('*'*50)
+            print(f'Result : {result}')
+            print('*'*50)
+            serializer = self.serializer_class(result,many=True)
+            return self.get_paginated_response(serializer.data)
+        except Exception as e:
+            return Response({'error':str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # return Response(e,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # print(f"-----------\nERROR:{e}\n-------------------- ")
+
+
+from Apps.User.serializers import UserSerializer
+class SearchUSers(PaginatedElasticSearchAPIView):
+    '''User elastic search'''
+    serializer_class = UserSerializer
+    document_class = UserDocument
+    
+    def generate_q_expression(self, query):
+        return Q(
+            "bool",
+            should=(
+                Q("match",username=query),
+                Q("match",first_name=query),
+                Q("match",last_name=query),
+            ), minimum_should_match = 1
+        )
+
+class SearchCategories(PaginatedElasticSearchAPIView):
+    serializer_class = CategorySerializer
+    document_class = CategoryDocument
+    
+    def generate_q_expression(self, query):
+        return Q(
+            "multi_match", 
+            query=query,
+            fields=(
+                "name",
+            )
+        )
+        
+class SearchTags(PaginatedElasticSearchAPIView):
+    serializer_class = TagsSerializer
+    document_class = TagDocument
+    
+    def generate_q_expression(self, query):
+        return Q(
+            "multi_match", 
+            query=query,
+            fields=(
+                "name",
+            )
+        )
+from dateutil.parser import parse
+
+class SearchPhotos(PaginatedElasticSearchAPIView):
+    serializer_class = PhotoSerializer
+    document_class = PhotoDocument
+    
+    def generate_q_expression(self, query):
+        return Q(
+            "multi_match", 
+            query=query,
+            fields = (
+                "title",
+                "description",
+                "image",
+                "category",
+                "uploaded_by",
+                "tags",
+                "location",
+                "created_at",
+            )
+        )

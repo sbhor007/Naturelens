@@ -11,5 +11,9 @@ router.register('save-photo',views.SavePhotosViewSet,basename='savephoto')
 
 
 urlpatterns = [
+    path("search-user/<str:query>/", views.SearchUSers.as_view() , name="search_user"),
+    path("search-category/<str:query>/", views.SearchCategories.as_view() , name="search_category"),
+    path("search-tags/<str:query>/", views.SearchTags.as_view() , name="search_tags"),
+    path("search-photos/<str:query>/", views.SearchPhotos.as_view() , name="search_photos"),
     path('', include(router.urls))
 ]

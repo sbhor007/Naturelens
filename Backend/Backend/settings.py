@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'Apps.Photos',
     'Apps.Social',
     'drf_api_logger',
+    'django_elasticsearch_dsl',
+    # 'search.apps.SearchConfig',
 ]
 
 MIDDLEWARE = [
@@ -276,3 +278,18 @@ cloudinary.config(
 )
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Elasticsearch
+# https://django-elasticsearch-dsl.readthedocs.io/en/latest/settings.html
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": "https://localhost:9200",
+        "http_auth": ("elastic", os.environ.get('ELASTIC_PASSWORD')),
+        'verify_certs': False,
+        'ssl_show_warn': False,  # This will suppress SSL warnings
+        'ssl_assert_hostname': False,
+        'ssl_assert_fingerprint': False,
+        # "ca_certs": "PATH_TO_http_ca.crt",
+    }
+}
