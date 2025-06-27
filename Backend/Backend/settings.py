@@ -293,3 +293,9 @@ ELASTICSEARCH_DSL = {
         # "ca_certs": "PATH_TO_http_ca.crt",
     }
 }
+
+# pagination
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100
+}

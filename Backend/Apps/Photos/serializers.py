@@ -13,7 +13,7 @@ class TagsSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 
-
+'''photo serializer'''
 class PhotoSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(write_only=True,required=False)
     tag_names = serializers.ListField(
@@ -86,6 +86,23 @@ class PhotoSerializer(serializers.ModelSerializer):
     def get_like_count(self,obj):
         return obj.likes.count()
     
+
+'''search photo serializer'''
+class PhotoSearchSerializer(serializers.Serializer):
+    id = serializers.SerializerMethodField()
+    title = serializers.CharField()
+    description = serializers.CharField()
+    image = serializers.CharField()
+    location = serializers.CharField()
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()
+    uploaded_by = serializers.DictField()
+    category = serializers.DictField()
+    tags = serializers.ListField()
+    like_count = serializers.IntegerField(required=False, allow_null=True, default=0)
+    
+    def get_id(self, obj):
+        return obj.meta.id  # This retrieves the actual ID
 
 class SavePhotosSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)

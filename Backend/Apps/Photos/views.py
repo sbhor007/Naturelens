@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import CategorySerializer,TagsSerializer,PhotoSerializer, SavePhotosSerializer
+from .serializers import CategorySerializer,TagsSerializer,PhotoSerializer,PhotoSearchSerializer, SavePhotosSerializer
 from .models import Tags,Category,Photo,SavePhotos
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import permissions,status
@@ -9,6 +9,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+
+
 
 
 # Create your views here.
@@ -94,20 +96,24 @@ class PaginatedElasticSearchAPIView(APIView,LimitOffsetPagination):
         try:
             q = self.generate_q_expression(query)
             search = self.document_class.search().query(q)
+            print('-'*50)
+            print("SEARCH: ",search)
+            print('Query: ',q)
+            print('-'*50)
             response = search.execute()
             print('*'*50)
             print(f'Found {response.hits.total.value} hit\'s for query: "{query}"')
             print('*'*50)
-            result = self.paginate_queryset(response,request,view=self)
+            result = self.paginate_queryset(response.hits, request, view=self)
             print('*'*50)
             print(f'Result : {result}')
             print('*'*50)
             serializer = self.serializer_class(result,many=True)
             return self.get_paginated_response(serializer.data)
         except Exception as e:
-            return Response({'error':str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            # return Response(e,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            # print(f"-----------\nERROR:{e}\n-------------------- ")
+            import traceback
+            print(traceback.format_exc())
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 from Apps.User.serializers import UserSerializer
@@ -154,7 +160,7 @@ class SearchTags(PaginatedElasticSearchAPIView):
 from dateutil.parser import parse
 
 class SearchPhotos(PaginatedElasticSearchAPIView):
-    serializer_class = PhotoSerializer
+    serializer_class = PhotoSearchSerializer
     document_class = PhotoDocument
     
     def generate_q_expression(self, query):
@@ -165,10 +171,13 @@ class SearchPhotos(PaginatedElasticSearchAPIView):
                 "title",
                 "description",
                 "image",
-                "category",
-                "uploaded_by",
-                "tags",
+                "category.name",
+                "uploaded_by.username",
+                "uploaded_by.first_name",
+                "uploaded_by.last_name",
+                "tags.name",
                 "location",
-                "created_at",
-            )
+                # "created_at",
+            ),
+            fuzziness="auto"
         )

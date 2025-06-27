@@ -2,11 +2,14 @@ from django_elasticsearch_dsl import Document,fields
 from django_elasticsearch_dsl.registries import registry
 
 from .models import Photo,Category,Tags
-from Apps.User.models import User
+from Apps.User.models import User,UserProfile
 
 '''this tells the integration system that this document should be managed and synchronized with Elasticsearch '''
 @registry.register_document #Register that document with Elastic DSL registry
 class UserDocument(Document):
+    
+    
+    
     class Index:
         '''Configure the elastic search index'''
         name= "users" #name of e-search index
@@ -70,6 +73,11 @@ class PhotoDocument(Document):
         "last_name": fields.TextField(),
         "username": fields.TextField(),
         "email": fields.TextField(),
+        "profile":fields.ObjectField(properties={
+            "id":fields.TextField(),
+            "profile_image":fields.TextField(),
+            "bio":fields.TextField()
+        })
         
     })
     
@@ -78,7 +86,27 @@ class PhotoDocument(Document):
         "name":fields.TextField(),
     })
     
-    # type = fields.TextField(attr="type_to_string")
+    def prepare_uploaded_by(self, instance):
+        user = instance.uploaded_by
+        profile = getattr(user, 'profile', None)
+    
+        return {
+            "id": user.id,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "username": user.username,
+            "email": user.email,
+            "profile": {
+                "id": str(profile.id) if profile else None,
+                "profile_image": profile.profile_image_url if profile else "",
+                "bio": profile.bio if profile else "",
+            }
+        }
+
+
+    like_count = fields.IntegerField()
+    def prepare_like_count(self, instance):
+        return instance.likes.count()
     
     class Index:
         name = 'photos'
@@ -90,10 +118,13 @@ class PhotoDocument(Document):
     class Django:
         model = Photo
         fields = (
+            "id",
             "title",
             "description",
-            "image",
+            "image",  
             "location",
             "created_at",
             "updated_at",
+            # 'likes'
+            # 'like_count',
         )
