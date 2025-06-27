@@ -5,11 +5,12 @@ import { Router, RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/Auth/auth.service';
 import { it } from 'node:test';
 import { UserService } from '../../../services/User/user.service';
+import { SearchComponent } from "../search/search.component";
 
 
 @Component({
   selector: 'app-dashboard-layout',
-  imports: [RouterModule, CommonModule, RouterLink],
+  imports: [RouterModule, CommonModule, RouterLink, SearchComponent],
   templateUrl: './dashboard-layout.component.html',
   styleUrl: './dashboard-layout.component.css'
 })

@@ -14,6 +14,8 @@ import { SavedComponent } from './components/user-dashboard/saved/saved.componen
 import { EditProfileComponent } from './components/user-dashboard/edit-profile/edit-profile.component';
 import { LoadingComponent } from './loading/loading.component';
 import { PhotoDetailsComponent } from './components/user-dashboard/photo-details/photo-details.component';
+import { SearchComponent } from './components/user-dashboard/search/search.component';
+import { SearchResultComponent } from './components/user-dashboard/search-result/search-result.component';
 
 export const routes: Routes = [
   {
@@ -51,7 +53,7 @@ export const routes: Routes = [
   {
     path: 'user',
     component: DashboardLayoutComponent,
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -96,6 +98,10 @@ export const routes: Routes = [
       {
         path: 'edit-profile',
         component: EditProfileComponent,
+      },
+      {
+        path:'search-result',
+        component:SearchResultComponent
       },
     ],
   },

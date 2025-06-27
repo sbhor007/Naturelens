@@ -102,6 +102,8 @@ export class ImagesService {
   getUserPhotos(){
     this.apiService.getUserPhotos().subscribe({
       next: res =>{
+        console.log('GET_USER_PHOTO : RES : ',res);
+        
         this.userPhotosSubject.next(res)
         this.hasGetUserPhotosCalled.next(true)
       },

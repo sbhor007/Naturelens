@@ -1,0 +1,22 @@
+<div
+  class="md:py-6 py-6 px-3 md:px-8 min-h-screen scroll-smooth overflow-auto custom-scrollbar scrollbar-hide bg-white md:bg-white/0"
+>
+  <div
+    class="masonry columns-2 sm:columns-2 md:columns-3 lg:columns-5 gap-4"
+    infiniteScroll
+  >
+    <div
+      *ngFor="let item of searchedImages"
+      class="mb-4 break-inside-avoid bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer"
+    >
+      <div class="relative overflow-hidden rounded hover:rounded">
+        <img
+          [src]="'http://localhost:8000/'+item.image"
+          [alt]="item.title"
+          class="w-full h-auto rounded-t-lg"
+        />
+        <!-- <p class="text-center p-2">{{ item.title }}</p> -->
+      </div>
+    </div>
+  </div>
+</div>

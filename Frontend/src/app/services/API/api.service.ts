@@ -1,19 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
-import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable, tap } from "rxjs";
+import { environment } from "../../../environments/environment.development";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ApiService {
-  
   private baseURL = environment.baseAPI;
   private isLoggedIn$ = false;
 
   constructor(private http: HttpClient) {
-    this.isLoggedIn$ = !!sessionStorage.getItem('access');
+    this.isLoggedIn$ = !!sessionStorage.getItem("access");
   }
 
   /*start auth API */
@@ -22,7 +20,7 @@ export class ApiService {
   }
 
   logout(refreshToken: string) {
-    console.log('refresh Token : ', refreshToken);
+    console.log("refresh Token : ", refreshToken);
     return this.http.post(`${this.baseURL}user/logout/`, {
       refresh: refreshToken,
     });
@@ -31,9 +29,9 @@ export class ApiService {
   refreshAccessToken(refreshToken: string) {
     return this.http.post<any>(`${this.baseURL}user/token/refresh/`, {
       refresh: refreshToken,
-    })
+    });
   }
-  
+
   /*End auth API */
 
   /*start User API */
@@ -56,40 +54,47 @@ export class ApiService {
 
   /*start Module Photos API */
   // Photos API
-  createPhoto(photoDetails:any):Observable<any>{
-    return this.http.post(`${this.baseURL}photos/photo/`,photoDetails)
+  createPhoto(photoDetails: any): Observable<any> {
+    return this.http.post(`${this.baseURL}photos/photo/`, photoDetails);
   }
 
-  getAllPhotos():Observable<any>{
-    return this.http.get(`${this.baseURL}photos/photo/`)
+  getAllPhotos(): Observable<any> {
+    return this.http.get(`${this.baseURL}photos/photo/`);
   }
 
-  getUserPhotos():Observable<any>{
-    return this.http.get(`${this.baseURL}photos/photo/?mine=true`)
+  getUserPhotos(): Observable<any> {
+    return this.http.get(`${this.baseURL}photos/photo/user-photos/`);
   }
-  getPhotoCategories():Observable<any>{
-    return this.http.get(`${this.baseURL}photos/category/`)
+  getPhotoCategories(): Observable<any> {
+    return this.http.get(`${this.baseURL}photos/category/`);
   }
 
-  getTags():Observable<any>{
-    return this.http.get(`${this.baseURL}photos/tag/`)
+  getTags(): Observable<any> {
+    return this.http.get(`${this.baseURL}photos/tag/`);
   }
 
   /* save photos */
-  savePhoto(savePhotoDetails:any):Observable<any>{
-    return this.http.post(`${this.baseURL}photos/save-photo/`,savePhotoDetails)
+  savePhoto(savePhotoDetails: any): Observable<any> {
+    return this.http.post(
+      `${this.baseURL}photos/save-photo/`,
+      savePhotoDetails,
+    );
   }
 
-  getAllSavedPhotos():Observable<any>{
-    return this.http.get(`${this.baseURL}photos/save-photo/`)
+  getAllSavedPhotos(): Observable<any> {
+    return this.http.get(`${this.baseURL}photos/save-photo/`);
   }
 
-  removeSavedPhoto(removableObjectId:string):Observable<any>{
-    return this.http.delete(`${this.baseURL}photos/save-photo/${removableObjectId}/`)
+  removeSavedPhoto(removableObjectId: string): Observable<any> {
+    return this.http.delete(
+      `${this.baseURL}photos/save-photo/${removableObjectId}/`,
+    );
   }
 
-  totalSavedPhotos(photoId:string):Observable<any>{
-    return this.http.get(`${this.baseURL}photos/save-photo/count/?photoId=${photoId}`)
+  totalSavedPhotos(photoId: string): Observable<any> {
+    return this.http.get(
+      `${this.baseURL}photos/save-photo/count/?photoId=${photoId}`,
+    );
   }
   // updatePhotos(updatePhotoDetails:any,id)
 
@@ -97,39 +102,47 @@ export class ApiService {
 
   /* social model APi */
 
-  likeDislike(likeDetails:any):Observable<any>{
-    return this.http.post<any>(`${this.baseURL}social/photo-like/`,likeDetails)
+  likeDislike(likeDetails: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseURL}social/photo-like/`,
+      likeDetails,
+    );
   }
 
-  totalLikes(id:string):Observable<any>{
-    return this.http.get(`${this.baseURL}social/photo-like/like-count/?id=${id}`)
+  totalLikes(id: string): Observable<any> {
+    return this.http.get(
+      `${this.baseURL}social/photo-like/like-count/?id=${id}`,
+    );
   }
 
-  isLiked(id:string):Observable<any>{
-    return this.http.get(`${this.baseURL}social/photo-like/is-liked/?id=${id}`)
-  }
-  
-  createComment(commentDetails:any):Observable<any>{
-    return this.http.post(`${this.baseURL}social/comment/`,commentDetails)
+  isLiked(id: string): Observable<any> {
+    return this.http.get(`${this.baseURL}social/photo-like/is-liked/?id=${id}`);
   }
 
-  getPhotoComments(id:string):Observable<any>{
-    return this.http.get(`${this.baseURL}social/comment/photo-comments/?id=${id}`)
+  createComment(commentDetails: any): Observable<any> {
+    return this.http.post(`${this.baseURL}social/comment/`, commentDetails);
   }
 
-  deleteComment(commentId:string):Observable<any>{
-    return this.http.delete(`${this.baseURL}social/comment/${commentId}/`)
+  getPhotoComments(id: string): Observable<any> {
+    return this.http.get(
+      `${this.baseURL}social/comment/photo-comments/?id=${id}`,
+    );
   }
 
-  updateComment(formData: FormData, commentId: string):Observable<any> {
-    return this.http.patch(`${this.baseURL}social/comment/${commentId}/`,formData)
+  deleteComment(commentId: string): Observable<any> {
+    return this.http.delete(`${this.baseURL}social/comment/${commentId}/`);
   }
 
+  updateComment(formData: FormData, commentId: string): Observable<any> {
+    return this.http.patch(
+      `${this.baseURL}social/comment/${commentId}/`,
+      formData,
+    );
+  }
 
-  
-
-
-  
+  /*Search Api start */
+  searchPhotos(searchTerm: string): Observable<any> {
+    return this.http.get(`${this.baseURL}photos/search-photos/${searchTerm}/`);
+  }
+  /*Search Api start */
 }
-
-

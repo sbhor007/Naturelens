@@ -32,7 +32,7 @@ export class SavedComponent implements OnInit {
   ngOnInit(): void {
     // this.savePhotoService.getSavedPhotos();
     this.savePhotoService.savedPhotosState$.subscribe((res) => {
-      this.savedPhotosDetails$ = res.map((img: any) => ({
+      this.savedPhotosDetails$ = res.results.map((img: any) => ({
         ...img,
         isLoaded: false,
       }));
