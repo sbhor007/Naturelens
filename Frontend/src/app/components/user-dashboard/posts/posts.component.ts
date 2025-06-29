@@ -3,6 +3,7 @@ import {
   ElementRef,
   OnInit,
   QueryList,
+  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { ImagesService } from '../../../services/images/images.service';
@@ -12,6 +13,7 @@ import Masonry from 'masonry-layout';
 import { Router } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-posts',
@@ -21,78 +23,85 @@ import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
 })
 export class PostsComponent implements OnInit {
   userPosts: any[] = [];
+  @ViewChild('masonryGrid') masonryGrid!: ElementRef;
+  private msnry: any;
+  private imageURL = environment.imagesURL;
+  count:number = 0
 
-  @ViewChildren('card') cards!: QueryList<ElementRef>;
-
-  constructor(
-    private router: Router,
-    private imageService:ImagesService
-  ) {
-    
-  }
+  constructor(private router: Router, private imageService: ImagesService) {}
 
   ngOnInit(): void {
-
-    this.imageService.hasGetUserPhotosCalled$.subscribe(
-      res =>{
-        console.log('this.imageService.hasGetUserPhotosCalled$ : ',res);
-        if(!res){  
-          this.imageService.getUserPhotos();
-        }
+    this.imageService.hasGetUserPhotosCalled$.subscribe((res) => {
+      console.log('this.imageService.hasGetUserPhotosCalled$ : ', res);
+      if (!res) {
+        this.imageService.getUserPhotos();
       }
-    )
-
-    this.imageService.userPhotosState$.subscribe((state) => {
-      this.userPosts = state.map((img: any) => ({ ...img, isLoaded: false }));
     });
 
-    console.log('userPostState : ',this.userPosts);   
+    this.imageService.userPhotosState$.subscribe((res) => {
+      // this.count = res.count
+      console.log("res:",res);
+      this.userPosts = res.map((data:any) => ({
+        ...data,
+        image: this.imageURL + data.image
+      }))
+      setTimeout(() => {
+        this.initMasonry();
+      }, 0);
+    });
+
+    console.log('userPostState : ', this.userPosts);
   }
 
-  ngAfterViewInit() {
-    // Register ScrollTrigger
-    gsap.registerPlugin(ScrollTrigger);
+  async ngAfterViewInit() {
+    if (this.userPosts.length) {
+      this.initMasonry();
+    }
+  }
 
-    // Animate each card as it comes into view
-    this.cards.changes.subscribe((cards: QueryList<ElementRef>) => {
-      cards.forEach((card, i) => {
-        gsap.from(card.nativeElement, {
-          opacity: 0,
-          y: 50,
-          duration: 0.8,
-          delay: i * 0.05,
-          scrollTrigger: {
-            trigger: card.nativeElement,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
+  async initMasonry() {
+    if (typeof window !== 'undefined') {
+      const Masonry = (await import('masonry-layout')).default;
+      const imagesLoaded = (await import('imagesloaded')).default;
+
+      const grid = this.masonryGrid.nativeElement;
+
+      if (!this.msnry) {
+        this.msnry = new Masonry(grid, {
+          itemSelector: '.grid-item',
+          columnWidth: '.grid-sizer',
+          gutter: 16,
+          percentPosition: true,
         });
-      });
-    });
+      }
 
-    // Also animate already-rendered cards
-    this.cards.forEach((card, i) => {
-      gsap.from(card.nativeElement, {
-        opacity: 0,
-        y: 50,
-        duration: 0.8,
-        delay: i * 0.05,
-        scrollTrigger: {
-          trigger: card.nativeElement,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
+      imagesLoaded(grid).on('progress', () => {
+        this.msnry.layout?.();
       });
-    });
-  }
-
-  onImageLoad(event: Event, img: any) {
-    img.isLoaded = true;
+    }
   }
 
   photosDetails(photo: any) {
     if (photo && photo.id) {
       this.router.navigate(['user/photo-details', photo.id], {
+        state: { photo: photo },
+      });
+    } else {
+      console.error('Photo object is missing an id:', photo);
+    }
+  }
+
+  /* Delete Photo */
+  deletePhoto(photoId:string){
+    console.log("delete function call");
+    if (confirm("Are You Shore"))
+      this.imageService.deletePhoto(photoId)
+  }
+
+  /* update photo */
+  updatePhoto(photo:any){
+    if (photo && photo.id) {
+      this.router.navigate(['user/update-post', photo.id], {
         state: { photo: photo },
       });
     } else {

@@ -36,6 +36,8 @@ export class EditProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.userProfileState$ = this.userService.userProfileState$;
+    
+    
 
     this.userProfileState$.subscribe((state) => {
       this.latestProfileState = state;
@@ -44,7 +46,7 @@ export class EditProfileComponent implements OnInit {
     this.errorMessage = this.latestProfileState?.error;
     // this.profileData = state.profile
     this.isProfileAvailable = this.latestProfileState?.available ?? false;
-
+    console.log('latest profile : ',this.isProfileAvailable);
     // TODO:my logic
     if (this.isProfileAvailable) {
       // this.profileData = state.profile

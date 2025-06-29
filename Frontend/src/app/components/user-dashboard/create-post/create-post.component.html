@@ -148,14 +148,14 @@
       </div>
 
       <!-- Submit Button -->
-      <button
-        type="submit"
-        [disabled]="form.invalid"
-        class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 disabled:bg-gray-400"
-        aria-label="Submit post"
-      >
-        Create Post
-      </button>
+     <button
+  type="submit"
+  [disabled]="form.invalid || (isCreateMode && !form.get('image')?.value)"
+  class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 disabled:bg-gray-400"
+  aria-label="Submit post"
+>
+  {{buttonName}}
+</button>
     </div>
   </form>
 </div>

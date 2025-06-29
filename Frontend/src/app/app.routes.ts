@@ -92,6 +92,10 @@ export const routes: Routes = [
         component: CreatePostComponent,
       },
       {
+        path: 'update-post/:id',
+        component: CreatePostComponent,
+      },
+      {
         path: 'search',
         component: CreatePostComponent,
       },

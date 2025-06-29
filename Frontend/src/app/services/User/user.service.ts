@@ -21,13 +21,7 @@ export class UserService {
 
   readonly userProfileState$ = this.userProfileStateSubject.asObservable()
 
-
-
-
-
   constructor(private http: HttpClient,private apiService:ApiService,private router:Router) {}
-
-
 
   isProfileAvailable() {
     return this.profileState;
@@ -55,14 +49,17 @@ export class UserService {
     })
     this.apiService.getProfile().subscribe({
       next: (res) => {
-        if (res.length > 0) {
+        console.log("USER-SERVICE: getUserProfile: res:\n",res);
+        if (res.count > 0) {
           this.updateUserProfileState({
             loading:false,
             profile:res[0],
             available:true
           })
           this.setProfileState(true);
-          this.profileData = (res[0]);
+          this.profileData = (res.results[0]);
+          console.log("USER-SERVICE: getUserProfile: profileData:\n",this.profileData);
+          
         } else {
           this.setProfileState(false);
           this.updateUserProfileState({

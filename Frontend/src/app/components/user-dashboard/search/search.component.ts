@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SearchService } from '../../../services/search/search.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -19,7 +20,8 @@ export class SearchComponent {
 
   constructor(
     private fb: FormBuilder, 
-    private searchService: SearchService
+    private searchService: SearchService,
+    private router:Router
   ){
     this.searchForm = this.fb.group({
       searchTerm: ['', Validators.required],
@@ -30,7 +32,7 @@ export class SearchComponent {
     console.log("function Call");
     
     if(this.searchForm.invalid){
-      alert('invalide data')
+      this.router.navigate(['user/'])
       return this.searchForm.markAllAsTouched()
     }
     const searchTerm = this.searchForm.get('searchTerm')?.value

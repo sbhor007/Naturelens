@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
-  ElementRef,
   OnInit,
-  signal,
-  ViewChild,
+  signal
 } from '@angular/core';
 import {
   FormBuilder,
@@ -12,60 +10,79 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { routes } from '../../../app.routes';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ImagesService } from '../../../services/images/images.service';
-import { table } from 'console';
 
 @Component({
   selector: 'app-create-post',
-  imports: [CommonModule, ReactiveFormsModule, CommonModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './create-post.component.html',
   styleUrl: './create-post.component.css',
 })
 export class CreatePostComponent implements OnInit {
-  removeFile($event: MouseEvent) {
-    throw new Error('Method not implemented.');
-  }
-
   form: FormGroup;
   isDragOver = signal(false);
   imagePreview: string | ArrayBuffer | null = null;
-  isImage = true; // To differentiate between image and video
+  isImage = true;
   errorMessage: string | null = null;
   categories: any;
   tags: any;
   selectedFile: File | null = null;
-  photosData:any
-
-  boards = ['Photography', 'Design', 'Art', 'Technology'];
+  photosData: any;
+  buttonName: string = 'Create Post';
+  isCreateMode: boolean = true;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private imageService: ImagesService
   ) {
+    const navigation = this.router.getCurrentNavigation();
+
+    if (navigation?.extras.state?.['photo']) {
+      this.photosData = navigation.extras.state['photo'];
+      this.buttonName = 'Update Post';
+      this.isCreateMode = false;
+    } else if (history.state?.photo) {
+      this.photosData = history.state.photo;
+      this.buttonName = 'Update Post';
+      this.isCreateMode = false;
+    } else {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) {
+        this.fetchPhotoById(id);
+        this.buttonName = 'Update Post';
+        this.isCreateMode = false;
+      }
+    }
+
+    // Build form without image required initially
     this.form = this.fb.group({
-      image: [null, Validators.required],
+      image: [null],
       title: ['', Validators.required],
       description: ['', Validators.required],
       location: ['', Validators.required],
-
       category_name: ['', Validators.required],
       tag_names: ['', Validators.required],
     });
-    this.imageService.getAllPhotos()
+
+    if (this.photosData && this.photosData.id) {
+      this.patchForm(this.photosData);
+      this.imagePreview = this.photosData.image || null;
+    }
+
+    if (this.isCreateMode) {
+      // In create mode, image is required
+      this.form.get('image')?.addValidators(Validators.required);
+    }
+
     this.imageService.getPhotoCategories();
     this.imageService.getTags();
   }
 
   ngOnInit(): void {
-    this.imageService.photosState$.subscribe(
-      state => {
-        this.photosData = state
-      }
-    )
     this.imageService.photoCategoriesState$.subscribe((state) => {
       this.categories = state;
     });
@@ -73,8 +90,26 @@ export class CreatePostComponent implements OnInit {
     this.imageService.tagsState$.subscribe((state) => {
       this.tags = state;
     });
+  }
 
-    console.log('Photos Data:', this.photosData);
+  fetchPhotoById(id: string) {
+    // TODO: implement actual fetch if needed
+    // Example:
+    // this.imageService.getPhotoById(id).subscribe(photo => {
+    //   this.photosData = photo;
+    //   this.patchForm(photo);
+    //   this.imagePreview = photo.image || null;
+    // });
+  }
+
+  patchForm(photo: any) {
+    this.form.patchValue({
+      title: photo.title || '',
+      description: photo.description || '',
+      location: photo.location || '',
+      category_name: photo.category?.name || '',
+      tag_names: photo.tags ? photo.tags.map((t: any) => t.name).join(', ') : '',
+    });
   }
 
   onDragOver(event: DragEvent) {
@@ -100,34 +135,30 @@ export class CreatePostComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
-      this.selectedFile = file;
       this.validateAndSetFile(file);
-      console.log('elected file : ', this.selectedFile);
+      this.selectedFile = file;
     }
   }
 
   private validateAndSetFile(file: File) {
     this.errorMessage = null;
-
-    // Validate file type
     const isImage = file.type.startsWith('image/');
     const isVideo = file.type === 'video/mp4';
+
     if (!isImage && !isVideo) {
       this.errorMessage = 'Only image or .mp4 video files are allowed.';
       return;
     }
 
-    // Validate file size
-    const maxSizeMB = isImage ? 20 : 200; // 20MB for images, 200MB for videos
+    const maxSizeMB = isImage ? 20 : 200;
     if (file.size > maxSizeMB * 1024 * 1024) {
       this.errorMessage = `File size exceeds ${maxSizeMB}MB limit.`;
       return;
     }
 
     this.isImage = isImage;
-    this.form.patchValue({ image: file });
+    this.form.get('image')?.setValue(file);
 
-    // Generate preview
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = reader.result;
@@ -139,38 +170,31 @@ export class CreatePostComponent implements OnInit {
   }
 
   onSubmit() {
-    
     if (this.form.invalid) {
-      return this.form.markAllAsTouched();
+      this.form.markAllAsTouched();
+      return;
     }
 
     const formData = new FormData();
     if (this.selectedFile) {
-      console.log('file selected');
       formData.append('image', this.selectedFile, this.selectedFile.name);
     }
+
     formData.append('title', this.form.get('title')?.value || '');
     formData.append('description', this.form.get('description')?.value || '');
     formData.append('location', this.form.get('location')?.value || '');
-    formData.append(
-      'category_name',
-      this.form.get('category_name')?.value || ''
-    );
+    formData.append('category_name', this.form.get('category_name')?.value || '');
+
     const tags = this.form
-        .get('tag_names')
-        ?.value.split(',')
-        .map((tag: string) => tag.trim())
-        .filter((tag: string) => tag)
+      .get('tag_names')
+      ?.value.split(',')
+      .map((tag: string) => tag.trim())
+      .filter((tag: string) => tag);
 
-    formData.append(
-      'tag_names',
-      tags
-    );
-console.log('tags:',tags);
+    formData.append('tag_names', JSON.stringify(tags || []));
 
-    this.imageService.uploadPhotos(formData)
-    console.log("create post",formData);
-    
+    this.imageService.uploadPhotos(formData);
+    console.log('Form submitted:', formData);
   }
 
   resetForm() {

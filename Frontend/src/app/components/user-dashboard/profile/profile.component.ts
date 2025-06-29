@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { asNativeElements, Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/User/user.service';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/Auth/auth.service';
@@ -25,14 +25,19 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private savePhotos: SavePhotoService
   ) {
-    // this.savePhotos.getSavedPhotos();
+    this.savePhotos.getSavedPhotos();
+    // this.userService.getUserProfile();
   }
 
   ngOnInit(): void {
     this.userService.getUserProfile();
+
     this.username = this.authService.getUsername();
+
     this.ch = this.username ? this.username.charAt(0) : '';
+
     this.isProfileAvailable = this.userService.isProfileAvailable();
+
     if (this.isProfileAvailable) {
       console.log('hello');
       this.imagePreview =

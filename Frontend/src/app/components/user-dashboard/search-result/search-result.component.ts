@@ -8,6 +8,7 @@ import {
 import { SearchService } from '../../../services/search/search.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-search-result',
@@ -20,6 +21,8 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
   searchedImages: any[] = [];
   @ViewChild('masonryGrid') masonryGrid!: ElementRef;
   private msnry: any;
+  private imageURL = environment.imagesURL;
+  count:number = 0
 
   items = [
     { image: 'https://images.pexels.com/photos/34950/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=800', title: 'Item 1' },
@@ -34,11 +37,18 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.searchService.searchedPhoto$.subscribe((res) => {
-      this.searchedImages = res.results;
+      this.count = res.count
+      this.searchedImages = res.results.map((data:any) => ({
+        ...data,
+        image: this.imageURL + data.image
+      }))
       setTimeout(() => {
         this.initMasonry();
       }, 0);
     });
+
+    console.log('SEARCHED IMAGES: ',this.searchedImages);
+    
   }
 
   async ngAfterViewInit() {

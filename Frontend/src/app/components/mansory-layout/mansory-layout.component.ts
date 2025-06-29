@@ -1,80 +1,66 @@
-import {
-  Component,
-  Input,
-  AfterViewInit,
-  QueryList,
-  ElementRef,
-  ViewChildren,
-  OnInit,
-} from '@angular/core';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CommonModule } from '@angular/common';
-import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
-import { Router } from 'express';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-mansory-layout',
-  imports: [CommonModule,NgxShimmerLoadingModule],
+  imports: [CommonModule],
   templateUrl: './mansory-layout.component.html',
   styleUrl: './mansory-layout.component.css',
 })
 export class MansoryLayoutComponent implements AfterViewInit,OnInit{
   @Input() photos: any[] = [];
-  @Input() clickHandler!: (photo: any) => void;
+  // @Input() clickHandler!: (photo: any) => void;
+  @ViewChild('masonryGrid') masonryGrid!: ElementRef;
 
-  @ViewChildren('card') cards!: QueryList<ElementRef>;
+  private msnry: any;
+    // private imageURL = environment.imagesURL;
 
   constructor(private router: Router) { }
-  
 
   ngOnInit(): void {
-      console.log('mansulry layout : ',this.photos);
-      
+    console.log('INPUT data:',this.photos);
+    
   }
-
-  animateCards(cards: QueryList<ElementRef>) {
-  cards.forEach((card, i) => {
-    gsap.from(card.nativeElement, {
-      opacity: 0,
-      y: 50,
-      duration: 0.8,
-      delay: i * 0.05,
-      scrollTrigger: {
-        trigger: card.nativeElement,
-        start: 'top 85%',
-        toggleActions: 'play none none none',
-      },
-    });
-  });
-}
-
-ngAfterViewInit() {
-  gsap.registerPlugin(ScrollTrigger);
-  this.animateCards(this.cards);
-
-  this.cards.changes.subscribe((cards) => this.animateCards(cards));
-}
-  onImageLoad(img: any) {
-    img.isLoaded = !img.isLoaded;
-  }
-
-  onClick(photo: any) {
-    if (this.clickHandler) this.clickHandler(photo);
-  }
-
-  trackByPhotoId(index: number, photo: any): string {
-  return photo.id;
-}
   
+  async ngAfterViewInit() {
+    if (this.photos.length) {
+      this.initMasonry();
+    }
+  }
 
-  // photosDetails(photo: any) {
-  //   if (photo && photo.id) {
-  //     this.router.navigate(['user/photo-details', photo.id], {
-  //       state: { photo: photo },
-  //     });
-  //   } else {
-  //     console.error('Photo object is missing an id:', photo);
-  //   }
-  // }
+  async initMasonry() {
+    if (typeof window !== 'undefined') {
+      const Masonry = (await import('masonry-layout')).default;
+      const imagesLoaded = (await import('imagesloaded')).default;
+
+      const grid = this.masonryGrid.nativeElement;
+
+      if (!this.msnry) {
+        this.msnry = new Masonry(grid, {
+          itemSelector: '.grid-item',
+          columnWidth: '.grid-sizer',
+          gutter: 16,
+          percentPosition: true
+        });
+      }
+
+      imagesLoaded(grid).on('progress', () => {
+        this.msnry.layout?.();
+      });
+    }
+  }
+
+  photosDetails(photo: any) {
+    if (photo && photo.id) {
+      this.router.navigate(['user/photo-details', photo.id], {
+        state: { photo: photo },
+      });
+    } else {
+      console.error('Photo object is missing an id:', photo);
+    }
+  }
+  
 }

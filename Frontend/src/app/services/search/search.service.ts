@@ -23,10 +23,10 @@ export class SearchService {
       next: res =>{
         console.log('SEARCH-SERVICE: SEARCH-PHOTOS: RES:\n',res);
         this.searchedPhotoSubject.next(res)
-        if(res.count > 0)
+        // if(res.count > 0)
           this.router.navigate(['user/search-result'])
-        else
-          this.router.navigate(['user/'])
+        // else
+          // this.router.navigate(['user/'])
       },
       error: err =>{
         console.log('SEARCH-SERVICE: SEARCH-PHOTOS: ERR:\n',err);

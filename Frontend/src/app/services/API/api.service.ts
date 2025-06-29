@@ -69,6 +69,10 @@ export class ApiService {
     return this.http.get(`${this.baseURL}photos/category/`);
   }
 
+  deletePhoto(photoId:string):Observable<any>{
+    return this.http.delete(`${this.baseURL}photos/photo/${photoId}/`)
+  }
+
   getTags(): Observable<any> {
     return this.http.get(`${this.baseURL}photos/tag/`);
   }

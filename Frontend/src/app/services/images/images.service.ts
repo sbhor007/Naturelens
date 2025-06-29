@@ -89,6 +89,7 @@ export class ImagesService {
         this.getAllPhotos()
         this.getPhotoCategories()
         this.getTags()
+        this.getUserPhotos()
         alert('photo upload successfully');
         this.router.navigate(['/user/profile/posts']);
       },
@@ -110,6 +111,21 @@ export class ImagesService {
       error: err =>{
         console.log('GET_USER_PHOTO : ',err);
         
+      }
+    })
+  }
+
+  /* Delete Photo by Id */
+  deletePhoto(photoId:string){
+    this.apiService.deletePhoto(photoId).subscribe({
+      next: res =>{
+        console.log('IMAGE-SERVICE : deletePhoto: res \n',res);
+        this.getUserPhotos()
+        alert("photo deleted")
+      },
+      error : err =>{
+        console.log('IMAGE-SERVICE : deletePhoto: err \n',err);
+        alert('something went to wrong')
       }
     })
   }
