@@ -31,7 +31,8 @@ class PhotoViewSet(ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
     permission_classes = (permissions.IsAuthenticated,IsOwnerOrReadOnly)
-    authentication_classes = (JWTAuthentication,)   
+    authentication_classes = (JWTAuthentication,) 
+    
     CACHE_KEY_PREFIX = 'photo-view'
     
     def get_queryset(self):
@@ -50,6 +51,19 @@ class PhotoViewSet(ModelViewSet):
             serializer = self.serializer_class(photos,many=True)
             return Response(serializer.data)
         return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    def update(self, request, *args, **kwargs):
+        print('*'*50)
+        print('UPDATE_PHOT'.center(50))
+        print(request.data._mutable)
+        # print(request)
+        
+        if('image' not in request.data):
+            print('IMAGE NOT FOUND'.center(50))
+            request.data._mutable = True
+            request.data['image'] = self.get_queryset().get(id=kwargs['pk']).image
+            return super().update(serializer, *args, **kwargs)
+        return super().update(request, *args, **kwargs)
     
 class SavePhotosViewSet(ModelViewSet):
     queryset = SavePhotos.objects.all()

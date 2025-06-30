@@ -115,6 +115,22 @@ export class ImagesService {
     })
   }
 
+  updatePhoto(photoDetails:any,photoId:string){
+    console.log('photoDetails : \n',photoDetails);
+    
+    this.apiService.updatePhoto(photoDetails,photoId).subscribe({
+      next: res =>{
+        console.log('UPDATE_PHOTO : RES : \n',res);
+        this.getAllPhotos()
+        alert('update successful')
+      },
+      error: err =>{
+        console.log('UPDATE_PHOTO : ',err);
+        alert(err)
+      }
+    })
+  }
+
   /* Delete Photo by Id */
   deletePhoto(photoId:string){
     this.apiService.deletePhoto(photoId).subscribe({

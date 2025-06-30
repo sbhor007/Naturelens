@@ -64,7 +64,7 @@ class LoginView(generics.GenericAPIView):
 
 
 class LogoutView(generics.GenericAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     def post(self,req): 
         serializer = LogoutSerializer(data=req.data)
         serializer.is_valid(raise_exception=True)

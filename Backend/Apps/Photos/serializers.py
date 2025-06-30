@@ -47,10 +47,6 @@ class PhotoSerializer(serializers.ModelSerializer):
         return f"Photo(id={self.id}, title={self.title})"
     
     def create(self, validated_data):
-        print('*'*50)
-        print(f"validated data : {validated_data}")
-        print('*'*50)
-        
         category_name = validated_data.pop('category_name',None)
         tag_names = validated_data.pop('tag_names',[])
         if category_name:
@@ -65,26 +61,20 @@ class PhotoSerializer(serializers.ModelSerializer):
             tag, _ = Tags.objects.get_or_create(name=tag_name)
             tags.append(tag)
         
-        print(f"{'-'*50}")
-        print(str(tags))
-        print(tag_names)
-        print('-'*50)
-        
         user = self.context['request'].user
         validated_data['uploaded_by'] = user
         
         photo = Photo.objects.create(**validated_data)
         if tags:
             photo.tags.set(tags)
-            
-        print('*'*50)
-        print(f"photo : {photo}")
-        print('*'*50)
-        
         return photo
+    
+    def delete(self,validated_data):
+        pass
                 
     def get_like_count(self,obj):
         return obj.likes.count()
+    
     
 
 '''search photo serializer'''

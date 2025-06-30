@@ -12,5 +12,6 @@ urlpatterns = [
     path('api/v1/user/',include('Apps.User.urls')),
     path('api/v1/photos/', include('Apps.Photos.urls')),
     path('api/v1/social/', include('Apps.Social.urls')),
+    path("api/v1/mail/", include('Apps.Mail.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
 ] +  static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -65,6 +65,12 @@ export class ApiService {
   getUserPhotos(): Observable<any> {
     return this.http.get(`${this.baseURL}photos/photo/user-photos/`);
   }
+
+  updatePhoto(photoDetails:any,photoId:string):Observable<any>{
+    return this.http.put(`${this.baseURL}photos/photo/${photoId}/`,photoDetails);
+  }
+  /*end Module Photos API */
+
   getPhotoCategories(): Observable<any> {
     return this.http.get(`${this.baseURL}photos/category/`);
   }

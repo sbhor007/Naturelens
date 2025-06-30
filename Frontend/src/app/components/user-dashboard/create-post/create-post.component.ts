@@ -103,7 +103,10 @@ export class CreatePostComponent implements OnInit {
   }
 
   patchForm(photo: any) {
+    console.log('patch-image : ',photo.image|| null);
+    // photo.image.replace('http://localhost:8000/media/mediafiles/',)
     this.form.patchValue({
+      image:photo.image.replace('http://localhost:8000/media/mediafiles/','') || null,
       title: photo.title || '',
       description: photo.description || '',
       location: photo.location || '',
@@ -193,7 +196,16 @@ export class CreatePostComponent implements OnInit {
 
     formData.append('tag_names', JSON.stringify(tags || []));
 
-    this.imageService.uploadPhotos(formData);
+    if (this.photosData && this.photosData.id) {
+      console.log('update: ',formData);
+      this.imageService.updatePhoto(formData,this.photosData.id)
+      alert('update call')
+      
+    }else{
+      console.log('update: ',formData);
+      this.imageService.uploadPhotos(formData);
+    }
+
     console.log('Form submitted:', formData);
   }
 
