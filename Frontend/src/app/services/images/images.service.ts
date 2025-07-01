@@ -90,8 +90,9 @@ export class ImagesService {
         this.getPhotoCategories()
         this.getTags()
         this.getUserPhotos()
-        alert('photo upload successfully');
-        this.router.navigate(['/user/profile/posts']);
+        console.log('photo upload successfully',res);
+        // alert('photo upload successfully');
+        // this.router.navigate(['/user/profile/posts']);
       },
       error: (err) => {
         this.photosSubject.next(null);

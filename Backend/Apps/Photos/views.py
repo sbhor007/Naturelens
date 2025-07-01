@@ -62,6 +62,7 @@ class PhotoViewSet(ModelViewSet):
             print('IMAGE NOT FOUND'.center(50))
             request.data._mutable = True
             request.data['image'] = self.get_queryset().get(id=kwargs['pk']).image
+            serializer = self.get_serializer(request.data)
             return super().update(serializer, *args, **kwargs)
         return super().update(request, *args, **kwargs)
     
@@ -73,7 +74,7 @@ class SavePhotosViewSet(ModelViewSet):
     
     def get_queryset(self):
         user = self.request.user
-        queryset = SavePhotos.objects.filter(user=user)
+        queryset = SavePhotos.objects.filter(user=user).order_by('?')
         return queryset
         # return SavePhotos.objects.all()
     

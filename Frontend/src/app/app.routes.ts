@@ -16,6 +16,7 @@ import { LoadingComponent } from './loading/loading.component';
 import { PhotoDetailsComponent } from './components/user-dashboard/photo-details/photo-details.component';
 import { SearchComponent } from './components/user-dashboard/search/search.component';
 import { SearchResultComponent } from './components/user-dashboard/search-result/search-result.component';
+import { DomyImageInsertComponent } from './domy-image-insert/domy-image-insert.component';
 
 export const routes: Routes = [
   {
@@ -107,6 +108,10 @@ export const routes: Routes = [
         path:'search-result',
         component:SearchResultComponent
       },
+      // {
+      //   path:'upload-images',
+      //   component:DomyImageInsertComponent
+      // }
     ],
   },
   {
