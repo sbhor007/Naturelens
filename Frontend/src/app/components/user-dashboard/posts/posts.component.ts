@@ -27,6 +27,7 @@ export class PostsComponent implements OnInit {
   private msnry: any;
   private imageURL = environment.imagesURL;
   count:number = 0
+ openMenuId: string | null = null;
 
   constructor(private router: Router, private imageService: ImagesService) {}
 
@@ -52,6 +53,10 @@ export class PostsComponent implements OnInit {
 
     console.log('userPostState : ', this.userPosts);
   }
+
+  openMenu(id: string) {
+  this.openMenuId = this.openMenuId === id ? null : id;
+}
 
   async ngAfterViewInit() {
     if (this.userPosts.length) {
@@ -96,6 +101,7 @@ export class PostsComponent implements OnInit {
     console.log("delete function call");
     if (confirm("Are You Shore"))
       this.imageService.deletePhoto(photoId)
+    this.openMenuId = null;
   }
 
   /* update photo */
@@ -107,5 +113,7 @@ export class PostsComponent implements OnInit {
     } else {
       console.error('Photo object is missing an id:', photo);
     }
+    this.openMenuId = null;
   }
+
 }

@@ -2,32 +2,33 @@
 
 <!-- PHOTO CONTAINER -->
 <div
-  class="md:py-8 py-6 px-4 md:px-10 min-h-screen scroll-smooth overflow-auto custom-scrollbar scrollbar-hide bg-gradient-to-br "
+  class="md:py-8 py-6 px-4 md:px-10 min-h-screen scroll-smooth overflow-auto custom-scrollbar scrollbar-hide bg-gradient-to-br"
 >
   <!-- MASONRY GRID -->
   <div
-    class="masonry columns-2 sm:columns-2 md:columns-3 lg:columns-5 gap-6"
+    class="masonry columns-2 sm:columns-2 md:columns-3 lg:columns-5 gap-2"
     infiniteScroll
   >
     <!-- PHOTO CARD LOOP -->
     <div
       *ngFor="let img of userPosts"
-      class="mb-6 break-inside-avoidshadow-md rounded-xl overflow-hidden hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 cursor-pointer group border border-gray-100"
+      class="md:mb-4  break-inside-avoidshadow-md  overflow-hidden hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 cursor-pointer group border border-gray-100"
     >
       <!-- IMAGE CONTAINER -->
-      <div class="overflow-hidden rounded-xl hover:rounded-xl relative">
+      <div class="overflow-hidden hover:rounded-tr-xl hover:rounded-bl-xl  relative">
         <!-- IMAGE DISPLAY -->
         <img
           [src]="img.image"
           (click)="photosDetails(img)"
           [alt]="img.title"
-          class="w-full h-auto rounded-t-xl group-hover:brightness-110 transition-all duration-300"
+          class="w-full h-auto  group-hover:brightness-110 transition-all duration-300"
         />
 
         <!-- 3 DOTS BUTTON + MENU -->
-        <div class="absolute top-3 z-50 right-3 inline-block group/menu">
+        <div class="absolute top-3 z-30 right-3 inline-block group/menu">
           <button
             class="p-1.5 rounded-full bg-white/10 backdrop-blur-sm text-gray-50 hover:text-gray-100 hover:bg-white/40 shadow-lg transition-all duration-200 cursor-pointer"
+            (click)="openMenu(img.id)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -45,10 +46,12 @@
           <!-- IMAGE ACTION MENU -->
           <div
             class="hidden group-hover/menu:block absolute top-8 md:top-6 right-0 md:mt-2 w-36 rounded-xl shadow-xl bg-white z-50 border border-gray-100 overflow-hidden"
+             [class.block]="openMenuId === img.id"
+             [class.hidden]="openMenuId != img.id"
           >
             <div class="py-2">
               <button
-              (click)="updatePhoto(img)"
+                (click)="updatePhoto(img)"
                 class="block w-full px-2 py-1 mx-2 text-sm text-gray-700 rounded hover:bg-blue-100 hover:text-blue-600 transition-colors duration-150"
               >
                 Update
@@ -93,7 +96,9 @@
       />
     </svg>
     <p class="text-gray-400 text-xl font-medium">No Photos Found</p>
-    <p class="text-gray-300 text-sm mt-2">Your gallery is waiting for some amazing photos</p>
+    <p class="text-gray-300 text-sm mt-2">
+      Your gallery is waiting for some amazing photos
+    </p>
   </div>
 </div>
 

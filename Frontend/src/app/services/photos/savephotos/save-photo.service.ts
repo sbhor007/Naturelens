@@ -55,7 +55,7 @@ export class SavePhotoService {
   private savedPhotoIds(res: any) {
     let photoIds;
     // photoIds = res.map((data: any) => data.photo.id);
-    photoIds = res.map((data: any) => ({
+    photoIds = res.results.map((data: any) => ({
       objId: data.id,
       photoId: data.photo.id,
     }));

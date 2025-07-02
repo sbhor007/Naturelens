@@ -50,13 +50,18 @@ export class ExploreComponent implements OnInit {
     });
 
     this.imagesService.photosState$.subscribe((res) => {
-      this.images1 = res.results.map((img: any) => ({ ...img, isLoaded: false }));
+      console.log('Res-1\n',res);
+      
+      this.images1 = res?.results?.map((img: any) => ({ ...img, isLoaded: false }));
+      // console.log('this.imagesService.photosState$.subscribe\n',this.images1);
     });
 
-    console.log('EXPLORE : images\n',this.images1);
+    // console.log('EXPLORE : images\n',this.images1);
 
     this.savePhotoService.savedPhotoIdsState$.subscribe((res) => {
       this.savedPhotoObj = res;
+      console.log('saved photo serrvice: explore:\n',res);
+      
       this.savedPhotoIds = res.map((data: any) => data.photoId);
     });
   }
