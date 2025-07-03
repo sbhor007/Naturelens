@@ -15,6 +15,8 @@ venv.bak/
 # Environment variables
 .env
 .env.*
+env/*
+env
 
 # VS Code settings
 .vscode/
@@ -57,3 +59,19 @@ Dockerfile
 /serializers.py
 /urls.py
 /views.py
+
+**/__pycache__/**
+**/__pycache__
+**/migrations/**
+__pycache__
+
+
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.venv/
+venv/
+env/
+*.egg

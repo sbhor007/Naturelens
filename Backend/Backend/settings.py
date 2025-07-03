@@ -142,7 +142,7 @@ DATABASES = {
         'ENGINE': os.environ.get('DB_ENGINE','django.db.backends.mysql'),
         'NAME': os.environ.get('DB_NAME', 'naturelens_db'),
         'USER': os.environ.get('DB_USER', 'root'),
-        'PASSWORD': os.environ.get('DB_PASSWORD','Mysql80'),
+        'PASSWORD': os.environ.get('DB_PASSWORD','Mysql!80'),
         'HOST': os.environ.get('DB_HOST','mysql'),
         'PORT': os.environ.get('DB_PORT','3306'),
         'OPTIONS': {
