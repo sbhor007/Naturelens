@@ -1,324 +1,219 @@
 export let DataQueue = [
-    {
-        "title": "Twilight Coastal Marsh",
-        "description": "A marshy coastline glowing under twilight skies.",
-        "category_name": "Nature",
-        "tags": "marsh, coast",
-        "location": "Odisha"
-    },
-    {
-        "title": "Emerald Cliff Waterfall",
-        "description": "A waterfall cascading down an emerald-green cliff.",
-        "category_name": "Nature",
-        "tags": "waterfall, cliff",
-        "location": "Uttarakhand"
-    },
-    {
-        "title": "Starlit Alpine Valley",
-        "description": "A valley shimmering under a starlit alpine sky.",
-        "category_name": "Nature",
-        "tags": "valley, stars",
-        "location": "Himachal Pradesh"
-    },
-    {
-        "title": "Golden Mangrove Delta",
-        "description": "A delta with mangroves glowing in golden light.",
-        "category_name": "Nature",
-        "tags": "mangroves, delta",
-        "location": "Sundarbans"
-    },
-    {
-        "title": "Misty Highland Plateau",
-        "description": "A misty plateau in a highland region.",
-        "category_name": "Nature",
-        "tags": "plateau, mist",
-        "location": "Sikkim"
-    },
-    {
-        "title": "Coral Island Reef",
-        "description": "A vibrant reef surrounding a tropical island.",
-        "category_name": "Nature",
-        "tags": "coral, reef",
-        "location": "Andaman Islands"
-    },
-    {
-        "title": "Sacred Bamboo Grove",
-        "description": "A tranquil grove of sacred bamboo trees.",
-        "category_name": "Nature",
-        "tags": "bamboo, grove",
-        "location": "Mizoram"
-    },
-    {
-        "title": "Desert Starry Canyon",
-        "description": "A canyon under a brilliant starry desert sky.",
-        "category_name": "Nature",
-        "tags": "canyon, stars",
-        "location": "Rajasthan"
-    },
-    {
-        "title": "Verdant Monsoon Hills",
-        "description": "Hills lush with greenery during the monsoon.",
-        "category_name": "Nature",
-        "tags": "hills, monsoon",
-        "location": "Kerala"
-    },
-    {
-        "title": "Crystal River Bend",
-        "description": "A clear river curving through a scenic bend.",
-        "category_name": "Nature",
-        "tags": "river, bend",
-        "location": "Uttarakhand"
-    },
-    {
-        "title": "Ancient Pine Ridge",
-        "description": "A ridge lined with ancient pine trees.",
-        "category_name": "Nature",
-        "tags": "pine, ridge",
-        "location": "Jammu and Kashmir"
-    },
-    {
-        "title": "Sandy Island Spit",
-        "description": "A narrow sandy spit extending into the sea.",
-        "category_name": "Nature",
-        "tags": "spit, island",
-        "location": "Lakshadweep"
-    },
-    {
-        "title": "Mossy Jungle Path",
-        "description": "A path covered in moss through a dense jungle.",
-        "category_name": "Nature",
-        "tags": "jungle, moss",
-        "location": "Assam"
-    },
-    {
-        "title": "Red Rock Desert Mesa",
-        "description": "A striking mesa rising from a red rock desert.",
-        "category_name": "Nature",
-        "tags": "mesa, desert",
-        "location": "Rajasthan"
-    },
-    {
-        "title": "Orchid Highland Slope",
-        "description": "A slope vibrant with highland orchids.",
-        "category_name": "Nature",
-        "tags": "orchids, slope",
-        "location": "Nagaland"
-    },
-    {
-        "title": "Glacial Lake Shore",
-        "description": "A pristine shore along a glacial-fed lake.",
-        "category_name": "Nature",
-        "tags": "lake, glacier",
-        "location": "Ladakh"
-    },
-    {
-        "title": "Tropical Beach Cove",
-        "description": "A secluded cove with soft tropical beaches.",
-        "category_name": "Nature",
-        "tags": "cove, beach",
-        "location": "Goa"
-    },
-    {
-        "title": "Cedar Mountain Glade",
-        "description": "A peaceful glade surrounded by cedar trees.",
-        "category_name": "Nature",
-        "tags": "cedar, glade",
-        "location": "Himachal Pradesh"
-    },
-    {
-        "title": "Monsoon Cliff Rapids",
-        "description": "Swift rapids cascading down a cliff during monsoon.",
-        "category_name": "Nature",
-        "tags": "rapids, monsoon",
-        "location": "Maharashtra"
-    },
-    {
-        "title": "Starlit Bamboo Clearing",
-        "description": "A clearing in a bamboo forest under a starry sky.",
-        "category_name": "Nature",
-        "tags": "bamboo, stars",
-        "location": "Mizoram"
-    },
-    {
-        "title": "Golden Desert Ridge",
-        "description": "A ridge of golden sand in a desert landscape.",
-        "category_name": "Nature",
-        "tags": "ridge, desert",
-        "location": "Rajasthan"
-    },
-    {
-        "title": "Mossy Alpine Stream",
-        "description": "A stream lined with moss in an alpine region.",
-        "category_name": "Nature",
-        "tags": "stream, moss",
-        "location": "Sikkim"
-    },
-    {
-        "title": "Coral Lagoon Shore",
-        "description": "A tranquil shore along a coral-fringed lagoon.",
-        "category_name": "Nature",
-        "tags": "lagoon, coral",
-        "location": "Andaman Islands"
-    },
-    {
-        "title": "Ancient Teak Grove",
-        "description": "A grove of ancient teak trees with sprawling branches.",
-        "category_name": "Nature",
-        "tags": "teak, grove",
-        "location": "Kerala"
-    },
-    {
-        "title": "Wildflower Coastal Cliff",
-        "description": "A cliff adorned with colorful coastal wildflowers.",
-        "category_name": "Nature",
-        "tags": "wildflowers, cliff",
-        "location": "Goa"
-    },
-    {
-        "title": "Sacred Lotus Lake",
-        "description": "A serene lake dotted with sacred lotus flowers.",
-        "category_name": "Nature",
-        "tags": "lake, lotus",
-        "location": "Tamil Nadu"
-    },
-    {
-        "title": "Misty Rainforest Canopy",
-        "description": "A dense rainforest canopy shrouded in mist.",
-        "category_name": "Nature",
-        "tags": "rainforest, canopy",
-        "location": "Assam"
-    },
-    {
-        "title": "Glacial Mountain Pass",
-        "description": "A rugged pass surrounded by glacial peaks.",
-        "category_name": "Nature",
-        "tags": "glacier, pass",
-        "location": "Ladakh"
-    },
-    {
-        "title": "Golden Monsoon Meadow",
-        "description": "A meadow glowing with monsoon-fueled greenery.",
-        "category_name": "Nature",
-        "tags": "meadow, monsoon",
-        "location": "Uttarakhand"
-    },
-    {
-        "title": "Sandy Coastal Dune",
-        "description": "A windswept dune along a sandy coastline.",
-        "category_name": "Nature",
-        "tags": "dune, coast",
-        "location": "Daman and Diu"
-    },
-    {
-        "title": "Cedar Valley Overlook",
-        "description": "A scenic overlook in a cedar-lined valley.",
-        "category_name": "Nature",
-        "tags": "cedar, overlook",
-        "location": "Himachal Pradesh"
-    },
-    {
-        "title": "Orchid Mountain Trail",
-        "description": "A trail lined with vibrant mountain orchids.",
-        "category_name": "Nature",
-        "tags": "orchids, trail",
-        "location": "Nagaland"
-    },
-    {
-        "title": "Red Sandstone Plateau",
-        "description": "A flat plateau of striking red sandstone.",
-        "category_name": "Nature",
-        "tags": "plateau, sandstone",
-        "location": "Rajasthan"
-    },
-    {
-        "title": "Mossy Highland Gorge",
-        "description": "A gorge with moss-covered walls in the highlands.",
-        "category_name": "Nature",
-        "tags": "gorge, moss",
-        "location": "Arunachal Pradesh"
-    },
-    {
-        "title": "Tropical Island Bay",
-        "description": "A serene bay on a lush tropical island.",
-        "category_name": "Nature",
-        "tags": "bay, island",
-        "location": "Andaman Islands"
-    },
-    {
-        "title": "Snowy Alpine Ridge",
-        "description": "A ridge covered in fresh alpine snow.",
-        "category_name": "Nature",
-        "tags": "ridge, snow",
-        "location": "Jammu and Kashmir"
-    },
-    {
-        "title": "Golden Grassland Plains",
-        "description": "Expansive plains of golden grasslands.",
-        "category_name": "Nature",
-        "tags": "grassland, plains",
-        "location": "Gujarat"
-    },
-    {
-        "title": "Crystal Cave Spring",
-        "description": "A clear spring flowing through a hidden cave.",
-        "category_name": "Nature",
-        "tags": "spring, cave",
-        "location": "Meghalaya"
-    },
-    {
-        "title": "Mangrove Tidal Swamp",
-        "description": "A swampy tidal area dense with mangroves.",
-        "category_name": "Nature",
-        "tags": "mangroves, swamp",
-        "location": "Sundarbans"
-    },
-    {
-        "title": "Cliffside Monsoon Vista",
-        "description": "A cliff with a stunning view during monsoon season.",
-        "category_name": "Nature",
-        "tags": "cliff, monsoon",
-        "location": "Maharashtra"
-    },
-    {
-        "title": "Ancient Banyan Clearing",
-        "description": "A clearing shaded by an ancient banyan tree.",
-        "category_name": "Nature",
-        "tags": "banyan, clearing",
-        "location": "Tamil Nadu"
-    },
-    {
-        "title": "Starlit Desert Mesa",
-        "description": "A mesa glowing under a starlit desert sky.",
-        "category_name": "Nature",
-        "tags": "mesa, stars",
-        "location": "Rajasthan"
-    },
-    {
-        "title": "Mossy River Valley",
-        "description": "A valley with a moss-lined river flowing through.",
-        "category_name": "Nature",
-        "tags": "river, moss",
-        "location": "Uttarakhand"
-    },
-    {
-        "title": "Tropical Fern Clearing",
-        "description": "A clearing filled with lush tropical ferns.",
-        "category_name": "Nature",
-        "tags": "ferns, clearing",
-        "location": "Assam"
-    },
-    {
-        "title": "Glacial Cliff Lake",
-        "description": "A lake nestled at the base of a glacial cliff.",
-        "category_name": "Nature",
-        "tags": "lake, glacier",
-        "location": "Ladakh"
-    },
-    {
-        "title": "Golden Coastal Horizon",
-        "description": "A coastline stretching toward a golden horizon.",
-        "category_name": "Nature",
-        "tags": "coast, horizon",
-        "location": "Kerala"
-    }
+  {
+    "title": "Echoes of the Valley Wind",
+    "description": "Whispers of the wind across a secluded valley.",
+    "category_name": "Nature",
+    "tags": "valley, wind",
+    "location": "Arunachal Pradesh"
+  },
+  {
+    "title": "Terracotta Dreams",
+    "description": "Warm tones of ancient terracotta sculptures.",
+    "category_name": "Heritage",
+    "tags": "terracotta, sculpture",
+    "location": "West Bengal"
+  },
+  {
+    "title": "Wharf at First Light",
+    "description": "Soft morning light over a quiet fishing wharf.",
+    "category_name": "Seascape",
+    "tags": "wharf, dawn",
+    "location": "Goa"
+  },
+  {
+    "title": "Jungle Mist Awakens",
+    "description": "Dense jungle slowly revealed through lifting mist.",
+    "category_name": "Nature",
+    "tags": "jungle, mist",
+    "location": "Assam"
+  },
+  {
+    "title": "Steps of History",
+    "description": "Ancient stone steps climbing to a forgotten fort.",
+    "category_name": "History",
+    "tags": "steps, fort",
+    "location": "Madhya Pradesh"
+  },
+  {
+    "title": "Ceremony Under Stars",
+    "description": "Night rituals unfolding beneath a starlit sky.",
+    "category_name": "Religion",
+    "tags": "stars, ritual",
+    "location": "Rajasthan"
+  },
+  {
+    "title": "Mirror Lake Calm",
+    "description": "Still waters perfectly reflecting a mountain range.",
+    "category_name": "Nature",
+    "tags": "lake, reflection",
+    "location": "Sikkim"
+  },
+  {
+    "title": "Harmony in the Haze",
+    "description": "Muted light blending hills and clouds into harmony.",
+    "category_name": "Abstract",
+    "tags": "haze, harmony",
+    "location": "Nagaland"
+  },
+  {
+    "title": "Clay Walls and Cotton Skies",
+    "description": "Village homes beneath soft, cloudy skies.",
+    "category_name": "Culture",
+    "tags": "village, cloud",
+    "location": "Odisha"
+  },
+  {
+    "title": "Rooftop Prayer Flags",
+    "description": "Colorful flags fluttering on high rooftops.",
+    "category_name": "Religion",
+    "tags": "prayer, flag",
+    "location": "Ladakh"
+  },
+  {
+    "title": "The Mango Grove Silence",
+    "description": "Stillness of a mango grove during noon.",
+    "category_name": "Nature",
+    "tags": "mango, grove",
+    "location": "Telangana"
+  },
+  {
+    "title": "Night at the Fairgrounds",
+    "description": "Bright rides and food stalls at a village fair.",
+    "category_name": "Culture",
+    "tags": "fair, night",
+    "location": "Haryana"
+  },
+  {
+    "title": "Sunlit Alley Charms",
+    "description": "A narrow alley glowing in afternoon light.",
+    "category_name": "Cityscape",
+    "tags": "alley, sun",
+    "location": "Puducherry"
+  },
+  {
+    "title": "Under the Banyan Silence",
+    "description": "Peaceful gathering beneath a centuries-old tree.",
+    "category_name": "Religion",
+    "tags": "banyan, peace",
+    "location": "Gujarat"
+  },
+  {
+    "title": "Lantern-lit Courtyard",
+    "description": "Warm lanterns brightening a traditional home.",
+    "category_name": "Culture",
+    "tags": "lantern, home",
+    "location": "Andaman Islands"
+  },
+  {
+    "title": "Harvest Under Open Skies",
+    "description": "Farmers working together during harvest season.",
+    "category_name": "Agriculture",
+    "tags": "harvest, sky",
+    "location": "Bihar"
+  },
+  {
+    "title": "The Cradle of Monsoons",
+    "description": "Clouds spilling rain over emerald hills.",
+    "category_name": "Seasons",
+    "tags": "monsoon, hills",
+    "location": "Mizoram"
+  },
+  {
+    "title": "Candlelight at the Shrine",
+    "description": "Tiny flames flickering at a sacred shrine.",
+    "category_name": "Religion",
+    "tags": "shrine, candle",
+    "location": "Uttar Pradesh"
+  },
+  {
+    "title": "Echoes Between Arches",
+    "description": "Stone arches whispering tales of kings.",
+    "category_name": "History",
+    "tags": "arches, ruins",
+    "location": "Delhi"
+  },
+  {
+    "title": "Ferry Across the Estuary",
+    "description": "A slow ferry crossing wide river waters.",
+    "category_name": "Travel",
+    "tags": "ferry, river",
+    "location": "Andhra Pradesh"
+  },
+  {
+    "title": "Cactus Against Crimson",
+    "description": "Sharp cactus silhouetted by a crimson sunset.",
+    "category_name": "Nature",
+    "tags": "cactus, sunset",
+    "location": "Rajasthan"
+  },
+  {
+    "title": "Bamboo Bridge Walk",
+    "description": "Locals crossing a narrow bamboo bridge.",
+    "category_name": "Culture",
+    "tags": "bridge, bamboo",
+    "location": "Tripura"
+  },
+  {
+    "title": "Golden Fields of Mustard",
+    "description": "A sea of blooming yellow mustard flowers.",
+    "category_name": "Agriculture",
+    "tags": "mustard, yellow",
+    "location": "Haryana"
+  },
+  {
+    "title": "Ablaze with Marigolds",
+    "description": "Marigold garlands lighting up a temple entrance.",
+    "category_name": "Festival",
+    "tags": "marigold, temple",
+    "location": "Uttarakhand"
+  },
+  {
+    "title": "Moonlight Over Ghats",
+    "description": "The moon casting silver across sacred steps.",
+    "category_name": "Religion",
+    "tags": "moonlight, ghats",
+    "location": "Varanasi"
+  },
+  {
+    "title": "Street Chai Ritual",
+    "description": "A street vendor pouring steaming cups of chai.",
+    "category_name": "Culture",
+    "tags": "chai, street",
+    "location": "Mumbai"
+  },
+  {
+    "title": "Dust Trails Behind Herds",
+    "description": "Cattle raising dust as they return home.",
+    "category_name": "Agriculture",
+    "tags": "herd, dust",
+    "location": "Chhattisgarh"
+  },
+  {
+    "title": "Sunset over Coconut Lines",
+    "description": "Straight rows of palms under an orange sky.",
+    "category_name": "Nature",
+    "tags": "coconut, sunset",
+    "location": "Lakshadweep"
+  },
+  {
+    "title": "Kite Dancers of Spring",
+    "description": "Kites soaring high during a spring celebration.",
+    "category_name": "Festival",
+    "tags": "kite, spring",
+    "location": "Gujarat"
+  },
+  {
+    "title": "Tides Against Stone",
+    "description": "Ocean tides crashing onto weathered stone.",
+    "category_name": "Nature",
+    "tags": "tide, stone",
+    "location": "Tamil Nadu"
+  },
+  {
+    "title": "Lines in the Sand",
+    "description": "Wavy lines left behind by retreating waves.",
+    "category_name": "Abstract",
+    "tags": "sand, wave",
+    "location": "Daman and Diu"
+  }
 ]

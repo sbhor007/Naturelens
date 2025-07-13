@@ -137,6 +137,22 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 
 load_dotenv(BASE_DIR / '.env')
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.getenv("DB_NAME", "naturelens_db"),
+#         'USER': os.getenv("DB_USER", "natureuser"),
+#         'PASSWORD': os.getenv("DB_PASSWORD", "naturepass"),
+#         # 'HOST': 'mysql',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#             'charset': 'utf8mb4',
+#         },
+#     }
+    
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get('DB_ENGINE','django.db.backends.mysql'),
@@ -144,7 +160,7 @@ DATABASES = {
         'USER': os.environ.get('DB_USER', 'root'),
         'PASSWORD': os.environ.get('DB_PASSWORD','Mysql!80'),
         'HOST': os.environ.get('DB_HOST','mysql'),
-        'PORT': os.environ.get('DB_PORT','3306'),
+        'PORT': os.environ.get('DB_PORT','3307'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
@@ -193,7 +209,7 @@ INTERNAL_IPS = [
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": f"redis://{os.environ.get('REDIS_HOST', 'localhost')}:{os.environ.get('REDIS_PORT', 6379)}/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -269,7 +285,7 @@ CLOUDINARY_STORAGE = {
     'cloud_name' : os.environ.get('CLOUD_NAME'),
   	'api_key' : os.environ.get('API_KEY'),
   	'api_secret' : os.environ.get('API_SECRET')
-}
+}   
 
 # cloudinary configuration
 cloudinary.config( 

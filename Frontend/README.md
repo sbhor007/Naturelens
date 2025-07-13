@@ -1,59 +1,169 @@
-# Frontend
+# Naturelens Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.7.
+This is the frontend for the Naturelens project, built with Angular. It provides a user interface for interacting with the Naturelens backend API.
 
-## Development server
+## Table of Contents
+
+- [Features](#features)
+- [Requirements](#requirements)
+- [Setup Instructions](#setup-instructions)
+- [Environment Variables](#environment-variables)
+- [Development Server](#development-server)
+- [Code Scaffolding](#code-scaffolding)
+- [Building](#building)
+- [Running Tests](#running-tests)
+- [Project Structure](#project-structure)
+- [Additional Resources](#additional-resources)
+
+---
+
+## Features
+
+- Modern Angular SPA
+- REST API integration
+- User authentication
+- Photo gallery and upload
+- Social features
+
+---
+
+## Requirements
+
+- Node.js (v18+ recommended)
+- npm (v9+ recommended)
+- Angular CLI
+
+---
+
+## Setup Instructions
+
+1. **Clone the repository**
+
+   ```sh
+   git clone <your-repo-url>
+   cd Naturelens/Frontend
+   ```
+
+2. **Install dependencies**
+
+   ```sh
+   npm install
+   ```
+
+3. **Configure environment variables**
+
+   Edit the environment files in `src/environments/`:
+
+   - `environment.ts` (for development)
+   - `environment.prod.ts` (for production)
+
+   Example:
+   ```typescript
+   export const environment = {
+     production: false,
+     apiUrl: 'http://localhost:8000/api',
+     // Add other environment variables here
+   };
+   ```
+
+---
+
+## Environment Variables
+
+Environment variables for the Angular app are managed in the files:
+
+- `src/environments/environment.ts` (development)
+- `src/environments/environment.prod.ts` (production)
+
+Common variables you may want to set:
+
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8000/api', // Backend API URL
+  // Add other variables as needed
+};
+```
+
+---
+
+## Development Server
 
 To start a local development server, run:
 
-```bash
+```sh
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Once the server is running, open your browser and navigate to [http://localhost:4200/](http://localhost:4200/). The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
+---
+
+## Code Scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
-```bash
+```sh
 ng generate component component-name
 ```
 
 For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
-```bash
+```sh
 ng generate --help
 ```
 
+---
+
 ## Building
 
-To build the project run:
+To build the project for production, run:
 
-```bash
-ng build
+```sh
+ng build --configuration production
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Running Tests
 
-```bash
-ng test
+- **Unit tests:**  
+  ```sh
+  ng test
+  ```
+- **End-to-end tests:**  
+  ```sh
+  ng e2e
+  ```
+
+---
+
+## Project Structure
+
+```
+Frontend/
+  src/
+    app/
+    environments/
+    assets/
+    ...
+  angular.json
+  package.json
+  tsconfig.json
+  README.md
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
 ## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Angular CLI Documentation](https://angular.dev/tools/cli)
+- [Angular Official Docs](https://angular.dev/)
+
+---
+
+**Note:**  
+- Update the `apiUrl` and other environment variables in `src/environments/` as needed for your backend.  
+- For Docker or production deployment, ensure the environment files are set correctly.

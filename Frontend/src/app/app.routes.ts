@@ -108,10 +108,10 @@ export const routes: Routes = [
         path:'search-result',
         component:SearchResultComponent
       },
-      // {
-      //   path:'upload-images',
-      //   component:DomyImageInsertComponent
-      // }
+      {
+        path:'upload-images',
+        component:DomyImageInsertComponent
+      }
     ],
   },
   {

@@ -64,7 +64,7 @@ export class AuthService {
     // debugger
     this.apiService.login(loginCredentials).subscribe({
       next: (res) => {
-        console.log(res.access);
+        console.log(res);
         const tokens = res.tokens;
         sessionStorage.setItem('access', tokens.access);
         sessionStorage.setItem('refresh', tokens.refresh);
