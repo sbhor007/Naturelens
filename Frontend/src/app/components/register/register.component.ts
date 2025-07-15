@@ -11,21 +11,26 @@ import {
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/Auth/auth.service';
 import { UserService } from '../../services/User/user.service';
+import { OtpVerificationComponent } from "../otp-verification/otp-verification.component";
+import { OTPService } from '../../services/Email/otp.service';
 
 @Component({
   selector: 'app-register',
-  imports: [RouterLink, ReactiveFormsModule, CommonModule],
+  imports: [RouterLink, ReactiveFormsModule, CommonModule, OtpVerificationComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
   registrationForm: FormGroup;
+  userEmail:string = ''
+  isOtpSend:boolean = false
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private userService:UserService,
-    private router: Router
+    private router: Router,
+    private otpService:OTPService
   ) {
     this.registrationForm = this.fb.group({
       first_name:['',Validators.required],
@@ -47,15 +52,54 @@ export class RegisterComponent {
 });
   }
 
+  /* Register new User */
   register(): void {
     if (this.registrationForm.invalid) {
       this.registrationForm.markAllAsTouched();
       return;
     }
-    this.userService.register(this.registrationForm.value)
-    this.registrationForm.reset();
+    // this.userService.register(this.registrationForm.value)
+     this.userEmail = this.registrationForm.get('email')?.value
+    console.log('userEmail',this.userEmail);
+    
+
+    // sending verification otp to user email
+    // if(!this.sendOtp(userEmail)){
+    //   alert('something went to wrong for mail sending')
+    //   return
+    // }
+
+    this.sendOtp(this.userEmail)
+    console.log('register function end');
+    
   }
 
+  /* Send OTP to user's email */
+  sendOtp(userEmail:any){
+    console.log('email service called');
+
+    const res = this.otpService.sendOTP(userEmail)
+    
+    this.isOtpSend = true
+    
+    // return res
+    // return false
+
+
+  }
+  
+  /* check otp verified */
+  isOtpVerified(){
+    console.log('is otp verified function call');
+    this.isOtpSend = false
+    this.userService.register(this.registrationForm.value)
+    this.registrationForm.reset();
+    // return true
+  }
+
+
+
+  /* Password Validations */
   passwordValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value || '';
     const errors: any = {};

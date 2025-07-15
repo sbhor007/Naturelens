@@ -1,6 +1,17 @@
+
 <div
   class="bg-gradient-to-br text-black min-h-[90vh] flex items-center justify-center"
 >
+  <!-- OTP Verification Component start -->
+@if (isOtpSend) {
+<div class="rounded-2xl shadow-lg mx-3 md:mx-0 transition-all duration-500 ease-in-out transform animate-fade-in">
+  <app-otp-verification
+    [userEmail]="userEmail"
+    (isOtpVerified)="isOtpVerified()"
+  ></app-otp-verification>
+</div>
+}@else {
+  <!-- OTP Verification Component end -->
   <!-- Form Container -->
   <form [formGroup]="registrationForm" (ngSubmit)="register()">
     <div
@@ -102,7 +113,6 @@
             >
               Last Name is required.
             </div>
-            
           </div>
         </div>
         <div>
@@ -193,4 +203,6 @@
       </p>
     </div>
   </form>
+}
 </div>
+
