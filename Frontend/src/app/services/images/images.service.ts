@@ -5,8 +5,6 @@ import { environment } from '../../../environments/environment.development';
 import { ApiService } from '../API/api.service';
 import { Router } from '@angular/router';
 
-
-
 @Injectable({
   providedIn: 'root',
 })
@@ -16,18 +14,16 @@ export class ImagesService {
   private photosSubject = new BehaviorSubject<any | null>(null);
   private userPhotosSubject = new BehaviorSubject<any | null>(null);
 
-  
-
   readonly photoCategoriesState$ = this.photoCategoriesSubject.asObservable();
   readonly tagsState$ = this.tagsSubject.asObservable();
   readonly photosState$ = this.photosSubject.asObservable();
   readonly userPhotosState$ = this.userPhotosSubject.asObservable();
 
-  private hasGetPhotosCalled = new BehaviorSubject<boolean>(false)
-  private hasGetUserPhotosCalled = new BehaviorSubject<boolean>(false)
+  private hasGetPhotosCalled = new BehaviorSubject<boolean>(false);
+  private hasGetUserPhotosCalled = new BehaviorSubject<boolean>(false);
 
-  readonly hasGetPhotosCalled$ = this.hasGetPhotosCalled.asObservable()
-  readonly hasGetUserPhotosCalled$ = this.hasGetUserPhotosCalled.asObservable()
+  readonly hasGetPhotosCalled$ = this.hasGetPhotosCalled.asObservable();
+  readonly hasGetUserPhotosCalled$ = this.hasGetUserPhotosCalled.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -35,21 +31,18 @@ export class ImagesService {
     private router: Router
   ) {
     console.log('component loaded');
-    this.getAllPhotos()
-    this.getPhotoCategories()
-    this.getTags()
-    
+    this.getAllPhotos();
+    this.getPhotoCategories();
+    this.getTags();
   }
 
   getAllPhotos() {
     this.apiService.getAllPhotos().subscribe({
       next: (res) => {
-        // if (Array.isArray(res)) {
-        //   res = res.sort(() => Math.random() - 0.5);
-        // }
-        this.photosSubject.next(res)
-        this.hasGetPhotosCalled.next(true)
-        console.log('get-all-photos-res : ', res);
+        console.log('IMAGE-SERVICE::getAllPhotos : res :\n ',res);
+        
+        this.photosSubject.next(res);
+        this.hasGetPhotosCalled.next(true);
       },
       error: (err) => {
         console.error('ERROR:', err);
@@ -82,15 +75,15 @@ export class ImagesService {
   }
 
   uploadPhotos(photosDetails: any) {
-    console.log("Photos Details : ",photosDetails);
+    console.log('Photos Details : ', photosDetails);
     this.apiService.createPhoto(photosDetails).subscribe({
       next: (res) => {
         this.photosSubject.next(res);
-        this.getAllPhotos()
-        this.getPhotoCategories()
-        this.getTags()
-        this.getUserPhotos()
-        console.log('photo upload successfully',res);
+        this.getAllPhotos();
+        this.getPhotoCategories();
+        this.getTags();
+        this.getUserPhotos();
+        console.log('photo upload successfully', res);
         // alert('photo upload successfully');
         // this.router.navigate(['/user/profile/posts']);
       },
@@ -101,50 +94,48 @@ export class ImagesService {
     });
   }
 
-  getUserPhotos(){
+  getUserPhotos() {
     this.apiService.getUserPhotos().subscribe({
-      next: res =>{
-        console.log('GET_USER_PHOTO : RES : ',res);
-        
-        this.userPhotosSubject.next(res)
-        this.hasGetUserPhotosCalled.next(true)
+      next: (res) => {
+        console.log('GET_USER_PHOTO : RES : ', res);
+
+        this.userPhotosSubject.next(res);
+        this.hasGetUserPhotosCalled.next(true);
       },
-      error: err =>{
-        console.log('GET_USER_PHOTO : ',err);
-        
-      }
-    })
+      error: (err) => {
+        console.log('GET_USER_PHOTO : ', err);
+      },
+    });
   }
 
-  updatePhoto(photoDetails:any,photoId:string){
-    console.log('photoDetails : \n',photoDetails);
-    
-    this.apiService.updatePhoto(photoDetails,photoId).subscribe({
-      next: res =>{
-        console.log('UPDATE_PHOTO : RES : \n',res);
-        this.getAllPhotos()
-        alert('update successful')
+  updatePhoto(photoDetails: any, photoId: string) {
+    console.log('photoDetails : \n', photoDetails);
+
+    this.apiService.updatePhoto(photoDetails, photoId).subscribe({
+      next: (res) => {
+        console.log('UPDATE_PHOTO : RES : \n', res);
+        this.getAllPhotos();
+        alert('update successful');
       },
-      error: err =>{
-        console.log('UPDATE_PHOTO : ',err);
-        alert(err)
-      }
-    })
+      error: (err) => {
+        console.log('UPDATE_PHOTO : ', err);
+        alert(err);
+      },
+    });
   }
 
   /* Delete Photo by Id */
-  deletePhoto(photoId:string){
+  deletePhoto(photoId: string) {
     this.apiService.deletePhoto(photoId).subscribe({
-      next: res =>{
-        console.log('IMAGE-SERVICE : deletePhoto: res \n',res);
-        this.getUserPhotos()
-        alert("photo deleted")
+      next: (res) => {
+        console.log('IMAGE-SERVICE : deletePhoto: res \n', res);
+        this.getUserPhotos();
+        alert('photo deleted');
       },
-      error : err =>{
-        console.log('IMAGE-SERVICE : deletePhoto: err \n',err);
-        alert('something went to wrong')
-      }
-    })
+      error: (err) => {
+        console.log('IMAGE-SERVICE : deletePhoto: err \n', err);
+        alert('something went to wrong');
+      },
+    });
   }
-
 }

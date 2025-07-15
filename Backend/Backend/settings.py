@@ -187,7 +187,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# pagination and default authentication
+
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 30,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )   
@@ -208,7 +212,7 @@ INTERNAL_IPS = [
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{os.environ.get('REDIS_HOST', 'localhost')}:{os.environ.get('REDIS_PORT', 6379)}/1",
+        "LOCATION": "redis://127.0.0.1:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -310,13 +314,6 @@ ELASTICSEARCH_DSL = {
         # "ca_certs": "PATH_TO_http_ca.crt",
     }
 }
-
-# pagination
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 50
-}
-
 
 # Email Service
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
