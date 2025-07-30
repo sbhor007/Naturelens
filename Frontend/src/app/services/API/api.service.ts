@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable, tap } from "rxjs";
+import { environment } from "../../../environments/environment.development";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ApiService {
   private baseURL = environment.baseAPI;
   private isLoggedIn$ = false;
 
   constructor(private http: HttpClient) {
-    this.isLoggedIn$ = !!sessionStorage.getItem('access');
+    this.isLoggedIn$ = !!sessionStorage.getItem("access");
   }
 
   /*start auth API */
@@ -20,7 +20,7 @@ export class ApiService {
   }
 
   logout(refreshToken: string) {
-    console.log('refresh Token : ', refreshToken);
+    console.log("refresh Token : ", refreshToken);
     return this.http.post(`${this.baseURL}user/logout/`, {
       refresh: refreshToken,
     });
@@ -55,19 +55,18 @@ export class ApiService {
 
   //send otp
   sendOTP(email: string): Observable<any> {
-    return this.http.post(
-      `${this.baseURL}mail/send-otp/?email=${email}`,
-      {}
-    );
+    console.log('baseURL:', this.baseURL);
+    
+    return this.http.post(`${this.baseURL}mail/send-otp/?email=${email}`, {});
   }
 
   //validate OTP
   verifyOTP(email: string, Otp: string) {
-    console.log('api-service-check-email: ',email);
-    
+    console.log("api-service-check-email: ", email);
+
     const validationData = {
-      'email': email,
-      'otp': Otp,
+      email: email,
+      otp: Otp,
     };
     return this.http.post(`${this.baseURL}mail/verify-otp/`, validationData);
   }
@@ -81,6 +80,12 @@ export class ApiService {
   getAllPhotos(): Observable<any> {
     return this.http.get(`${this.baseURL}photos/photo/`);
   }
+  //load photos when scroll triggered
+  getPhotosByUrl(url: string, offSet: number): Observable<any> {
+    return this.http.get(
+      `http://172.18.0.1:8000/api/v1/photos/photo/?limit=30&offset=${offSet}`,
+    );
+  }
 
   getUserPhotos(): Observable<any> {
     return this.http.get(`${this.baseURL}photos/photo/user-photos/`);
@@ -89,7 +94,7 @@ export class ApiService {
   updatePhoto(photoDetails: any, photoId: string): Observable<any> {
     return this.http.put(
       `${this.baseURL}photos/photo/${photoId}/`,
-      photoDetails
+      photoDetails,
     );
   }
   /*end Module Photos API */
@@ -110,7 +115,7 @@ export class ApiService {
   savePhoto(savePhotoDetails: any): Observable<any> {
     return this.http.post(
       `${this.baseURL}photos/save-photo/`,
-      savePhotoDetails
+      savePhotoDetails,
     );
   }
 
@@ -120,13 +125,13 @@ export class ApiService {
 
   removeSavedPhoto(removableObjectId: string): Observable<any> {
     return this.http.delete(
-      `${this.baseURL}photos/save-photo/${removableObjectId}/`
+      `${this.baseURL}photos/save-photo/${removableObjectId}/`,
     );
   }
 
   totalSavedPhotos(photoId: string): Observable<any> {
     return this.http.get(
-      `${this.baseURL}photos/save-photo/count/?photoId=${photoId}`
+      `${this.baseURL}photos/save-photo/count/?photoId=${photoId}`,
     );
   }
   // updatePhotos(updatePhotoDetails:any,id)
@@ -138,13 +143,13 @@ export class ApiService {
   likeDislike(likeDetails: any): Observable<any> {
     return this.http.post<any>(
       `${this.baseURL}social/photo-like/`,
-      likeDetails
+      likeDetails,
     );
   }
 
   totalLikes(id: string): Observable<any> {
     return this.http.get(
-      `${this.baseURL}social/photo-like/like-count/?id=${id}`
+      `${this.baseURL}social/photo-like/like-count/?id=${id}`,
     );
   }
 
@@ -158,7 +163,7 @@ export class ApiService {
 
   getPhotoComments(id: string): Observable<any> {
     return this.http.get(
-      `${this.baseURL}social/comment/photo-comments/?id=${id}`
+      `${this.baseURL}social/comment/photo-comments/?id=${id}`,
     );
   }
 
@@ -169,7 +174,7 @@ export class ApiService {
   updateComment(formData: FormData, commentId: string): Observable<any> {
     return this.http.patch(
       `${this.baseURL}social/comment/${commentId}/`,
-      formData
+      formData,
     );
   }
 

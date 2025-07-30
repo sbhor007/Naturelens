@@ -3,10 +3,13 @@ import { ExploreComponent } from "../explore/explore.component";
 
 @Component({
   selector: 'app-home',
-  imports: [ExploreComponent],
+  imports: [],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent{
+  title = `Join the Nature Photography Movement`
+  
+  heading = ""
 
 }

@@ -13,6 +13,7 @@ import { AuthService } from '../../services/Auth/auth.service';
 import { UserService } from '../../services/User/user.service';
 import { OtpVerificationComponent } from "../otp-verification/otp-verification.component";
 import { OTPService } from '../../services/Email/otp.service';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-register',
@@ -24,6 +25,7 @@ export class RegisterComponent {
   registrationForm: FormGroup;
   userEmail:string = ''
   isOtpSend:boolean = false
+  private baseURL = environment.baseAPI;
 
   constructor(
     private fb: FormBuilder,
@@ -32,6 +34,8 @@ export class RegisterComponent {
     private router: Router,
     private otpService:OTPService
   ) {
+    console.log('baseURL',this.baseURL);
+    
     this.registrationForm = this.fb.group({
       first_name:['',Validators.required],
       last_name:['',Validators.required],

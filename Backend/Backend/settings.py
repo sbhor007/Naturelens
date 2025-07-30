@@ -79,15 +79,16 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_URLS_REGEX = r"^/api/.*$"
 CORS_ALLOWED_ORIGINS = [
-   "http://localhost:4200",
+    "http://localhost:4200",
     "http://127.0.0.1:4200",
-    "http://localhost:80",
-    "http://127.0.0.1:80",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
     "http://192.168.1.42:4200",
-    
+    "http://0.0.0.0:4200",
 ]
 
-CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', 'http://localhost:8001,http://localhost:4200').split(',')
+
+CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', 'http://localhost:8000,http://localhost:4200,http://0.0.0.0:4200').split(',')
 
 
 
@@ -212,7 +213,9 @@ INTERNAL_IPS = [
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
+        # "LOCATION": "redis://redis:6379/1",
         "LOCATION": "redis://127.0.0.1:6379/1",
+        
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -305,7 +308,8 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 ELASTICSEARCH_DSL = {
     "default": {
-        "hosts": "https://localhost:9200",
+        # "hosts": "https://elasticsearch:9200",
+        "hosts":  "https://localhost:9200",
         "http_auth": ("elastic", os.environ.get('ELASTIC_PASSWORD')),
         'verify_certs': False,
         'ssl_show_warn': False,  # This will suppress SSL warnings

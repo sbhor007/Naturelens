@@ -23,18 +23,16 @@
   break-inside: avoid;
 }
 
-
 .custom-scrollbar {
   /* Hide scrollbar for Chrome, Safari and Opera */
   &::-webkit-scrollbar {
     display: none;
   }
-  
-  /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
 
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 
 /* Hide scrollbar */
 .scrollbar-hide::-webkit-scrollbar {
@@ -42,8 +40,8 @@
 }
 
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* Optional: Custom styled scrollbar (visible if .custom-scrollbar used alone) */
@@ -59,7 +57,6 @@
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
-
 
 .shimmer-effect {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
@@ -103,7 +100,72 @@
 }
 
 img {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Smooth fade-in animation for new images */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+.fade-in.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Loading indicator styles */
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  margin: 1rem 0;
+}
+
+.loading-spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+/* Smooth scroll behavior */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Improved masonry transitions */
+.masonry-item {
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.masonry-item:hover {
+  transform: translateY(-2px);
 }
 
 .shimmer-effect {
@@ -115,6 +177,27 @@ img {
   animation: shimmer 1.5s infinite;
 }
 
+/* Loading more indicator */
+.loading-more {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.loading-more .spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
 @keyframes shimmer {
   0% {
     background-position: 200% 0;
@@ -123,4 +206,3 @@ img {
     background-position: -200% 0;
   }
 }
-

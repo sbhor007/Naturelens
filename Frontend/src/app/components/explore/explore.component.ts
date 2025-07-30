@@ -1,42 +1,43 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule } from "@angular/common";
 import {
   Component,
   ElementRef,
   OnInit,
   QueryList,
   ViewChildren,
-} from '@angular/core';
-import gsap from 'gsap';
-import { ImagesService } from '../../services/images/images.service';
-import Masonry from 'masonry-layout';
-import { Router } from '@angular/router';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
-import { SavePhotoService } from '../../services/photos/savephotos/save-photo.service';
+  ViewChild,
+} from "@angular/core";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { ImagesService } from "../../services/images/images.service";
+import { Router } from "@angular/router";
+import { ScrollingModule } from "@angular/cdk/scrolling";
+import { NgxShimmerLoadingModule } from "ngx-shimmer-loading";
+import { SavePhotoService } from "../../services/photos/savephotos/save-photo.service";
 
 @Component({
-  selector: 'app-explore',
+  selector: "app-explore",
   standalone: true,
   imports: [CommonModule, ScrollingModule, NgxShimmerLoadingModule],
-  templateUrl: './explore.component.html',
-  styleUrl: './explore.component.css',
+  templateUrl: "./explore.component.html",
+  styleUrl: "./explore.component.css",
 })
 export class ExploreComponent implements OnInit {
-  images1: any[] = [];
+  images1: any = [];
   savedPhotoIds: string[] = [];
   savedPhotoObj: any;
 
-  @ViewChildren('card') cards!: QueryList<ElementRef>;
+  @ViewChildren("card") cards!: QueryList<ElementRef>;
+  @ViewChild("scrollSentinel", { static: false }) scrollSentinel!: ElementRef;
 
   constructor(
     private imagesService: ImagesService,
     private router: Router,
-    private savePhotoService: SavePhotoService
+    private savePhotoService: SavePhotoService,
   ) {}
 
   ngOnInit(): void {
     this.imagesService.hasGetPhotosCalled$.subscribe((res) => {
-      console.log('imagesService.hasGetPhotosCalled$ : ', res);
       if (!res) {
         this.imagesService.getAllPhotos();
       }
@@ -44,62 +45,70 @@ export class ExploreComponent implements OnInit {
 
     this.savePhotoService.hasGetSavedPhotosCalled$.subscribe((res) => {
       if (!res) {
-        console.log('savePhotoService.hasGetSavedPhotosCalled$ : ', res);
         this.savePhotoService.getSavedPhotos();
       }
     });
 
     this.imagesService.photosState$.subscribe((res) => {
-      console.log('Res-1\n',res);
-      
-      this.images1 = res?.results?.map((img: any) => ({ ...img, isLoaded: false }));
-      // console.log('this.imagesService.photosState$.subscribe\n',this.images1);
-    });
+      this.images1 = res?.results?.map((img: any) => ({
+        ...img,
+        isLoaded: false,
+      }));
 
-    // console.log('EXPLORE : images\n',this.images1);
+      // Recalculate triggers when new images load
+      setTimeout(() => ScrollTrigger.refresh(), 100);
+    });
 
     this.savePhotoService.savedPhotoIdsState$.subscribe((res) => {
       this.savedPhotoObj = res;
-      console.log('saved photo serrvice: explore:\n',res);
-      
       this.savedPhotoIds = res.map((data: any) => data.photoId);
     });
   }
 
   ngAfterViewInit() {
-    // Register ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
 
-    // Animate each card as it comes into view
+    // Animate new cards
     this.cards.changes.subscribe((cards: QueryList<ElementRef>) => {
       cards.forEach((card, i) => {
         gsap.from(card.nativeElement, {
           opacity: 0,
           y: 50,
-          duration: 0.8,
-          delay: i * 0.05,
+          duration: 0.5,
+          delay: i * 0.01,
           scrollTrigger: {
             trigger: card.nativeElement,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
+            start: "top 85%",
+            toggleActions: "play none none none",
           },
         });
       });
+      ScrollTrigger.refresh();
     });
 
-    // Also animate already-rendered cards
+    // Animate initially rendered cards
     this.cards.forEach((card, i) => {
       gsap.from(card.nativeElement, {
         opacity: 0,
         y: 50,
-        duration: 0.8,
-        delay: i * 0.05,
+        duration: 0.5,
+        delay: i * 0.01,
         scrollTrigger: {
           trigger: card.nativeElement,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
+          start: "top 85%",
+          toggleActions: "play none none none",
         },
       });
+    });
+
+    // Trigger infinite scroll when sentinel enters view
+    ScrollTrigger.create({
+      trigger: this.scrollSentinel.nativeElement,
+      start: "top 90%",
+      onEnter: () => {
+        console.log("Sentinel reached. Loading next photos...");
+        this.loadNextPhotos();
+      },
     });
   }
 
@@ -107,27 +116,28 @@ export class ExploreComponent implements OnInit {
     img.isLoaded = true;
   }
 
+  loadNextPhotos() {
+    console.log("EXPLORE-COMPONENT:: loadNextPhotosCall");
+
+    this.imagesService.loadNextPhotos();
+  }
+
   photosDetails(photo: any) {
     if (photo && photo.id) {
-      this.router.navigate(['user/photo-details', photo.id], {
+      this.router.navigate(["user/photo-details", photo.id], {
         state: { photo: photo },
       });
     } else {
-      console.error('Photo object is missing an id:', photo);
+      console.error("Photo object is missing an id:", photo);
     }
   }
-
-  // getSaved
 
   savePhoto(photoId: string) {
     this.savePhotoService.savePhoto(photoId);
   }
 
   removeSavePhoto(photoId: string) {
-    console.log('removePhoto : ', photoId);
-    // const removableObj = this.savedPhotoObj.filter((data:any) => data.photoId == photoId)
     const removableObj = this.getSavedObject(photoId);
-    console.log('removePhoto : ', removableObj);
     this.savePhotoService.removeSavedPhoto(removableObj[0].objId, photoId);
   }
 
