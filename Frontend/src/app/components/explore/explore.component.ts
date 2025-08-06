@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -6,142 +6,336 @@ import {
   QueryList,
   ViewChildren,
   ViewChild,
-} from "@angular/core";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import { ImagesService } from "../../services/images/images.service";
-import { Router } from "@angular/router";
-import { ScrollingModule } from "@angular/cdk/scrolling";
-import { NgxShimmerLoadingModule } from "ngx-shimmer-loading";
-import { SavePhotoService } from "../../services/photos/savephotos/save-photo.service";
+  OnDestroy,
+  AfterViewInit,
+  ChangeDetectorRef,
+} from '@angular/core';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+import { ImagesService } from '../../services/images/images.service';
+import { Router } from '@angular/router';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
+import { SavePhotoService } from '../../services/photos/savephotos/save-photo.service';
+import { Subject, takeUntil, debounceTime, fromEvent } from 'rxjs';
 
 @Component({
-  selector: "app-explore",
+  selector: 'app-explore',
   standalone: true,
   imports: [CommonModule, ScrollingModule, NgxShimmerLoadingModule],
-  templateUrl: "./explore.component.html",
-  styleUrl: "./explore.component.css",
+  templateUrl: './explore.component.html',
+  styleUrl: './explore.component.css',
 })
-export class ExploreComponent implements OnInit {
-  images1: any = [];
+export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
+  images1: any[] = [];
   savedPhotoIds: string[] = [];
   savedPhotoObj: any;
+  isLoading = false;
+  totalImages:number = 0
 
-  @ViewChildren("card") cards!: QueryList<ElementRef>;
-  @ViewChild("scrollSentinel", { static: false }) scrollSentinel!: ElementRef;
+  private destroy$ = new Subject<void>();
+  private animationTimeline?: gsap.core.Timeline;
+
+  @ViewChildren('card') cards!: QueryList<ElementRef>;
+  @ViewChild('scrollSentinel', { static: false }) scrollSentinel!: ElementRef;
 
   constructor(
     private imagesService: ImagesService,
     private router: Router,
     private savePhotoService: SavePhotoService,
+    private cdr: ChangeDetectorRef,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
-    this.imagesService.hasGetPhotosCalled$.subscribe((res) => {
-      if (!res) {
-        this.imagesService.getAllPhotos();
-      }
-    });
+    this.initializeServices();
+    this.setupScrollToTop();
+  }
 
-    this.savePhotoService.hasGetSavedPhotosCalled$.subscribe((res) => {
-      if (!res) {
-        this.savePhotoService.getSavedPhotos();
-      }
-    });
+  ngAfterViewInit(): void {
+    this.initializeAnimations();
+    this.setupCardAnimationObserver();
+    this.setupInfiniteScroll();
+  }
 
-    this.imagesService.photosState$.subscribe((res) => {
-      this.images1 = res?.results?.map((img: any) => ({
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    this.animationTimeline?.kill();
+  }
+
+  private initializeServices(): void {
+    // Initialize photos service
+    this.imagesService.hasGetPhotosCalled$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        if (!res) {
+          this.imagesService.getAllPhotos();
+        }
+      });
+
+    // Initialize saved photos service
+    this.savePhotoService.hasGetSavedPhotosCalled$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        if (!res) {
+          this.savePhotoService.getSavedPhotos();
+        }
+      });
+
+    // Listen to photos updates
+    this.imagesService.photosState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+  console.log('Photos state updated:', res); // Debug log
+  if (res?.results) {
+    this.totalImages = res?.count;
+
+    // Create a map for existing images by id
+    const existingImagesMap = new Map(this.images1.map(img => [img.id, img]));
+
+    // Merge new results, preserving isLoaded/hasError for existing images
+    const mergedImages = res.results.map((img: any) => {
+      const existing = existingImagesMap.get(img.id);
+      return {
         ...img,
-        isLoaded: false,
-      }));
-
-      // Recalculate triggers when new images load
-      setTimeout(() => ScrollTrigger.refresh(), 100);
+        isLoaded: existing ? existing.isLoaded : false,
+        hasError: existing ? existing.hasError : false,
+      };
     });
 
-    this.savePhotoService.savedPhotoIdsState$.subscribe((res) => {
-      this.savedPhotoObj = res;
-      this.savedPhotoIds = res.map((data: any) => data.photoId);
+    this.images1 = mergedImages;
+
+    console.log('Images array:', this.images1); // Debug log
+
+    // Refresh ScrollTrigger after images update
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+      this.cdr.detectChanges();
+    }, 100);
+  }
+});
+
+    // Listen to saved photos updates
+    this.savePhotoService.savedPhotoIdsState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.savedPhotoObj = res;
+        this.savedPhotoIds = res.map((data: any) => data.photoId);
+        this.cdr.detectChanges();
+      });
+  }
+
+  private initializeAnimations(): void {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Set up master timeline
+    this.animationTimeline = gsap.timeline();
+
+    // Animate header on load
+    gsap.from('.sticky', {
+      y: -100,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'back.out(1.7)',
     });
   }
 
-  ngAfterViewInit() {
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Animate new cards
-    this.cards.changes.subscribe((cards: QueryList<ElementRef>) => {
-      cards.forEach((card, i) => {
-        gsap.from(card.nativeElement, {
-          opacity: 0,
-          y: 50,
-          duration: 0.5,
-          delay: i * 0.01,
-          scrollTrigger: {
-            trigger: card.nativeElement,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        });
+  private setupCardAnimationObserver(): void {
+    // Animate cards when they come into view
+    this.cards.changes
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((cards: QueryList<ElementRef>) => {
+        this.animateCards(cards.toArray());
       });
-      ScrollTrigger.refresh();
-    });
 
-    // Animate initially rendered cards
-    this.cards.forEach((card, i) => {
-      gsap.from(card.nativeElement, {
+    // Animate initial cards
+    if (this.cards.length > 0) {
+      this.animateCards(this.cards.toArray());
+    }
+  }
+
+  private animateCards(cardElements: ElementRef[]): void {
+    cardElements.forEach((card, index) => {
+      // Kill existing triggers for this element
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.trigger === card.nativeElement) {
+          trigger.kill();
+        }
+      });
+
+      // Create new animation
+      gsap.set(card.nativeElement, {
         opacity: 0,
-        y: 50,
-        duration: 0.5,
-        delay: i * 0.01,
+        y: 90,
+        scale: 0.9,
+      });
+
+      gsap.to(card.nativeElement, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.4,
+        delay: index * 0.01,
+        ease: 'back.out(1.7)',
         scrollTrigger: {
           trigger: card.nativeElement,
-          start: "top 85%",
-          toggleActions: "play none none none",
+          start: 'top 60%',
+          end: 'top 50%',
+          toggleActions: 'play none none reverse',
+          once: true,
         },
       });
     });
 
-    // Trigger infinite scroll when sentinel enters view
-    ScrollTrigger.create({
-      trigger: this.scrollSentinel.nativeElement,
-      start: "top 90%",
-      onEnter: () => {
-        console.log("Sentinel reached. Loading next photos...");
-        this.loadNextPhotos();
-      },
-    });
+    // Refresh ScrollTrigger
+    setTimeout(() => ScrollTrigger.refresh(), 50);
   }
 
-  onImageLoad(event: Event, img: any) {
-    img.isLoaded = true;
-  }
-
-  loadNextPhotos() {
-    console.log("EXPLORE-COMPONENT:: loadNextPhotosCall");
-
-    this.imagesService.loadNextPhotos();
-  }
-
-  photosDetails(photo: any) {
-    if (photo && photo.id) {
-      this.router.navigate(["user/photo-details", photo.id], {
-        state: { photo: photo },
+  private setupInfiniteScroll(): void {
+    if (this.scrollSentinel) {
+      ScrollTrigger.create({
+        trigger: this.scrollSentinel.nativeElement,
+        start: 'top 95%',
+        onEnter: () => {
+          if (!this.isLoading) {
+            console.log('Loading next photos...');
+            this.loadNextPhotos();
+          }
+        },
       });
-    } else {
-      console.error("Photo object is missing an id:", photo);
     }
   }
 
-  savePhoto(photoId: string) {
+  private setupScrollToTop(): void {
+    const backToTopButton = document.getElementById('backToTop');
+    if (backToTopButton) {
+      fromEvent(window, 'scroll')
+        .pipe(debounceTime(100), takeUntil(this.destroy$))
+        .subscribe(() => {
+          const scrolled = window.pageYOffset > 300;
+          gsap.to(backToTopButton, {
+            opacity: scrolled ? 1 : 0,
+            duration: 0.3,
+            pointerEvents: scrolled ? 'auto' : 'none',
+          });
+        });
+
+      fromEvent(backToTopButton, 'click')
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          gsap.to(window, {
+            duration: 1,
+            scrollTo: { y: 0 },
+            ease: 'power2.out',
+          });
+        });
+    }
+  }
+
+  onImageLoad(event: Event, img: any): void {
+    console.log('Image loaded successfully:', img.image); // Debug log
+    img.isLoaded = true;
+    img.hasError = false;
+
+    // Add a subtle entrance animation for the loaded image
+    const imgElement = event.target as HTMLImageElement;
+    if (imgElement) {
+      gsap.fromTo(
+        imgElement,
+        { opacity: 0, scale: 1.05 },
+        { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' }
+      );
+    }
+
+    this.cdr.detectChanges();
+  }
+
+  onImageError(event: Event, img: any): void {
+    console.error('Failed to load image:', img.image); // Debug log
+    img.hasError = true;
+    img.isLoaded = true; // Hide shimmer even on error
+    this.cdr.detectChanges();
+  }
+
+  loadNextPhotos(): void {
+    // if (this.images1.length == this.totalImages) return
+    // if (this.images1.length == 30) return
+    if (this.isLoading) return;
+
+    this.isLoading = true;
+    console.log('EXPLORE-COMPONENT:: loadNextPhotosCall');
+
+    // Add loading animation to sentinel
+    if (this.scrollSentinel) {
+      gsap.to(this.scrollSentinel.nativeElement, {
+        scale: 1.05,
+        duration: 0.3,
+        yoyo: true,
+        repeat: 1,
+      });
+    }
+
+    this.imagesService.loadNextPhotos();
+
+    // Reset loading state after a delay
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 1000);
+  }
+
+  photosDetails(photo: any): void {
+    if (photo?.id) {
+      // Add click animation
+      const event = new CustomEvent('imageClick');
+
+      this.router.navigate(['user/photo-details', photo.id], {
+        state: { photo: photo },
+      });
+    } else {
+      console.error('Photo object is missing an id:', photo);
+    }
+  }
+
+  savePhoto(photoId: string): void {
+    // Add save animation feedback
+    const button = event?.target as HTMLElement;
+    if (button) {
+      gsap.to(button, {
+        scale: 1.2,
+        duration: 0.1,
+        yoyo: true,
+        repeat: 1,
+        ease: 'power2.out',
+      });
+    }
+
     this.savePhotoService.savePhoto(photoId);
   }
 
-  removeSavePhoto(photoId: string) {
+  removeSavePhoto(photoId: string): void {
+    // Add remove animation feedback
+    const button = event?.target as HTMLElement;
+    if (button) {
+      gsap.to(button, {
+        scale: 1.2,
+        duration: 0.1,
+        yoyo: true,
+        repeat: 1,
+        ease: 'power2.out',
+      });
+    }
+
     const removableObj = this.getSavedObject(photoId);
     this.savePhotoService.removeSavedPhoto(removableObj[0].objId, photoId);
   }
 
-  getSavedObject(photoId: string) {
-    return this.savedPhotoObj.filter((data: any) => data.photoId == photoId);
+  getSavedObject(photoId: string): any[] {
+    return this.savedPhotoObj.filter((data: any) => data.photoId === photoId);
+  }
+
+  trackByImageId(index: number, item: any): any {
+    return item.id;
   }
 }

@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, tap } from "rxjs";
 import { environment } from "../../../environments/environment.development";
 
+
 @Injectable({
   providedIn: "root",
 })
@@ -83,7 +84,7 @@ export class ApiService {
   //load photos when scroll triggered
   getPhotosByUrl(url: string, offSet: number): Observable<any> {
     return this.http.get(
-      `http://172.18.0.1:8000/api/v1/photos/photo/?limit=30&offset=${offSet}`,
+      url,
     );
   }
 

@@ -156,11 +156,11 @@ load_dotenv(BASE_DIR / '.env')
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get('DB_ENGINE','django.db.backends.mysql'),
-        'NAME': os.environ.get('DB_NAME', 'naturelens_db'),
+        'NAME': os.environ.get('DB_NAME', 'naturelense_db'),
         'USER': os.environ.get('DB_USER', 'root'),
-        'PASSWORD': os.environ.get('DB_PASSWORD','Mysql!80'),
-        'HOST': os.environ.get('DB_HOST','mysql'),
-        'PORT': os.environ.get('DB_PORT','3307'),
+        'PASSWORD': os.environ.get('DB_PASSWORD','root'),
+        'HOST': os.environ.get('DB_HOST','127.0.0.1'),
+        'PORT': os.environ.get('DB_PORT','3306'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
@@ -214,7 +214,7 @@ CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         # "LOCATION": "redis://redis:6379/1",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": "redis://localhost:6379/1",
         
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",

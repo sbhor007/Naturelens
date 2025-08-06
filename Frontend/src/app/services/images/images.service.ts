@@ -64,6 +64,10 @@ export class ImagesService {
       this.offSet += 30;
       this.apiService.getPhotosByUrl(this.nextUrl, this.offSet).subscribe({
         next: (res) => {
+          this.nextUrl = res.next;
+          this.previousUrl = res.previous;
+          console.log("IMAGE-SERVICE::loadNextPhotos : nextUrl :\n ", this.nextUrl);
+          console.log("IMAGE-SERVICE::loadNextPhotos : previousUrl :\n ", this.previousUrl);
           console.log("IMAGE-SERVICE::loadNextPhotos : res :\n ", res);
           const current = this.photosSubject.value;
           const margeResult = [...(current?.results || []), ...res.results];

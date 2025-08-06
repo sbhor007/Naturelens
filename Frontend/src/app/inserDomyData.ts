@@ -1,219 +1,213 @@
 export let DataQueue = [
+  
   {
-    "title": "Echoes of the Valley Wind",
-    "description": "Whispers of the wind across a secluded valley.",
-    "category_name": "Nature",
-    "tags": "valley, wind",
-    "location": "Arunachal Pradesh"
-  },
-  {
-    "title": "Terracotta Dreams",
-    "description": "Warm tones of ancient terracotta sculptures.",
-    "category_name": "Heritage",
-    "tags": "terracotta, sculpture",
-    "location": "West Bengal"
-  },
-  {
-    "title": "Wharf at First Light",
-    "description": "Soft morning light over a quiet fishing wharf.",
-    "category_name": "Seascape",
-    "tags": "wharf, dawn",
-    "location": "Goa"
-  },
-  {
-    "title": "Jungle Mist Awakens",
-    "description": "Dense jungle slowly revealed through lifting mist.",
-    "category_name": "Nature",
-    "tags": "jungle, mist",
-    "location": "Assam"
-  },
-  {
-    "title": "Steps of History",
-    "description": "Ancient stone steps climbing to a forgotten fort.",
-    "category_name": "History",
-    "tags": "steps, fort",
-    "location": "Madhya Pradesh"
-  },
-  {
-    "title": "Ceremony Under Stars",
-    "description": "Night rituals unfolding beneath a starlit sky.",
-    "category_name": "Religion",
-    "tags": "stars, ritual",
+    "title": "Golden Hour on the Dunes",
+    "description": "A radiant sunset casting long shadows across desert dunes.",
+    "category_name": "Landscape",
+    "tags": "sunset, dunes, desert",
     "location": "Rajasthan"
   },
   {
-    "title": "Mirror Lake Calm",
-    "description": "Still waters perfectly reflecting a mountain range.",
+    "title": "Monsoon Rhythms",
+    "description": "Raindrops dancing on fresh leaves under cloudy skies.",
     "category_name": "Nature",
-    "tags": "lake, reflection",
+    "tags": "rain, monsoon, leaves",
+    "location": "Kerala"
+  },
+  {
+    "title": "Mist over the Pines",
+    "description": "Morning mist embracing tall pine trees.",
+    "category_name": "Nature",
+    "tags": "pine, mist, forest",
+    "location": "Himachal Pradesh"
+  },
+  {
+    "title": "Silent Snowfall",
+    "description": "A quiet snowfall covering the land in white.",
+    "category_name": "Winter",
+    "tags": "snow, winter, peaceful",
+    "location": "Kashmir"
+  },
+  {
+    "title": "Reflection of the Peaks",
+    "description": "Mountains mirrored perfectly in a calm lake.",
+    "category_name": "Nature",
+    "tags": "mountain, reflection, lake",
     "location": "Sikkim"
   },
   {
-    "title": "Harmony in the Haze",
-    "description": "Muted light blending hills and clouds into harmony.",
-    "category_name": "Abstract",
-    "tags": "haze, harmony",
-    "location": "Nagaland"
+    "title": "Chasing Fireflies",
+    "description": "Fireflies lighting up a warm summer night.",
+    "category_name": "Macro",
+    "tags": "fireflies, night, glow",
+    "location": "Assam"
   },
   {
-    "title": "Clay Walls and Cotton Skies",
-    "description": "Village homes beneath soft, cloudy skies.",
-    "category_name": "Culture",
-    "tags": "village, cloud",
-    "location": "Odisha"
-  },
-  {
-    "title": "Rooftop Prayer Flags",
-    "description": "Colorful flags fluttering on high rooftops.",
-    "category_name": "Religion",
-    "tags": "prayer, flag",
-    "location": "Ladakh"
-  },
-  {
-    "title": "The Mango Grove Silence",
-    "description": "Stillness of a mango grove during noon.",
+    "title": "Roots of Time",
+    "description": "An ancient tree with sprawling roots tells a story.",
     "category_name": "Nature",
-    "tags": "mango, grove",
-    "location": "Telangana"
+    "tags": "tree, roots, age",
+    "location": "Meghalaya"
   },
   {
-    "title": "Night at the Fairgrounds",
-    "description": "Bright rides and food stalls at a village fair.",
-    "category_name": "Culture",
-    "tags": "fair, night",
-    "location": "Haryana"
-  },
-  {
-    "title": "Sunlit Alley Charms",
-    "description": "A narrow alley glowing in afternoon light.",
-    "category_name": "Cityscape",
-    "tags": "alley, sun",
-    "location": "Puducherry"
-  },
-  {
-    "title": "Under the Banyan Silence",
-    "description": "Peaceful gathering beneath a centuries-old tree.",
-    "category_name": "Religion",
-    "tags": "banyan, peace",
-    "location": "Gujarat"
-  },
-  {
-    "title": "Lantern-lit Courtyard",
-    "description": "Warm lanterns brightening a traditional home.",
-    "category_name": "Culture",
-    "tags": "lantern, home",
-    "location": "Andaman Islands"
-  },
-  {
-    "title": "Harvest Under Open Skies",
-    "description": "Farmers working together during harvest season.",
-    "category_name": "Agriculture",
-    "tags": "harvest, sky",
-    "location": "Bihar"
-  },
-  {
-    "title": "The Cradle of Monsoons",
-    "description": "Clouds spilling rain over emerald hills.",
-    "category_name": "Seasons",
-    "tags": "monsoon, hills",
-    "location": "Mizoram"
-  },
-  {
-    "title": "Candlelight at the Shrine",
-    "description": "Tiny flames flickering at a sacred shrine.",
-    "category_name": "Religion",
-    "tags": "shrine, candle",
-    "location": "Uttar Pradesh"
-  },
-  {
-    "title": "Echoes Between Arches",
-    "description": "Stone arches whispering tales of kings.",
-    "category_name": "History",
-    "tags": "arches, ruins",
-    "location": "Delhi"
-  },
-  {
-    "title": "Ferry Across the Estuary",
-    "description": "A slow ferry crossing wide river waters.",
-    "category_name": "Travel",
-    "tags": "ferry, river",
-    "location": "Andhra Pradesh"
-  },
-  {
-    "title": "Cactus Against Crimson",
-    "description": "Sharp cactus silhouetted by a crimson sunset.",
+    "title": "Ripples and Stones",
+    "description": "River pebbles creating ripples in flowing water.",
     "category_name": "Nature",
-    "tags": "cactus, sunset",
-    "location": "Rajasthan"
-  },
-  {
-    "title": "Bamboo Bridge Walk",
-    "description": "Locals crossing a narrow bamboo bridge.",
-    "category_name": "Culture",
-    "tags": "bridge, bamboo",
-    "location": "Tripura"
-  },
-  {
-    "title": "Golden Fields of Mustard",
-    "description": "A sea of blooming yellow mustard flowers.",
-    "category_name": "Agriculture",
-    "tags": "mustard, yellow",
-    "location": "Haryana"
-  },
-  {
-    "title": "Ablaze with Marigolds",
-    "description": "Marigold garlands lighting up a temple entrance.",
-    "category_name": "Festival",
-    "tags": "marigold, temple",
+    "tags": "ripples, river, rocks",
     "location": "Uttarakhand"
   },
   {
-    "title": "Moonlight Over Ghats",
-    "description": "The moon casting silver across sacred steps.",
-    "category_name": "Religion",
-    "tags": "moonlight, ghats",
-    "location": "Varanasi"
+    "title": "Blooming Serenity",
+    "description": "A vibrant field of blooming wildflowers.",
+    "category_name": "Flowers",
+    "tags": "wildflowers, bloom, color",
+    "location": "Nagaland"
   },
   {
-    "title": "Street Chai Ritual",
-    "description": "A street vendor pouring steaming cups of chai.",
-    "category_name": "Culture",
-    "tags": "chai, street",
-    "location": "Mumbai"
+    "title": "Above the Clouds",
+    "description": "Trekking to the peak above cloud level.",
+    "category_name": "Adventure",
+    "tags": "trekking, clouds, peak",
+    "location": "Leh Ladakh"
   },
   {
-    "title": "Dust Trails Behind Herds",
-    "description": "Cattle raising dust as they return home.",
-    "category_name": "Agriculture",
-    "tags": "herd, dust",
-    "location": "Chhattisgarh"
+    "title": "Whispers of the Forest",
+    "description": "Birdsong echoing in a dense jungle.",
+    "category_name": "Wildlife",
+    "tags": "forest, birds, dense",
+    "location": "Madhya Pradesh"
   },
   {
-    "title": "Sunset over Coconut Lines",
-    "description": "Straight rows of palms under an orange sky.",
+    "title": "River of Light",
+    "description": "A long exposure of star trails over a river.",
+    "category_name": "Astrophotography",
+    "tags": "stars, night, river",
+    "location": "Spiti Valley"
+  },
+  {
+    "title": "Golden Canopy",
+    "description": "Autumn leaves creating a golden forest path.",
     "category_name": "Nature",
-    "tags": "coconut, sunset",
-    "location": "Lakshadweep"
+    "tags": "autumn, leaves, forest",
+    "location": "Himachal Pradesh"
   },
   {
-    "title": "Kite Dancers of Spring",
-    "description": "Kites soaring high during a spring celebration.",
-    "category_name": "Festival",
-    "tags": "kite, spring",
-    "location": "Gujarat"
+    "title": "Island Stillness",
+    "description": "Still waters surrounding a lush green island.",
+    "category_name": "Water",
+    "tags": "island, water, calm",
+    "location": "Andaman & Nicobar"
   },
   {
-    "title": "Tides Against Stone",
-    "description": "Ocean tides crashing onto weathered stone.",
-    "category_name": "Nature",
-    "tags": "tide, stone",
+    "title": "Wings in Motion",
+    "description": "A hummingbird caught mid-flight near flowers.",
+    "category_name": "Wildlife",
+    "tags": "hummingbird, flight, flowers",
+    "location": "Manipur"
+  },
+  {
+    "title": "Pathway to the Sky",
+    "description": "Stairs leading into the clouds on a misty mountain.",
+    "category_name": "Landscape",
+    "tags": "stairs, clouds, journey",
+    "location": "Darjeeling"
+  },
+  {
+    "title": "Frozen in Time",
+    "description": "Icicles formed on the edge of a mountain cabin.",
+    "category_name": "Winter",
+    "tags": "ice, cabin, winter",
+    "location": "Kullu"
+  },
+  {
+    "title": "Lighthouse Lament",
+    "description": "Lonely lighthouse standing strong against ocean waves.",
+    "category_name": "Coastal",
+    "tags": "lighthouse, waves, sea",
     "location": "Tamil Nadu"
   },
   {
-    "title": "Lines in the Sand",
-    "description": "Wavy lines left behind by retreating waves.",
-    "category_name": "Abstract",
-    "tags": "sand, wave",
-    "location": "Daman and Diu"
+    "title": "Harmony in the Hills",
+    "description": "Sunrise over tea plantations in harmony.",
+    "category_name": "Nature",
+    "tags": "sunrise, hills, tea",
+    "location": "Munnar"
+  },
+  {
+    "title": "Flames of the Sky",
+    "description": "Fiery clouds during an intense sunset.",
+    "category_name": "Sky",
+    "tags": "sunset, clouds, fire",
+    "location": "Goa"
+  },
+  {
+    "title": "Tribal Trails",
+    "description": "Portraits of indigenous tribes in traditional attire.",
+    "category_name": "Culture",
+    "tags": "tribe, tradition, portrait",
+    "location": "Chhattisgarh"
+  },
+  {
+    "title": "Monsoon Mirage",
+    "description": "Water-covered roads reflecting stormy clouds.",
+    "category_name": "Street",
+    "tags": "monsoon, road, reflection",
+    "location": "Mumbai"
+  },
+  {
+    "title": "Sun-Kissed Peaks",
+    "description": "Golden sunlight hitting snow-covered mountains.",
+    "category_name": "Nature",
+    "tags": "sunlight, snow, peak",
+    "location": "Uttarakhand"
+  },
+  {
+    "title": "Dance of the Clouds",
+    "description": "Time-lapse of clouds swirling over a valley.",
+    "category_name": "Time-Lapse",
+    "tags": "clouds, valley, motion",
+    "location": "Coorg"
+  },
+  {
+    "title": "Urban Jungle",
+    "description": "Nature finding its way in city ruins.",
+    "category_name": "Urban",
+    "tags": "urban, decay, green",
+    "location": "Delhi"
+  },
+  {
+    "title": "Shadows in the Sand",
+    "description": "Camel shadows stretching across desert dunes.",
+    "category_name": "Travel",
+    "tags": "camel, shadow, desert",
+    "location": "Jaisalmer"
+  },
+  {
+    "title": "Foggy Reflections",
+    "description": "Early morning fog rolling over a quiet lake.",
+    "category_name": "Nature",
+    "tags": "fog, lake, calm",
+    "location": "Nainital"
+  },
+  {
+    "title": "Moon Over Mangroves",
+    "description": "Full moon shining above dense mangrove forests.",
+    "category_name": "Night",
+    "tags": "moon, mangrove, night",
+    "location": "Sundarbans"
+  },
+  {
+    "title": "Eternal Ember",
+    "description": "Campfire flickering under a starry sky.",
+    "category_name": "Camping",
+    "tags": "campfire, stars, night",
+    "location": "Panchgani"
+  },
+  {
+    "title": "Waterfall Symphony",
+    "description": "A roaring waterfall breaking through jungle silence.",
+    "category_name": "Nature",
+    "tags": "waterfall, jungle, roar",
+    "location": "Cherrapunji"
   }
 ]

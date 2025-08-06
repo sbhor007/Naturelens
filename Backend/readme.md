@@ -178,3 +178,13 @@ Backend/
 - Cloudinary and Elasticsearch credentials are required for full functionality.
 
 ---
+
+
+
+
+
+
+
+
+
+

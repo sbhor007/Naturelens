@@ -12,11 +12,12 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImagesService } from '../../../services/images/images.service';
+import { DomyImageInsertComponent } from "../../../domy-image-insert/domy-image-insert.component";
 
 @Component({
   selector: 'app-create-post',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DomyImageInsertComponent],
   templateUrl: './create-post.component.html',
   styleUrl: './create-post.component.css',
 })
