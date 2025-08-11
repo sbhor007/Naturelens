@@ -1,5 +1,22 @@
 mediafiles
 mysql-init
-docker-compose.yml
+# docker-compose.yml
 nginx.conf
 .env
+data
+.vscode
+.idea
+*.pyc
+__pycache__
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.pid
+*.swp
+*.bak
+*.orig
+*.DS_Store
+*.egg-info
+*.egg   

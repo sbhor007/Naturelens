@@ -159,7 +159,7 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME', 'naturelense_db'),
         'USER': os.environ.get('DB_USER', 'root'),
         'PASSWORD': os.environ.get('DB_PASSWORD','root'),
-        'HOST': os.environ.get('DB_HOST','127.0.0.1'),
+        'HOST': os.environ.get('DB_HOST','mysql'),
         'PORT': os.environ.get('DB_PORT','3306'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -209,18 +209,7 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-# redis configuration
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        # "LOCATION": "redis://redis:6379/1",
-        "LOCATION": "redis://localhost:6379/1",
-        
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -306,18 +295,34 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # Elasticsearch
 # https://django-elasticsearch-dsl.readthedocs.io/en/latest/settings.html
 
-ELASTICSEARCH_DSL = {
+# redis configuration
+CACHES = {
     "default": {
-        # "hosts": "https://elasticsearch:9200",
-        "hosts":  "https://localhost:9200",
-        "http_auth": ("elastic", os.environ.get('ELASTIC_PASSWORD')),
-        'verify_certs': False,
-        'ssl_show_warn': False,  # This will suppress SSL warnings
-        'ssl_assert_hostname': False,
-        'ssl_assert_fingerprint': False,
-        # "ca_certs": "PATH_TO_http_ca.crt",
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        # "LOCATION": "redis://localhost:6379/1",
+
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
+
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": "https://elasticsearch:9200",
+        "http_auth": (
+            os.environ.get('ELASTIC_USERNAME', 'elastic'),
+            os.environ.get('ELASTIC_PASSWORD', 'elastic_search')
+        ),
+        'verify_certs': False,
+        'ssl_show_warn': False,
+        'ssl_assert_hostname': False,
+        'ssl_assert_fingerprint': False,
+    }
+}
+
 
 # Email Service
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
