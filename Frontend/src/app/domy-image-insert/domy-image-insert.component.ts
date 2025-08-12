@@ -4,14 +4,14 @@ import { DataQueue } from '../inserDomyData';
 import { ImagesService } from '../services/images/images.service';
 
 @Component({
-  selector: 'app-domy-image-insert',
+  selector: "app-domy-image-insert",
   imports: [ReactiveFormsModule],
-  templateUrl: './domy-image-insert.component.html',
-  styleUrl: './domy-image-insert.component.css',
+  templateUrl: "./domy-image-insert.component.html",
+  styleUrl: "./domy-image-insert.component.css",
 })
 export class DomyImageInsertComponent {
- photoForm: FormGroup;
-  dataQueue = [...DataQueue];  // clone to avoid mutating original
+  photoForm: FormGroup;
+  dataQueue = [...DataQueue]; // clone to avoid mutating original
   imagesArray: File[] = [];
 
   constructor(
@@ -19,11 +19,11 @@ export class DomyImageInsertComponent {
     private imageService: ImagesService
   ) {
     this.photoForm = this.fb.group({
-      title: [''],
-      description: [''],
-      category_name: [''],
-      tags: [''],
-      location: [''],
+      title: [""],
+      description: [""],
+      category_name: [""],
+      tags: [""],
+      location: [""],
     });
   }
 
@@ -42,7 +42,7 @@ export class DomyImageInsertComponent {
         location: next.location,
       });
     } else {
-      console.log('✅ All data entries processed');
+      console.log("✅ All data entries processed");
       this.photoForm.reset();
     }
   }
@@ -53,17 +53,17 @@ export class DomyImageInsertComponent {
       this.imagesArray = Array.from(input.files).filter(file => file.type.startsWith('image/'));
       console.log('Selected images:', this.imagesArray);
     } else {
-      console.warn('No files selected.');
+      console.warn("No files selected.");
     }
   }
 
   submit(): void {
     if (this.imagesArray.length === 0) {
-      console.warn('⚠️ No images to upload.');
+      console.warn("⚠️ No images to upload.");
       return;
     }
     if (this.dataQueue.length === 0) {
-      console.warn('⚠️ No data entries to process.');
+      console.warn("⚠️ No data entries to process.");
       return;
     }
 
@@ -76,12 +76,12 @@ export class DomyImageInsertComponent {
 
   uploadImageWithData(image: File, data: any, index: number): void {
     const formData = new FormData();
-    formData.append('title', data.title);
-    formData.append('description', data.description);
-    formData.append('category_name', data.category_name);
-    formData.append('tag_names', data.tags);
-    formData.append('location', data.location);
-    formData.append('image', image);
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("category_name", data.category_name);
+    formData.append("tag_names", data.tags);
+    formData.append("location", data.location);
+    formData.append("image", image);
 
 
     try {

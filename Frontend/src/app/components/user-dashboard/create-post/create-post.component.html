@@ -1,109 +1,149 @@
-@if(false){
+@if (false) {
   <app-domy-image-insert></app-domy-image-insert>
-}@else {
-
-<div id="input-data" class="w-full md:h-fit md:flex  px-2 pb-11 md:p-0">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="w-full md:h-fit md:flex">
-    <!-- Upload Area -->
-    <div id="upload-photo" class="w-full md:pt-0 px-2 md:px-0 h-[70vh] md:w-[30vw] mt-10 flex flex-col items-center">
+} @else {
+  <div id="input-data" class="w-full md:h-fit md:flex px-2 pb-11 md:p-0">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="w-full md:h-fit md:flex"
+    >
+      <!-- Upload Area -->
       <div
-        class="border-2 border-dashed rounded-2xl bg-white shadow-md md:p-8 text-center cursor-pointer transition-all duration-300 h-[50vh] flex items-center justify-center flex-col gap-4 md:h-[70vh] hover:border-blue-400 hover:bg-blue-50"
-        [class.border-blue-500]="isDragOver()"
-        (dragover)="onDragOver($event)"
-        (dragleave)="onDragLeave($event)"
-        (drop)="onDrop($event)"
-        (click)="fileInput.click()"
-        role="button"
-        aria-label="Upload file"
+        id="upload-photo"
+        class="w-full md:pt-0 px-2 md:px-0 h-[70vh] md:w-[30vw] mt-10 flex flex-col items-center"
       >
-        <input
-          #fileInput
-          type="file"
-          class="hidden"
-          (change)="onFileSelect($event)"
-          accept="image/*,video/mp4"
-          aria-hidden="true"
-        />
-
-        <ng-container *ngIf="imagePreview; else placeholder">
-          <img
-            *ngIf="isImage"
-            [src]="imagePreview"
-            class="md:max-h-[60vh] max-h-[40vh] rounded-lg shadow-lg border border-gray-200 object-contain transition-transform duration-200 hover:scale-105"
-            alt="Preview of uploaded image"
+        <div
+          class="border-2 border-dashed rounded-2xl bg-white shadow-md md:p-8 text-center cursor-pointer transition-all duration-300 h-[50vh] flex items-center justify-center flex-col gap-4 md:h-[70vh] hover:border-blue-400 hover:bg-blue-50"
+          [class.border-blue-500]="isDragOver()"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)"
+          (click)="fileInput.click()"
+          role="button"
+          aria-label="Upload file"
+        >
+          <input
+            #fileInput
+            type="file"
+            class="hidden"
+            (change)="onFileSelect($event)"
+            accept="image/*,video/mp4"
+            aria-hidden="true"
           />
-          <video
-            *ngIf="!isImage"
-            [src]="imagePreview"
-            class="max-h-48 rounded-lg shadow-lg border border-gray-200 object-contain"
-            controls
-          ></video>
-          
-        </ng-container>
 
-        <ng-template #placeholder>
-          <div class="flex flex-col items-center gap-2">
-            <svg class="w-12 h-12 text-blue-400 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4a1 1 0 011-1h8a1 1 0 011 1v12m-4 4v-4m0 0l-2-2m2 2l2-2"></path>
-            </svg>
-            <span class="text-gray-700 font-medium">Choose a file or drag and drop</span>
-            <p class="text-xs text-gray-500">
-              High-quality <span class="font-semibold">.jpg</span> files &lt; 20MB or <span class="font-semibold">.mp4</span> files &lt; 200MB.
-            </p>
-            <span class="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs">Browse Files</span>
+          <ng-container *ngIf="imagePreview; else placeholder">
+            <img
+              *ngIf="isImage"
+              [src]="imagePreview"
+              class="md:max-h-[60vh] max-h-[40vh] rounded-lg shadow-lg border border-gray-200 object-contain transition-transform duration-200 hover:scale-105"
+              alt="Preview of uploaded image"
+            />
+            <video
+              *ngIf="!isImage"
+              [src]="imagePreview"
+              class="max-h-48 rounded-lg shadow-lg border border-gray-200 object-contain"
+              controls
+            ></video>
+          </ng-container>
+
+          <ng-template #placeholder>
+            <div class="flex flex-col items-center gap-2">
+              <svg
+                class="w-12 h-12 text-blue-400 mb-2"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M7 16V4a1 1 0 011-1h8a1 1 0 011 1v12m-4 4v-4m0 0l-2-2m2 2l2-2"
+                ></path>
+              </svg>
+              <span class="text-gray-700 font-medium"
+                >Choose a file or drag and drop</span
+              >
+              <p class="text-xs text-gray-500">
+                High-quality <span class="font-semibold">.jpg</span> files &lt;
+                5MB.
+              </p>
+              <span
+                class="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs"
+                >Browse Files</span
+              >
+            </div>
+          </ng-template>
+
+          <div
+            *ngIf="form.get('file')?.invalid && form.get('file')?.touched"
+            class="text-red-500 text-sm mt-2"
+          >
+            Please upload a valid image or video file.
           </div>
-        </ng-template>
-
-        <div *ngIf="form.get('file')?.invalid && form.get('file')?.touched" class="text-red-500 text-sm mt-2">
-          Please upload a valid image or video file.
-        </div>
-      </div>
-    </div>
-
-    <!-- Form Fields -->
-    <div class="w-full md:w-[70vw] h-fit  p-4 flex flex-col gap-4 justify-center  my-10 md:mt-15 md:mr-20 md:pl-10">
-      <!-- Title -->
-      <div>
-        <input
-          type="text"
-          formControlName="title"
-          placeholder="Add a title"
-          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
-          aria-label="Post title"
-        />
-        <div *ngIf="form.get('title')?.invalid && form.get('title')?.touched" class="text-red-500 text-sm">
-          Title is required.
         </div>
       </div>
 
-      <!-- Description -->
-      <div>
-        <textarea
-          formControlName="description"
-          placeholder="Add a detailed description"
-          rows="4"
-          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
-          aria-label="Post description"
-        ></textarea>
-        <div *ngIf="form.get('description')?.invalid && form.get('description')?.touched" class="text-red-500 text-sm">
-          Description is required.
+      <!-- Form Fields -->
+      <div
+        class="w-full md:w-[70vw] h-fit p-4 flex flex-col gap-4 justify-center my-10 md:mt-15 md:mr-20 md:pl-10"
+      >
+        <!-- Title -->
+        <div>
+          <input
+            type="text"
+            formControlName="title"
+            placeholder="Add a title"
+            class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
+            aria-label="Post title"
+          />
+          <div
+            *ngIf="form.get('title')?.invalid && form.get('title')?.touched"
+            class="text-red-500 text-sm"
+          >
+            Title is required.
+          </div>
         </div>
-      </div>
-      <!-- location -->
-       <div>
-        <input
-          type="text"
-          formControlName="location"
-          placeholder="Add a location"
-          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
-          aria-label="Post text"
-        />
-        <div *ngIf="form.get('location')?.invalid && form.get('location')?.touched" class="text-red-500 text-sm">
-          Location is Required.
+
+        <!-- Description -->
+        <div>
+          <textarea
+            formControlName="description"
+            placeholder="Add a detailed description"
+            rows="4"
+            class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
+            aria-label="Post description"
+          ></textarea>
+          <div
+            *ngIf="
+              form.get('description')?.invalid &&
+              form.get('description')?.touched
+            "
+            class="text-red-500 text-sm"
+          >
+            Description is required.
+          </div>
         </div>
-      </div>
-      <!-- Link -->
-      <!-- <div>
+        <!-- location -->
+        <div>
+          <input
+            type="text"
+            formControlName="location"
+            placeholder="Add a location"
+            class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
+            aria-label="Post text"
+          />
+          <div
+            *ngIf="
+              form.get('location')?.invalid && form.get('location')?.touched
+            "
+            class="text-red-500 text-sm"
+          >
+            Location is Required.
+          </div>
+        </div>
+        <!-- Link -->
+        <!-- <div>
         <input
           type="url"
           formControlName="link"
@@ -116,51 +156,63 @@
         </div>
       </div> -->
 
-      <!-- Board -->
-      <div>
-        <input
-        list="category"
-          formControlName="category_name"
-          placeholder="Enter category"
-          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
-          aria-label="Select a board"
-        />
+        <!-- Board -->
+        <div>
+          <input
+            list="category"
+            formControlName="category_name"
+            placeholder="Enter category"
+            class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
+            aria-label="Select a board"
+          />
           <!-- <option value="" disabled selected>Choose a board</option> -->
-           <datalist id="category" >
-             <option *ngFor="let c of categories" [value]="c.name"></option>
-           </datalist>
-        
-        <div *ngIf="form.get('category_name')?.invalid && form.get('category_name')?.touched" class="text-red-500 text-sm">
-          Please select a board.
-        </div>
-      </div>
+          <datalist id="category">
+            <option *ngFor="let c of categories" [value]="c.name"></option>
+          </datalist>
 
-      <!-- Tags -->
-      <div>
-        <input
-          
-          type="text"
-          formControlName="tag_names"
-          placeholder="Add tags (comma-separated)"
-          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
-          aria-label="Post tags"
-        />
-        
-        <div *ngIf="form.get('tag_names')?.invalid && form.get('tag_names')?.touched" class="text-red-500 text-sm">
-          Tags are required.
+          <div
+            *ngIf="
+              form.get('category_name')?.invalid &&
+              form.get('category_name')?.touched
+            "
+            class="text-red-500 text-sm"
+          >
+            Please select a board.
+          </div>
         </div>
-      </div>
 
-      <!-- Submit Button -->
-     <button
-  type="submit"
-  [disabled]="form.invalid || (isCreateMode && !form.get('image')?.value)"
-  class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 disabled:bg-gray-400"
-  aria-label="Submit post"
->
-  {{buttonName}}
-</button>
-    </div>
-  </form>
-</div>
+        <!-- Tags -->
+        <div>
+          <input
+            type="text"
+            formControlName="tag_names"
+            placeholder="Add tags (comma-separated)"
+            class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring w-full"
+            aria-label="Post tags"
+          />
+
+          <div
+            *ngIf="
+              form.get('tag_names')?.invalid && form.get('tag_names')?.touched
+            "
+            class="text-red-500 text-sm"
+          >
+            Tags are required.
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          [disabled]="
+            form.invalid || (isCreateMode && !form.get('image')?.value)
+          "
+          class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 disabled:bg-gray-400 cursor-pointer"
+          aria-label="Submit post"
+        >
+          {{ buttonName }}
+        </button>
+      </div>
+    </form>
+  </div>
 }

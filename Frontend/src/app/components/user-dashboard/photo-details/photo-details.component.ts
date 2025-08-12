@@ -12,6 +12,7 @@ import {
 import { AuthService } from '../../../services/Auth/auth.service';
 import { CommentComponent } from '../photo/comment/comment.component';
 import { SavePhotoService } from '../../../services/photos/savephotos/save-photo.service';
+import { ImagesService } from '../../../services/images/images.service';
 
 @Component({
   selector: 'app-photo-details',
@@ -35,7 +36,8 @@ export class PhotoDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private likeService: LikeService,
     private authService: AuthService,
-    private savePhotoService: SavePhotoService
+    private savePhotoService: SavePhotoService,
+    private imageService: ImagesService,
   ) {
     this.username = authService.getUsername();
     const navigation = this.router.getCurrentNavigation();
@@ -52,12 +54,11 @@ export class PhotoDetailsComponent implements OnInit {
     }
     // Final fallback: Get ID from route params
     else {
-      const id = this.route.snapshot.paramMap.get('id');
-      console.log('Photo ID from route params:', id);
-      if (id) {
-        // TODO: Implement photo fetching logic using the ID
-        // this.fetchPhotoById(id);
-        console.log('Need to fetch photo with ID:', id);
+      const photoId = this.route.snapshot.paramMap.get('id');
+      console.log('Photo ID from route params:', photoId);
+      if (photoId) {
+        this.getPhotoById(photoId);
+        console.log('Need to fetch photo with ID:', photoId);
       } else {
         console.log('No photo data or ID found, redirecting to explore');
         this.router.navigate(['/explore']);
@@ -127,5 +128,18 @@ export class PhotoDetailsComponent implements OnInit {
 
   getSavedObject(photoId:string){
     return this.savedPhotoObj.filter((data:any) => data.photoId == photoId)
+  }
+
+  // Get Photo by ID
+  getPhotoById(photoId: string) {
+    this.imageService.getPhotoById(photoId).subscribe({
+      next: (res) => {
+        this.photo = res;
+        console.log('Photo details:', this.photo);   
+      },
+      error: (err) => {
+        console.error('Error fetching photo:', err);
+      },
+    });  
   }
 }

@@ -18,15 +18,15 @@ export class HomeLayoutComponent {
     },
     {
       'name':'About',
-      'path':'#'
+      'path':'/comming-soon'
     },
     {
       'name':'Explore',
-      'path':'#'
+      'path':'/comming-soon'
     },
     {
       'name':'Support',
-      'path':'#'
+      'path':'/comming-soon'
     },
     {
       'name':'Sing In',

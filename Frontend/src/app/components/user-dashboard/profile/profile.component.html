@@ -1,84 +1,128 @@
-<div class="min-h-screen bg-white text-gray-800">
+<div class="min-h-screen bg-gray-50 text-gray-800">
   <!-- Header Section -->
-  <div class="flex md:justify-between justify-center flex-wrap items-center py-4">
-    <h1 class="text-3xl font-bold">Your saved ideas</h1>
-    <div class="flex items-center gap-4 flex-wrap md:flex-nowrap justify-center md:justify-normal">
-      <div class="flex items-center gap-3 w-full justify-around mt-3 md:mt-0">
+  <div
+    class="flex flex-col md:flex-row items-center justify-between gap-6 py-6 px-4 "
+  >
+    <!-- Left: Title -->
+    <h1 class="text-3xl font-bold tracking-tight">Your Saved Ideas</h1>
 
-        <!-- Profile Image -->
-        <ng-container *ngIf="imagePreview && isImage; else placeholder">
-          <div class="relative group">
-            <img
-              [src]="imagePreview"
-              class="object-cover w-24 h-24 rounded-full border-4 border-green-400 shadow-lg transition-transform duration-300 group-hover:scale-105"
-              alt="Preview of uploaded image"
-            />
-            <div class="absolute inset-0 bg-black bg-opacity-20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M15 10l4.553-4.553a2.121 2.121 0 00-3-3L12 7m0 0L7.447 2.447a2.121 2.121 0 00-3 3L9 10m3-3v12" />
-              </svg>
-            </div>
+    <!-- Right: Profile -->
+    <div
+      class="flex items-center gap-5 flex-wrap justify-center md:justify-end"
+    >
+      <!-- Profile Image -->
+      <ng-container *ngIf="imagePreview && isImage; else placeholder">
+        <div class="relative group">
+          <img
+            [src]="imagePreview"
+            class="object-cover w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-green-400 shadow-md transition-transform duration-300 group-hover:scale-105"
+            alt="Preview of uploaded image"
+          />
+          <div
+            class="absolute inset-0 bg-black bg-opacity-25 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          >
+            <svg
+              class="w-8 h-8 text-white"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 10l4.553-4.553a2.121 2.121 0 00-3-3L12 7m0 0L7.447 2.447a2.121 2.121 0 00-3 3L9 10m3-3v12"
+              />
+            </svg>
           </div>
-        </ng-container>
-
-        <!-- Placeholder Image -->
-        <ng-template #placeholder>
-          <div class="w-24 h-24 rounded-full bg-gradient-to-br from-green-300 to-blue-400 flex items-center justify-center text-4xl font-bold text-white shadow-lg border-4 border-green-400">
-            {{ ch.toUpperCase() }}
-          </div>
-        </ng-template>
-
-        <!-- User Info -->
-        <div>
-          <p class="font-semibold text-xl">{{ username }}</p>
-          <p class="text-sm text-gray-500">0 following</p>
-          <p class="text-sm text-gray-500">{{ bio }}</p>
         </div>
+      </ng-container>
 
-        <!-- Edit Profile Button -->
-        <div class="mt-2 px-2 py-2 cursor-pointer hover:bg-gray-200 rounded-full transition-all duration-200"
-             [routerLink]="'/user/edit-profile'"
-             routerLinkActive="active-nav-item">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px">
-            <path
-              d="M 19.171875 2 C 18.448125 2 17.724375 2.275625 17.171875 2.828125 L 16 4 L 20 8 L 21.171875 6.828125 C 22.275875 5.724125 22.275875 3.933125 21.171875 2.828125 C 20.619375 2.275625 19.895625 2 19.171875 2 z M 14.5 5.5 L 3 17 L 3 21 L 7 21 L 18.5 9.5 L 14.5 5.5 z" />
-          </svg>
+      <!-- Placeholder Image -->
+      <ng-template #placeholder>
+        <div
+          class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-green-300 to-blue-400 flex items-center justify-center text-3xl md:text-4xl font-bold text-white shadow-lg border-4 border-green-400"
+        >
+          {{ ch.toUpperCase() }}
         </div>
+      </ng-template>
+
+      <!-- User Info -->
+      <div class="text-center md:text-left">
+        <p class="font-semibold text-lg md:text-xl">{{ username }}</p>
+        <p class="text-sm text-gray-500">0 following</p>
+        <p class="text-sm text-gray-500 max-w-xs md:max-w-sm">{{ bio }}</p>
+      </div>
+
+      <!-- Edit Profile -->
+      <div
+        class="p-2 cursor-pointer hover:bg-gray-200 rounded-full transition duration-200"
+        [routerLink]="'/user/edit-profile'"
+        routerLinkActive="active-nav-item"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="22px"
+          height="22px"
+        >
+          <path
+            d="M 19.171875 2 C 18.448125 2 17.724375 2.275625 17.171875 2.828125 L 16 4 L 20 8 L 21.171875 6.828125 C 22.275875 5.724125 22.275875 3.933125 21.171875 2.828125 C 20.619375 2.275625 19.895625 2 19.171875 2 z M 14.5 5.5 L 3 17 L 3 21 L 7 21 L 18.5 9.5 L 14.5 5.5 z"
+          />
+        </svg>
       </div>
     </div>
   </div>
 
   <!-- Tabs Section -->
-  <div class="flex items-center justify-between md:py-6 space-x-4 text-lg font-medium py-3">
-    <div class="flex gap-4">
+  <div
+    class="flex items-center justify-between py-1 md:py-3 border-b border-gray-200"
+  >
+    <div class="flex gap-6 text-lg font-medium">
       <!-- Posts Tab -->
       <div
-        class="cursor-pointer pb-1"
+        class="cursor-pointer pb-1 hover:text-blue-600 transition-colors"
         [routerLink]="'/user/profile/posts'"
         routerLinkActive="active-nav-item"
         [routerLinkActiveOptions]="{ exact: true }"
+        [ngClass]="{
+          'border-b-2 border-blue-500 text-blue-600':
+            router.url === '/user/profile/posts'
+        }"
       >
         Posts
       </div>
 
       <!-- Saved Tab -->
       <div
-        class="cursor-pointer pb-1"
+        class="cursor-pointer pb-1 hover:text-blue-600 transition-colors"
         [routerLink]="'/user/profile/saved'"
         routerLinkActive="active-nav-item"
         [routerLinkActiveOptions]="{ exact: true }"
+        [ngClass]="{
+          'border-b-2 border-blue-500 text-blue-600':
+            router.url === '/user/profile/saved'
+        }"
       >
         Saved
       </div>
     </div>
 
-    <!-- Create Post Button -->
-    <div class="px-2 py-2 rounded-full hover:bg-gray-200 transition-all duration-200 cursor-pointer"
-         [routerLink]="'/user/create-post'">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="24" height="24">
-        <path style="fill: #303030"
-              d="M128 63.954c0 2.006-.797 3.821-2.136 5.127-1.308 1.337-3.125 2.133-5.166 2.133H71.302v49.356c0 4.012-3.284 7.292-7.302 7.292-2.009 0-3.827-.828-5.166-2.134-1.308-1.337-2.136-3.152-2.136-5.159V71.214H7.302c-4.05 0-7.302-3.248-7.302-7.26 0-2.006.797-3.853 2.136-5.159a7.279 7.279 0 0 1 5.166-2.134h49.395V7.306c0-4.012 3.284-7.26 7.302-7.26 2.009 0 3.827.828 5.166 2.133a7.238 7.238 0 0 1 2.136 5.127v49.356h49.395A7.276 7.276 0 0 1 128 63.954z" />
+    <!-- Create Post -->
+    <div
+      class="p-2 rounded-full hover:bg-gray-200 transition duration-200 cursor-pointer"
+      [routerLink]="'/user/create-post'"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 128 128"
+        width="24"
+        height="24"
+      >
+        <path
+          style="fill: #303030"
+          d="M128 63.954c0 2.006-.797 3.821-2.136 5.127-1.308 1.337-3.125 2.133-5.166 2.133H71.302v49.356c0 4.012-3.284 7.292-7.302 7.292-2.009 0-3.827-.828-5.166-2.134-1.308-1.337-2.136-3.152-2.136-5.159V71.214H7.302c-4.05 0-7.302-3.248-7.302-7.26 0-2.006.797-3.853 2.136-5.159a7.279 7.279 0 0 1 5.166-2.134h49.395V7.306c0-4.012 3.284-7.26 7.302-7.26 2.009 0 3.827.828 5.166 2.133a7.238 7.238 0 0 1 2.136 5.127v49.356h49.395A7.276 7.276 0 0 1 128 63.954z"
+        />
       </svg>
     </div>
   </div>

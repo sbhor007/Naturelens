@@ -137,36 +137,37 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 
 load_dotenv(BASE_DIR / '.env')
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': os.getenv("DB_NAME", "naturelens_db"),
-#         'USER': os.getenv("DB_USER", "natureuser"),
-#         'PASSWORD': os.getenv("DB_PASSWORD", "naturepass"),
-#         # 'HOST': 'mysql',
-#         'PORT': '3306',
-#         'OPTIONS': {
-#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#             'charset': 'utf8mb4',
-#         },
-#     }
-    
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('DB_ENGINE','django.db.backends.mysql'),
-        'NAME': os.environ.get('DB_NAME', 'naturelense_db'),
-        'USER': os.environ.get('DB_USER', 'root'),
-        'PASSWORD': os.environ.get('DB_PASSWORD','root'),
-        'HOST': os.environ.get('DB_HOST','mysql'),
-        'PORT': os.environ.get('DB_PORT','3306'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv("DB_NAME", "naturelens_db"),
+        'USER': os.getenv("DB_USER", "root"),
+        'PASSWORD': os.getenv("DB_PASSWORD", "root"),
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
         },
     }
 }
+
+
+# --for docker
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.environ.get('DB_ENGINE','django.db.backends.mysql'),
+#         'NAME': os.environ.get('DB_NAME', 'naturelense_db'),
+#         'USER': os.environ.get('DB_USER', 'root'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD','root'),
+#         'HOST': os.environ.get('DB_HOST','mysql'),
+#         'PORT': os.environ.get('DB_PORT','3306'),
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#             'charset': 'utf8mb4',
+#         },
+#     }
+# }
 
 
 # Password validation
@@ -296,22 +297,36 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # https://django-elasticsearch-dsl.readthedocs.io/en/latest/settings.html
 
 # redis configuration
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis:6379/1",
-        # "LOCATION": "redis://localhost:6379/1",
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://redis:6379/1",
+#         # "LOCATION": "redis://localhost:6379/1",
+#
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         }
+#     }
+# }
 
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
 
+# ELASTICSEARCH_DSL = {
+#     "default": {
+#         "hosts": "https://elasticsearch:9200",
+#         "http_auth": (
+#             os.environ.get('ELASTIC_USERNAME', 'elastic'),
+#             os.environ.get('ELASTIC_PASSWORD', 'elastic_search')
+#         ),
+#         'verify_certs': False,
+#         'ssl_show_warn': False,
+#         'ssl_assert_hostname': False,
+#         'ssl_assert_fingerprint': False,
+#     }
+# }
 
 ELASTICSEARCH_DSL = {
     "default": {
-        "hosts": "https://elasticsearch:9200",
+        "hosts": "https://localhost:9200",
         "http_auth": (
             os.environ.get('ELASTIC_USERNAME', 'elastic'),
             os.environ.get('ELASTIC_PASSWORD', 'elastic_search')
@@ -320,6 +335,18 @@ ELASTICSEARCH_DSL = {
         'ssl_show_warn': False,
         'ssl_assert_hostname': False,
         'ssl_assert_fingerprint': False,
+    }
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        # "LOCATION": "redis://redis:6379/1",
+        "LOCATION": "redis://localhost:6379/1",
+
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
 

@@ -1,0 +1,10 @@
+/* Smooth loader rotation handled by GSAP, fallback only */
+#loadingCircle {
+  border-radius: 50%;
+  border-top-color: white;
+}
+
+/* Modern card styles */
+.photo-card img {
+  border-radius: 0.75rem;
+}

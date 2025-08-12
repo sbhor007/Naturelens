@@ -13,15 +13,19 @@ export class UserService {
   private profileData: any | null = null;
   private profileState: boolean = false;
   private userProfileStateSubject = new BehaviorSubject<UserProfileState>({
-    loading:false,
-    error:null,
-    profile:null,
-    available:false
-  })
+    loading: false,
+    error: null,
+    profile: null,
+    available: false,
+  });
 
-  readonly userProfileState$ = this.userProfileStateSubject.asObservable()
+  readonly userProfileState$ = this.userProfileStateSubject.asObservable();
 
-  constructor(private http: HttpClient,private apiService:ApiService,private router:Router) {}
+  constructor(
+    private http: HttpClient,
+    private apiService: ApiService,
+    private router: Router
+  ) {}
 
   isProfileAvailable() {
     return this.profileState;
@@ -36,79 +40,82 @@ export class UserService {
   }
 
   updateUserProfileState(partial: Partial<UserProfileState>) {
-  this.userProfileStateSubject.next({
-    ...this.userProfileStateSubject.getValue(),
-    ...partial,
-  });
-}
+    this.userProfileStateSubject.next({
+      ...this.userProfileStateSubject.getValue(),
+      ...partial,
+    });
+  }
 
   // TODO:done
   getUserProfile() {
     this.updateUserProfileState({
-      loading:true
-    })
+      loading: true,
+    });
+
     this.apiService.getProfile().subscribe({
       next: (res) => {
-        console.log("USER-SERVICE: getUserProfile: res:\n",res);
+        console.log('USER-SERVICE: getUserProfile: res:\n', res.results[0]);
         if (res.count > 0) {
           this.updateUserProfileState({
-            loading:false,
-            profile:res[0],
-            available:true
-          })
+            loading: false,
+            profile: res.results[0],
+            available: true,
+          });
           this.setProfileState(true);
-          this.profileData = (res.results[0]);
-          console.log("USER-SERVICE: getUserProfile: profileData:\n",this.profileData);
-          
+          this.profileData = res.results[0];
+          console.log(
+            'USER-SERVICE: getUserProfile: profileData:\n',
+            this.profileData
+          );
         } else {
           this.setProfileState(false);
           this.updateUserProfileState({
-            loading:false,
-            profile:null,
-            available:false
-          })
+            loading: false,
+            profile: null,
+            available: false,
+          });
         }
       },
       error: (err) => {
         this.updateUserProfileState({
-            loading:false,
-            profile:null,
-            error:err,
-            available:false
-          })
+          loading: false,
+          profile: null,
+          error: err,
+          available: false,
+        });
         this.setProfileState(false);
-        this.profileData = (null);
+        this.profileData = null;
         console.log('error : ', err);
         alert('profile not Available');
       },
     });
   }
 
-  register(userDetails: any){
+  register(userDetails: any) {
     this.updateUserProfileState({
-      loading:true
-    })
+      loading: true,
+    });
     this.apiService.register(userDetails).subscribe({
       next: (res) => {
         this.updateUserProfileState({
-            loading:false
-          })
+          loading: false,
+        });
         console.log('Registration Successfully');
         alert('Registration Successful!');
         this.router.navigate(['/login']);
       },
       error: (err) => {
         this.updateUserProfileState({
-            loading:false
-          })
+          loading: false,
+        });
         console.error('Registration failed:', err);
         alert('Registration failed. Please try again.');
       },
     });
   }
 
-  createProfile(profileDetails: any){
-    console.log("profile Details : ",profileDetails);
+  createProfile(profileDetails: any) {
+    console.log('profile Details : ', profileDetails);
     this.apiService.createProfile(profileDetails).subscribe({
       next: (res) => {
         alert('user profile created');
@@ -123,13 +130,12 @@ export class UserService {
     });
   }
 
-
   updateProfile(profileDetails: any, id: number) {
-    console.log("profile Details : ",profileDetails);
-    
-    this.apiService.updateProfile(profileDetails,id).subscribe({
+    console.log('profile Details : ', profileDetails);
+
+    this.apiService.updateProfile(profileDetails, id).subscribe({
       next: (res) => {
-        this.getUserProfile()
+        this.getUserProfile();
         alert('user profile updated');
         console.log(res);
       },

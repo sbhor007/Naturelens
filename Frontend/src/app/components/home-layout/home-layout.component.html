@@ -1,6 +1,6 @@
 <div class="md:px-8 scroll-smooth md:scroll-auto">
 <nav
-    class="sticky top-0 z-50 flex bg-white/70  items-center justify-between px-4 py-4 md:px-5  md:rounded-b-md text-black backdrop-blur-md backdrop-saturate-150"
+    class="sticky top-0 z-50 flex bg-white/70  items-center justify-between px-4 py-4 md:px-5  md:rounded-b-md text-black backdrop-blur-md backdrop-saturate-150 border-b border-gray-200 shadow-md"
     style="backdrop-filter: blur(12px) saturate(150%); -webkit-backdrop-filter: blur(12px) saturate(150%);"
   >
     <!-- Logo and Nav Links -->
@@ -66,16 +66,17 @@
     <div class="hidden md:flex items-center space-x-3">
       <button
         routerLink="/login"
-        class="font-bold px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+        class="font-bold px-6 py-2 rounded-md hover:bg-blue-400  transition-colors cursor-pointer"
       >
         login
       </button>
       <button
         routerLink="/register"
-        class="font-bold px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+        class="font-bold px-4 py-2 rounded-md hover:bg-blue-400 transition-colors cursor-pointer"
       >
         register
       </button>
+      
       <!-- for dark mode -->
       <!-- <button>
         <svg
@@ -93,7 +94,9 @@
         </svg>
       </button> -->
     </div>
+    
     <!-- Mobile Menu -->
+
     <div
       *ngIf="isMenuOpen"
       class="md:hidden w-full  max-w-11/12 absolute top-full right-4 bg-gray-50 shadow-md z-50 animate-fade-in rounded-md overflow-hidden backdrop-blur-md backdrop-saturate-150"
@@ -112,7 +115,7 @@
         }
 
         <button
-          class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+          class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors cursor-pointer"
           style="text-shadow: 0 1px 4px rgba(0,0,0,0.25);"
           routerLink="/register"
         >

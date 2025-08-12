@@ -10,14 +10,14 @@ import { ImagesService } from '../../../services/images/images.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgModel, NgModelGroup } from '@angular/forms';
 import Masonry from 'masonry-layout';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
 import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-posts',
-  imports: [CommonModule, ScrollingModule, NgxShimmerLoadingModule],
+  imports: [CommonModule, ScrollingModule, NgxShimmerLoadingModule,RouterLink],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.css',
 })
@@ -27,10 +27,10 @@ export class PostsComponent implements OnInit {
   private msnry: any;
   private imageURL = environment.imagesURL;
   count:number = 0
- openMenuId: string | null = null;
-
+  openMenuId: string | null = null;
+  
   constructor(private router: Router, private imageService: ImagesService) {}
-
+  
   ngOnInit(): void {
     this.imageService.hasGetUserPhotosCalled$.subscribe((res) => {
       console.log('this.imageService.hasGetUserPhotosCalled$ : ', res);
@@ -38,7 +38,7 @@ export class PostsComponent implements OnInit {
         this.imageService.getUserPhotos();
       }
     });
-
+    
     this.imageService.userPhotosState$.subscribe((res) => {
       // this.count = res.count
       console.log("res:",res);
@@ -50,27 +50,27 @@ export class PostsComponent implements OnInit {
         this.initMasonry();
       }, 0);
     });
-
+    
     console.log('userPostState : ', this.userPosts);
   }
-
+  
   openMenu(id: string) {
-  this.openMenuId = this.openMenuId === id ? null : id;
-}
-
+    this.openMenuId = this.openMenuId === id ? null : id;
+  }
+  
   async ngAfterViewInit() {
     if (this.userPosts.length) {
       this.initMasonry();
     }
   }
-
+  
   async initMasonry() {
     if (typeof window !== 'undefined') {
       const Masonry = (await import('masonry-layout')).default;
       const imagesLoaded = (await import('imagesloaded')).default;
-
+      
       const grid = this.masonryGrid.nativeElement;
-
+      
       if (!this.msnry) {
         this.msnry = new Masonry(grid, {
           itemSelector: '.grid-item',
@@ -79,13 +79,13 @@ export class PostsComponent implements OnInit {
           percentPosition: true,
         });
       }
-
+      
       imagesLoaded(grid).on('progress', () => {
         this.msnry.layout?.();
       });
     }
   }
-
+  
   photosDetails(photo: any) {
     if (photo && photo.id) {
       this.router.navigate(['user/photo-details', photo.id], {
@@ -95,7 +95,12 @@ export class PostsComponent implements OnInit {
       console.error('Photo object is missing an id:', photo);
     }
   }
-
+  
+  addPhoto() {
+   
+    this.router.navigate(['/user/create-post']);
+    this.openMenuId = null;
+  }
   /* Delete Photo */
   deletePhoto(photoId:string){
     console.log("delete function call");

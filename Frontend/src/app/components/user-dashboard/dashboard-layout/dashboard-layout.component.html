@@ -1,21 +1,14 @@
-<!-- responsive-layout.component.html -->
 <div *ngIf="!isMobile" class="desktop-layout text-gray-800">
   <!-- Sidebar -->
-  <div
-    class="fixed bg-white/20 backdrop-blur-sm px-3 py-6 h-screen w-20 z-50 shadow-xl border-r border-gray-200/50"
-  >
+  <div class="fixed bg-white/20 backdrop-blur-sm px-3 py-6 h-screen w-20 z-50 shadow-xl border-r border-gray-200/50">
     <nav class="h-full flex flex-col">
       <!-- Logo Section -->
       <div class="flex justify-center mb-8 cursor-pointer">
         <div class="relative group">
-          <div
-            class="w-10 h-10  transition-all duration-300 flex items-center justify-center"
-          >
+          <div class="w-10 h-10 flex items-center justify-center">
             <div class="w-5 h-5 bg-white rounded-md opacity-90"></div>
           </div>
-          <div
-            class="absolute inset-0 text-4xl" [routerLink]="'/user'"
-          >🌿</div>
+          <div class="absolute inset-0 text-4xl" [routerLink]="'/user'">🌿</div>
         </div>
       </div>
 
@@ -24,24 +17,27 @@
         <div *ngFor="let item of icons" class="relative group">
           <a
             (click)="handleNavigation(item)"
-            routerLinkActive="active-nav-item"
             class="nav-item flex items-center justify-center w-14 h-14 rounded-xl transition-all duration-300 hover:bg-gray-100 hover:scale-105 cursor-pointer relative overflow-hidden"
+            [ngClass]="{
+              'bg-gray-100 text-blue-600': router.url.startsWith(item.route)
+            }"
           >
             <!-- Active indicator -->
             <div
-              class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-r-full opacity-0 active-indicator transition-all duration-300"
+              class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-r-full transition-all duration-300"
+              [class.opacity-100]="router.url === item.route"
+              [class.opacity-0]="router.url !== item.route"
             ></div>
 
             <!-- Icon -->
             <div
-              class="relative z-10 text-gray-600 group-hover:text-blue-600 transition-colors duration-300"
+              class="relative z-10 transition-colors duration-300"
+              [class.text-blue-600]="router.url === item.route"
               [innerHTML]="getSafeHtml(item.icon)"
             ></div>
 
             <!-- Hover background -->
-            <div
-              class="absolute inset-0 bg-gradient-to-br from-blue-100 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            ></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-100 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </a>
 
           <!-- Tooltip -->
@@ -49,63 +45,31 @@
             class="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 whitespace-nowrap z-50"
           >
             {{ item.name }}
-            <div
-              class="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900"
-            ></div>
+            <div class="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900"></div>
           </div>
         </div>
-        </div>
+      </div>
     </nav>
   </div>
 
   <!-- Main Content -->
   <div class="ml-20 min-h-screen bg-gray-50/30">
     <!-- Header -->
-    <header
-      class="sticky top-0 z-40 bg-white/20 backdrop-blur-lg border-b border-gray-200/50 shadow-sm"
-    >
+    <header class="sticky top-0 z-40 bg-white/20 backdrop-blur-lg border-b border-gray-200/50 shadow-sm">
       <div class="flex items-center justify-between px-6 py-4">
         <!-- Search Section -->
-         <div class="flex-1 max-w-8xl relative">
-         <app-search></app-search>
-         </div>
-        
+        <div class="flex-1 max-w-8xl relative">
+          <app-search></app-search>
+        </div>
 
         <!-- User Profile Section -->
         <div class="flex items-center space-x-4 ml-6">
-          <!-- Notifications
-          <button
-            class="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-300"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 17h5l-5 5c-3-3-5-5-5-5zm-4.5-8.5a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z"
-              ></path>
-            </svg>
-            <span
-              class="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center"
-              >3</span
-            >
-          </button>
- -->
-          <!-- Profile Avatar -->
           <div class="relative group cursor-pointer" [routerLink]="'profile'">
             <div
               class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-semibold cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
             >
-              {{user | uppercase }}
+              {{ user | uppercase }}
             </div>
-            <div
-              class="flex-1 max-w-8xl mx-4 relative"
-            ></div>
           </div>
         </div>
       </div>
@@ -118,34 +82,19 @@
   </div>
 </div>
 
-<!-- Enhanced Mobile Layout -->
-<div
-  *ngIf="isMobile"
-  class="mobile-layout text-gray-800 min-h-screen bg-gray-50/30"
->
+<!-- Mobile Layout -->
+<div *ngIf="isMobile" class="mobile-layout text-gray-800 min-h-screen bg-gray-50/30">
   <!-- Mobile Header -->
-  <header
-    class="sticky top-0 z-40 bg-white/90 backdrop-blur-lg border-b border-gray-200/50 shadow-sm px-4 py-3"
-  >
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-lg border-b border-gray-200/50 shadow-sm px-4 py-3">
     <div class="flex items-center justify-between">
-      <!-- Logo -->
-      <div
-        class="w-8 h-8  rounded-lg flex items-center justify-center"
-      >
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center">
         <div class="text-2xl" [routerLink]="'/user'">🌿</div>
       </div>
-
-      <!-- Search -->
-       <div class="flex-1 max-w-8xl relative">
-       <app-search></app-search>
-       </div>
-      
-
-      <!-- Profile -->
-      <div
-        class="w-8 h-8 bg-gray-300  rounded-full flex items-center justify-center text-black text-sm font-semibold"
-      >
-        {{user | uppercase}}
+      <div class="flex-1 max-w-8xl relative">
+        <app-search></app-search>
+      </div>
+      <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-black text-sm font-semibold">
+        {{ user | uppercase }}
       </div>
     </div>
   </header>
@@ -155,29 +104,32 @@
     <router-outlet></router-outlet>
   </div>
 
-  <!-- Enhanced Bottom Navigation -->
-  <nav
-    class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200/50 shadow-2xl z-50"
-  >
+  <!-- Mobile Bottom Navigation -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200/50 shadow-2xl z-50">
     <div class="flex items-center justify-around px-2 py-2">
       <a
         *ngFor="let item of icons"
         (click)="handleNavigation(item)"
-        routerLinkActive="active-mobile-nav"
-        class="mobile-nav-item flex flex-col items-center justify-center px-3 py-2 rounded-xl transition-all duration-300 hover:bg-gray-50 min-w-0 flex-1"
+        class="mobile-nav-item flex flex-col items-center justify-center px-3 py-2 rounded-xl transition-all duration-300 hover:bg-gray-50 min-w-0 flex-1 relative"
+        [ngClass]="{
+          'bg-blue-50 text-blue-600': router.url === item.route
+        }"
       >
         <div
-          class="text-gray-500 mb-1 transition-all duration-300"
+          class="mb-1 transition-all duration-300"
+          [class.text-blue-600]="router.url === item.route"
           [innerHTML]="getSafeHtml(item.icon)"
         ></div>
         <span
-          class="text-xs font-medium text-gray-600 transition-all duration-300 truncate"
-          >{{ item.name }}</span
+          class="text-xs font-medium transition-all duration-300 truncate"
+          [class.text-blue-600]="router.url === item.route"
         >
-
-        <!-- Active indicator -->
+          {{ item.name }}
+        </span>
         <div
-          class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-6 h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full opacity-0 active-mobile-indicator transition-all duration-300"
+          class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-6 h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full transition-all duration-300"
+          [class.opacity-100]="router.url === item.route"
+          [class.opacity-0]="router.url !== item.route"
         ></div>
       </a>
     </div>

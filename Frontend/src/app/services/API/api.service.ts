@@ -8,6 +8,7 @@ import { environment } from "../../../environments/environment.development";
   providedIn: "root",
 })
 export class ApiService {
+  
   private baseURL = environment.baseAPI;
   private isLoggedIn$ = false;
 
@@ -49,6 +50,8 @@ export class ApiService {
   }
 
   updateProfile(profileDetails: any, id: number): Observable<any> {
+    console.log("api-service-update-profile: ", profileDetails, id);
+    
     return this.http.put(`${this.baseURL}user/profile/${id}/`, profileDetails);
   }
 
@@ -90,6 +93,10 @@ export class ApiService {
 
   getUserPhotos(): Observable<any> {
     return this.http.get(`${this.baseURL}photos/photo/user-photos/`);
+  }
+
+  getPhotoById(photoId: string): Observable<any> {
+    return this.http.get(`${this.baseURL}photos/photo/${photoId}/`);
   }
 
   updatePhoto(photoDetails: any, photoId: string): Observable<any> {
@@ -136,6 +143,7 @@ export class ApiService {
     );
   }
   // updatePhotos(updatePhotoDetails:any,id)
+
 
   /*end Photos API */
 

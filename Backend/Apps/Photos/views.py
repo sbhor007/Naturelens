@@ -30,8 +30,8 @@ class CategoryViewSet(ModelViewSet):
 class PhotoViewSet(ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
-    # permission_classes = (permissions.IsAuthenticated,IsOwnerOrReadOnly)
-    # authentication_classes = (JWTAuthentication,) 
+    permission_classes = (permissions.IsAuthenticated,IsOwnerOrReadOnly)
+    authentication_classes = (JWTAuthentication,) 
     
     CACHE_KEY_PREFIX = 'photo-view'
     

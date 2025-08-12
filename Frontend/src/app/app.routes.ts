@@ -17,6 +17,7 @@ import { PhotoDetailsComponent } from './components/user-dashboard/photo-details
 import { SearchComponent } from './components/user-dashboard/search/search.component';
 import { SearchResultComponent } from './components/user-dashboard/search-result/search-result.component';
 import { DomyImageInsertComponent } from './domy-image-insert/domy-image-insert.component';
+import { CommingSoonComponent } from './components/comming-soon/comming-soon.component';
 
 export const routes: Routes = [
   {
@@ -47,6 +48,10 @@ export const routes: Routes = [
       {
         path: 'loading',
         component: LoadingComponent,
+      },
+      {
+        path:'comming-soon',
+        component: CommingSoonComponent,
       },
     ],
   },

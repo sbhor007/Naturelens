@@ -58,6 +58,11 @@ export class ImagesService {
     });
   }
 
+  /* get photo by id */
+  getPhotoById(photoId: string): Observable<any> {
+    return this.apiService.getPhotoById(photoId);
+  }
+
   //Load nextPhotos
   loadNextPhotos() {
     if (this.nextUrl != null) {

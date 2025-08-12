@@ -1,3 +1,11 @@
 .active-nav-item {
   @apply border-b-2 border-green-600 text-green-600 font-semibold;
 }
+
+.active-nav-item {
+  font-weight: bold;
+}
+
+.border-b-2 {
+  border-bottom-width: 2px;
+}

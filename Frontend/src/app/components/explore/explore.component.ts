@@ -31,7 +31,7 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
   savedPhotoIds: string[] = [];
   savedPhotoObj: any;
   isLoading = false;
-  totalImages:number = 0
+  totalImages: number = 0;
 
   private destroy$ = new Subject<void>();
   private animationTimeline?: gsap.core.Timeline;
@@ -88,34 +88,35 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
     this.imagesService.photosState$
       .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
-  console.log('Photos state updated:', res); // Debug log
-  if (res?.results) {
-    this.totalImages = res?.count;
+        console.log('Photos state updated:', res); // Debug log
+        if (res?.results) {
+          this.totalImages = res?.count;
 
-    // Create a map for existing images by id
-    const existingImagesMap = new Map(this.images1.map(img => [img.id, img]));
+          // Create a map for existing images by id
+          const existingImagesMap = new Map(this.images1.map((img) => [img.id, img]));
 
-    // Merge new results, preserving isLoaded/hasError for existing images
-    const mergedImages = res.results.map((img: any) => {
-      const existing = existingImagesMap.get(img.id);
-      return {
-        ...img,
-        isLoaded: existing ? existing.isLoaded : false,
-        hasError: existing ? existing.hasError : false,
-      };
-    });
+          // Merge new results, preserving isLoaded/hasError for existing images
+          const mergedImages = res.results.map((img: any) => {
+            const existing = existingImagesMap.get(img.id);
+            return {
+              ...img,
+              isLoaded: existing ? existing.isLoaded : false,
+              hasError: existing ? existing.hasError : false,
+            };
+          });
 
-    this.images1 = mergedImages;
+          this.images1 = mergedImages;
 
-    console.log('Images array:', this.images1); // Debug log
+          console.log('Images array:', this.images1); // Debug log
 
-    // Refresh ScrollTrigger after images update
-    setTimeout(() => {
-      ScrollTrigger.refresh();
-      this.cdr.detectChanges();
-    }, 100);
-  }
-});
+          // Refresh ScrollTrigger after images update
+          // CHANGE: small timeout tweak to allow image layout to settle before refresh
+          setTimeout(() => {
+            ScrollTrigger.refresh();
+            this.cdr.detectChanges();
+          }, 120);
+        }
+      });
 
     // Listen to saved photos updates
     this.savePhotoService.savedPhotoIdsState$
@@ -133,7 +134,7 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
     // Set up master timeline
     this.animationTimeline = gsap.timeline();
 
-    // Animate header on load
+    // Animate header on load (no functional change)
     gsap.from('.sticky', {
       y: -100,
       opacity: 0,
@@ -144,11 +145,9 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private setupCardAnimationObserver(): void {
     // Animate cards when they come into view
-    this.cards.changes
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((cards: QueryList<ElementRef>) => {
-        this.animateCards(cards.toArray());
-      });
+    this.cards.changes.pipe(takeUntil(this.destroy$)).subscribe((cards: QueryList<ElementRef>) => {
+      this.animateCards(cards.toArray());
+    });
 
     // Animate initial cards
     if (this.cards.length > 0) {
@@ -165,24 +164,25 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
 
-      // Create new animation
+      // Set initial state
       gsap.set(card.nativeElement, {
         opacity: 0,
         y: 90,
         scale: 0.9,
       });
 
+      // CHANGE: Slightly increased stagger effect for more noticeable entrance
       gsap.to(card.nativeElement, {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 0.4,
-        delay: index * 0.01,
+        duration: 0.45,
+        delay: index * 0.03, // was 0.01 -> CHANGE: 0.03 for clearer staggering
         ease: 'back.out(1.7)',
         scrollTrigger: {
           trigger: card.nativeElement,
-          start: 'top 60%',
-          end: 'top 50%',
+          start: 'top 90%',
+          end: 'top 60%',
           toggleActions: 'play none none reverse',
           once: true,
         },
@@ -190,7 +190,7 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     // Refresh ScrollTrigger
-    setTimeout(() => ScrollTrigger.refresh(), 50);
+    setTimeout(() => ScrollTrigger.refresh(), 60);
   }
 
   private setupInfiniteScroll(): void {
@@ -214,10 +214,11 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
       fromEvent(window, 'scroll')
         .pipe(debounceTime(100), takeUntil(this.destroy$))
         .subscribe(() => {
-          const scrolled = window.pageYOffset > 300;
+          // CHANGE: Lowered threshold so back-to-top feels more responsive on long lists
+          const scrolled = window.pageYOffset > 180; // was 300
           gsap.to(backToTopButton, {
             opacity: scrolled ? 1 : 0,
-            duration: 0.3,
+            duration: 0.28,
             pointerEvents: scrolled ? 'auto' : 'none',
           });
         });
@@ -227,6 +228,7 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
         .subscribe(() => {
           gsap.to(window, {
             duration: 1,
+            // NOTE: this uses the scrollTo property — ensure ScrollToPlugin is available if used in your build
             scrollTo: { y: 0 },
             ease: 'power2.out',
           });
@@ -245,7 +247,7 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
       gsap.fromTo(
         imgElement,
         { opacity: 0, scale: 1.05 },
-        { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' }
+        { opacity: 1, scale: 1, duration: 0.48, ease: 'power2.out' }
       );
     }
 
@@ -260,18 +262,16 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loadNextPhotos(): void {
-    // if (this.images1.length == this.totalImages) return
-    // if (this.images1.length == 30) return
     if (this.isLoading) return;
 
     this.isLoading = true;
     console.log('EXPLORE-COMPONENT:: loadNextPhotosCall');
 
-    // Add loading animation to sentinel
+    // Add loading animation to sentinel (subtle pulse)
     if (this.scrollSentinel) {
       gsap.to(this.scrollSentinel.nativeElement, {
-        scale: 1.05,
-        duration: 0.3,
+        scale: 1.03,
+        duration: 0.28,
         yoyo: true,
         repeat: 1,
       });
@@ -279,7 +279,7 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.imagesService.loadNextPhotos();
 
-    // Reset loading state after a delay
+    // Reset loading state after a delay (no core change)
     setTimeout(() => {
       this.isLoading = false;
     }, 1000);
@@ -287,7 +287,7 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
 
   photosDetails(photo: any): void {
     if (photo?.id) {
-      // Add click animation
+      // Add click animation (non-functional)
       const event = new CustomEvent('imageClick');
 
       this.router.navigate(['user/photo-details', photo.id], {
@@ -299,35 +299,52 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   savePhoto(photoId: string): void {
-    // Add save animation feedback
-    const button = event?.target as HTMLElement;
+    // NOTE: original code uses `event?.target` (global event). Keeping same behavior to avoid template changes.
+    const button = (event as any)?.target as HTMLElement;
+
     if (button) {
+      // Click bounce (existing)
       gsap.to(button, {
         scale: 1.2,
-        duration: 0.1,
+        duration: 0.12,
         yoyo: true,
         repeat: 1,
         ease: 'power2.out',
       });
+
+      // CHANGE: Micro success animation - subtle background flash to imply saved
+      // This is purely visual; it does not affect saving logic.
+      gsap.fromTo(
+        button,
+        { backgroundColor: '#ffffff' },
+        { backgroundColor: '#bbf7d0', duration: 0.28, yoyo: true, repeat: 1 }
+      );
     }
 
+    // Core save action (unchanged)
     this.savePhotoService.savePhoto(photoId);
   }
 
   removeSavePhoto(photoId: string): void {
-    // Add remove animation feedback
-    const button = event?.target as HTMLElement;
+    // NOTE: original code uses `event?.target`. Keeping same pattern to avoid template changes.
+    const button = (event as any)?.target as HTMLElement;
+
     if (button) {
+      // Click bounce (existing)
       gsap.to(button, {
         scale: 1.2,
-        duration: 0.1,
+        duration: 0.12,
         yoyo: true,
         repeat: 1,
         ease: 'power2.out',
       });
+
+      // CHANGE: Smooth fade back to white so removing feels less abrupt
+      gsap.to(button, { backgroundColor: '#ffffff', duration: 0.28 });
     }
 
     const removableObj = this.getSavedObject(photoId);
+    // Keep same remove logic — unchanged
     this.savePhotoService.removeSavedPhoto(removableObj[0].objId, photoId);
   }
 
