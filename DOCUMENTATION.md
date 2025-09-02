@@ -369,4 +369,3 @@ Naturelens/
 
 ### Access  Postman Collection
 - using link : `https://santosh-287858.postman.co/workspace/Santosh's-Workspace~5202420a-8540-4fab-8cd5-b3f95d1b46d3/collection/45409981-13a3d7f7-6548-4625-9c8b-4e9b97e9c9df?action=share&creator=45409981`
-//- using-api : `https://api.postman.com/collections/45409981-13a3d7f7-6548-4625-9c8b-4e9b97e9c9df?access_key=`*/
